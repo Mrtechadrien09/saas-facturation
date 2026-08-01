@@ -6,5 +6,14 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   swcMinify: false,
+  compress: true,
+
+  images: {
+    unoptimized: true,
+  },
+  experimental: {
+    workerThreads: true,
+    cpus: 1,
+  },
 };
-export default nextConfig;
+module.exports = nextConfig;
