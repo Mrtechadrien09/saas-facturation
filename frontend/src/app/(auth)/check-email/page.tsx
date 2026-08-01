@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -11,7 +11,7 @@ import { GradientBlobs } from "@/components/decorative/gradient-blobs";
 import { api } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
-export default function CheckEmailPage() {
+function CheckEmailcontent() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
   const [resending, setResending] = useState(false);
@@ -72,5 +72,12 @@ export default function CheckEmailPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+export default function CheckEmailPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center">Chargement...</div>}>
+      <CheckEmailcontent />
+    </Suspense>
   );
 }
