@@ -15,7 +15,7 @@ const app = express();
 
 // Middlewares globaux
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL || 'https://saas-facturation-ivory.vercel.app',
   credentials: true
 }));
 app.use(express.json());
