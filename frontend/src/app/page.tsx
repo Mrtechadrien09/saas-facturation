@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import Image from "next/image";
-
+export const dynamic = "force-dynamic";
 const features = [
   {
     icon: FileText,
