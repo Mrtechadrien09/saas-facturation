@@ -5,5 +5,8 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  experimental: {
+    missingSuspenseWithCSRBypass: true,
+  }
 };
 export default nextConfig;
