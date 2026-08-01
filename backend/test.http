@@ -1,0 +1,122 @@
+@baseUrl = http://localhost:5000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTRlZDI5Njk2ZjAzNWRkZTQwODUwYjQiLCJpYXQiOjE3ODM1NTA2MjcsImV4cCI6MTc4NjE0MjYyN30.fsGM7ogN1NSqBt2Z9cwvdic6kGFoLcqSNKSzYP06An8
+@customerId = 6a4edc395ca551835bf26801
+@invoiceId = 6a4ed603f1026694e337b2d3
+
+### TEST 1 : Vérifier la santé du serveur
+GET @baseUrl/
+Accept: application/json
+
+### TEST 2 : Créer un nouvel utilisateur (Inscription)
+POST @baseUrl/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Jean Dupont",
+  "email": "jean@example.com",
+  "password": "SecurePassword123!",
+  "companyName": "Ma Super Entreprise"
+}
+
+### TEST 3 : Se connecter (Récupère le JWT)
+POST @baseUrl/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "jean@example.com",
+  "password": "SecurePassword123!"
+}
+
+### TEST 4 : Créer un client
+POST @baseUrl/api/customers
+Content-Type: application/json
+Authorization: Bearer @token
+
+{
+  "name": "ASSALA BOUBA",
+  "email": "assalabouba@example.com",
+  "phone": "0601020304",
+  "address": {
+    "street": "12 Rue de la Paix",
+    "city": "Paris",
+    "zipCode": "75002",
+    "country": "France"
+  }
+}
+
+### TEST 5 : Récupérer mes clients
+GET @baseUrl/api/customers
+Authorization: Bearer @token
+
+### TEST 6 : Créer une facture sécurisée
+POST @baseUrl/api/invoices
+Content-Type: application/json
+Authorization: Bearer @token
+
+{
+  "customerId": "@customerId",
+  "dueDate": "2026-08-30",
+  "status": "SENT",
+  "items": [
+    {
+      "description": "Abonnement SaaS - Août 2026",
+      "quantity": 5,
+      "unitPrice": 75000,
+      "vatRate": 20
+    },
+    {
+      "description": "Support Premium",
+      "quantity": 1,
+      "unitPrice": 25000,
+      "vatRate": 20
+    }
+  ]
+}
+
+### TEST 7 : Récupérer TOUTES mes factures (avec pagination)
+GET @baseUrl/api/invoices?page=1&limit=10
+Authorization: Bearer @token
+
+### TEST 8 : Récupérer une facture par son ID
+GET @baseUrl/api/invoices/@invoiceId
+Authorization: Bearer @token
+
+### TEST 9 : Mettre à jour le statut d'une facture
+PATCH @baseUrl/api/invoices/@invoiceId
+Content-Type: application/json
+Authorization: Bearer @token
+
+{
+  "status": "PAID"
+}
+
+### Test 10 : Tenter de créer un client avec des données invalides (Doit échouer)
+POST http://localhost:5000/api/customers
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTRlZDI5Njk2ZjAzNWRkZTQwODUwYjQiLCJpYXQiOjE3ODM1NTA2MjcsImV4cCI6MTc4NjE0MjYyN30.fsGM7ogN1NSqBt2Z9cwvdic6kGFoLcqSNKSzYP06An8
+
+{
+  "name": "J",
+  "email": "jean.dupont-mauvais-format"
+}
+
+### Test 11 : Modifier le statut d'une facture
+PATCH http://localhost:5000/api/invoices/6a4ef351499b5ad8a2669c6d/status
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTRlZDI5Njk2ZjAzNWRkZTQwODUwYjQiLCJpYXQiOjE3ODM1NTA2MjcsImV4cCI6MTc4NjE0MjYyN30.fsGM7ogN1NSqBt2Z9cwvdic6kGFoLcqSNKSzYP06An8
+
+{
+  "status": "PAID"
+}
+
+### Test 12 : Récupérer les statistiques du tableau de bord
+GET  http://localhost:5000/api/invoices/6a4eef39c1a40d4348a23d54/stats
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTRlZDI5Njk2ZjAzNWRkZTQwODUwYjQiLCJpYXQiOjE3ODM1NTA2MjcsImV4cCI6MTc4NjE0MjYyN30.fsGM7ogN1NSqBt2Z9cwvdic6kGFoLcqSNKSzYP06An8
+
+### Test 13 : Supprimer une facture
+DELETE   http://localhost:5000/api/invoices/6a4ef351499b5ad8a2669c6d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTRlZDI5Njk2ZjAzNWRkZTQwODUwYjQiLCJpYXQiOjE3ODM1NTA2MjcsImV4cCI6MTc4NjE0MjYyN30.fsGM7ogN1NSqBt2Z9cwvdic6kGFoLcqSNKSzYP06An8
+
+### Test 14 : PDF
+GET   http://localhost:5000/api/invoices/6a4db2af6c8355ea8bcccd10/pdf
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTRlZDI5Njk2ZjAzNWRkZTQwODUwYjQiLCJpYXQiOjE3ODM1NTA2MjcsImV4cCI6MTc4NjE0MjYyN30.fsGM7ogN1NSqBt2Z9cwvdic6kGFoLcqSNKSzYP06An8
