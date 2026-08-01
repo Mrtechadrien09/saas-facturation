@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/lib/providers";
 import { Toaster } from "@/components/ui/sonner";
-
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Simplifact",
   description: "Gestion des factures avec Simplifact",
