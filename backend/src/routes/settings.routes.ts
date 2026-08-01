@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getSettings, updateSettings } from '../controllers/Settings.controller.js';
+import { getSettings, updateSettings } from '../controllers/settings.controller.js';
 import { requireAuth } from '../middleware/auth.js'; // Ton middleware d'authentification
 
 const router = Router();
