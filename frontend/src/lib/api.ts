@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "sonner";
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://saas-facturation-backend-hb6b.onrender.com",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://saas-facturation-backend-hb6b.onrender.com/api",
   headers: { "Content-Type": "application/json" },
 });
 
