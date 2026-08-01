@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { GradientBlobs } from "@/components/decorative/gradient-blobs";
 import { api } from "@/lib/api";
 
+export const dynamic = "force-dynamic";
 export default function CheckEmailPage() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
