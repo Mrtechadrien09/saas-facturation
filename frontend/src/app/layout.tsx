@@ -21,15 +21,22 @@ export default function RootLayout({
       <body>
         <Providers>{children}</Providers>
         <Toaster position="top-right" richColors/>
-        <Script
-          src="https://jsdelivr.net"
-          strategy="afterInteractive"
-          onLoad={() => {
-            if (typeof window !== 'undefined' &&(window as any).eruda) {
-              (window as any).eruda.init();
-            }
-          }}
+        <Script 
+          src="https://jsdelivr.net" 
+          strategy="beforeInteractive" // <-- Force le chargement au plus tôt
         />
+        <Script id="eruda-init" strategy="afterInteractive">
+          {`
+            if (typeof window !== 'undefined') {
+              var interval = setInterval(function() {
+                if (window.eruda) {
+                  window.eruda.init();
+                  clearInterval(interval);
+                }
+              }, 100);
+            }
+          `}
+        </Script>
       </body>
     </html>
   );
