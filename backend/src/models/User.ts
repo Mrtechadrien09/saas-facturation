@@ -16,7 +16,7 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: [true, "Le mot de passe est obligatoire"],
-    minlength: 6,
+    minlength: [6, "Le mot de passe doit contenir au moins 6 caractères"],
   },
   companyName: {
     type: String,
