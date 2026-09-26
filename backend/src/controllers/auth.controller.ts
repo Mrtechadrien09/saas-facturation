@@ -22,6 +22,11 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, email, password, companyName } = req.body;
 
+    if (!password || password.length < 6) {
+      res.status(400).json({ message: 'Le mot de passe doit contenir au moins 6 caractères' });
+      return;
+    }
+
     const userExists = await User.findOne({ email });
     if (userExists) {
       res.status(400).json({ message: 'Cet email est déjà utilisé' });
