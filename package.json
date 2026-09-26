@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@zxcvbn-ts/core": "^4.2.0"
+  }
+}
