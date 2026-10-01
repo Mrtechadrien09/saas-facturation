@@ -7,11 +7,14 @@ import apiRouter from './routes/index.js';
 import logger from './utils/logger.js';
 import { swaggerSpec } from './config/swagger.js';
 import { AppError } from './utils/AppError.js';
+import passport from './config/passport.js';
 
 // Chargement des variables d'environnement
 dotenv.config();
 
 const app = express();
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Middlewares globaux
 app.use(cors({
