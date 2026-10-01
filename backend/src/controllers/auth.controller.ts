@@ -9,7 +9,7 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 // Fonction utilitaire pour générer le JWT
-const generateToken = (userId: string): string => {
+export const generateToken = (userId: string): string => {
   const secret = process.env.JWT_SECRET;
   if (!secret) {
     throw new Error('JWT_SECRET est obligatoire dans .env');
@@ -82,6 +82,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       res.status(401).json({ message: 'Email ou mot de passe incorrect' });
       return;
     }
+
+    if (!user.password) { 
+      res.status(401).json({ message: "Ce compte utilise la connexion Google ou GitHub. Veuillez vous connecter via ces réseaux." });
+      return;
+     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
