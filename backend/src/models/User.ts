@@ -15,7 +15,11 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: [true, "Le mot de passe est obligatoire"],
+    // MODIFICATION : Le mot de passe est obligatoire SEULEMENT s'il n'y a pas d'ID Google ou GitHub
+    required: [
+      function(this: any) { return !this.googleId && !this.githubId; }, 
+      "Le mot de passe est obligatoire"
+    ],
     minlength: [6, "Le mot de passe doit contenir au moins 6 caractères"],
   },
   companyName: {
@@ -37,6 +41,20 @@ const userSchema = new Schema({
   },
   emailVerificationExpires: {
     type: Date,
+  },
+  // --- ENTRAIDE GOOGLE & GITHUB (AJOUTÉ) ---
+  googleId: { 
+    type: String, 
+    unique: true, 
+    sparse: true // Évite les conflits d'unicité avec les utilisateurs classiques
+  },
+  githubId: { 
+    type: String, 
+    unique: true, 
+    sparse: true // Évite les conflits d'unicité avec les utilisateurs classiques
+  },
+  avatar: { 
+    type: String // Pour récupérer la photo de profil sociale
   },
 }, {
   timestamps: true // Crée automatiquement des champs createdAt et updatedAt
