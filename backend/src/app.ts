@@ -20,7 +20,8 @@ app.use(passport.session());
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'https://saas-facturation-ivory.vercel.app',
   credentials: true
-}));
+}))
+;
 app.use(express.json());
 
 // Middleware de logging des requêtes
