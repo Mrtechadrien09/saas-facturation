@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { User, Building2, Mail, Lock, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 // Ajustez ces 3 lignes si vos fichiers Shadcn sont rangés ailleurs
 import { Input } from "@/components/ui/input";
@@ -40,6 +41,7 @@ const getScoreColor = (score: number): string => {
 export default function Register() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm({
     defaultValues: {
@@ -59,6 +61,7 @@ export default function Register() {
     setError(null);
     try {
       console.log("Données envoyées :", data);
+      router.push("/login"); // Rediriger vers la page de connexion après l'inscription
     } catch (err: any) {
       setError(err.message || "Une erreur est survenue.");
     } finally {
