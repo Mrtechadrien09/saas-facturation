@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
 import apiRouter from './routes/index.js';
 import logger from './utils/logger.js';
@@ -13,6 +14,19 @@ import passport from './config/passport.js';
 dotenv.config();
 
 const app = express();
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'simplifact-session-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 24,
+  },
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
