@@ -30,11 +30,8 @@ export const useAuth = create<AuthState>((set) => ({
   },
 
   register: async (name, email, password, companyName) => {
-    const { data } = await api.post("/auth/register", { name, email, password, companyName });
-    const { token, ...user } = data.data || data;
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
-    set({ user, isAuthenticated: true });
+    await api.post("/auth/register", { name, email, password, companyName });
+    set({ user: null, isAuthenticated: false });
   },
 
   logout: () => {
@@ -44,10 +41,19 @@ export const useAuth = create<AuthState>((set) => ({
   },
 
   init: () => {
-    const token = localStorage.getItem("token");
-    const savedUser = localStorage.getItem("user");
-    if (token && savedUser) {
-      set({ user: JSON.parse(savedUser), isAuthenticated: true });
+    try {
+      const token = localStorage.getItem("token");
+      const savedUser = localStorage.getItem("user");
+      if (token && savedUser) {
+        const parsedUser = JSON.parse(savedUser);
+        set({ user: parsedUser, isAuthenticated: true });
+        return;
+      }
+    } catch {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     }
+
+    set({ user: null, isAuthenticated: false });
   },
 }));
