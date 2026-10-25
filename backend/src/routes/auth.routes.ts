@@ -16,39 +16,36 @@ router.post('/reset-password', resetPassword);
 // ==========================================
 // 🌐 ROUTES GOOGLE
 // ==========================================
-router.get('/auth/google', 
+router.get('/google', 
   passport.authenticate('google', { scope: ['profile', 'email'], session: false })
 );
 
-router.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: 'https://saas-facturation-ivory.vercel.app', session: false }),
+router.get('/google/callback',
+  passport.authenticate('google', { failureRedirect: process.env.FRONTEND_URL || 'https://saas-facturation-ivory.vercel.app', session: false }),
   (req: any, res) => {
     const user = req.user;
 
-    // Utilisation de ta fonction locale exportée !
     const token = generateToken(user._id.toString());
 
-    // Redirection vers le frontend en ligne
-    res.redirect(`https://saas-facturation-ivory.vercel.app{token}`);
+    res.redirect(`${process.env.FRONTEND_URL || 'https://saas-facturation-ivory.vercel.app'}?token=${token}`);
   }
 );
 
 // ==========================================
 // 🐙 ROUTES GITHUB
 // ==========================================
-router.get('/auth/github', 
+router.get('/github', 
   passport.authenticate('github', { scope: ['user:email'], session: false })
 );
 
-router.get('/auth/github/callback',
-  passport.authenticate('github', { failureRedirect: 'https://saas-facturation-ivory.vercel.app', session: false }),
+router.get('/github/callback',
+  passport.authenticate('github', { failureRedirect: process.env.FRONTEND_URL || 'https://saas-facturation-ivory.vercel.app', session: false }),
   (req: any, res) => {
     const user = req.user;
 
-    // Utilisation de ta fonction locale exportée !
     const token = generateToken(user._id.toString());
 
-    res.redirect(`https://saas-facturation-ivory.vercel.app{token}`);
+    res.redirect(`${process.env.FRONTEND_URL || 'https://saas-facturation-ivory.vercel.app'}?token=${token}`);
   }
 );
 
