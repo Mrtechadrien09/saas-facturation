@@ -101,52 +101,92 @@ export default function CustomerDetailPage() {
 
   return (
     <div className="space-y-6">
-      <Button variant="ghost" size="sm" onClick={() => router.push("/customers")}>
+      <Button variant="ghost" size="sm" onClick={() => router.push("/customers")} className="text-slate-600 hover:bg-slate-100 hover:text-slate-900">
         <ArrowLeft className="mr-2 h-4 w-4" />
         Retour aux clients
       </Button>
 
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">{customer.name}</h1>
-          <div className="mt-2 space-y-1 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <Mail className="h-3.5 w-3.5" />
-              {customer.email}
+      <div className="rounded-[28px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-[#edf3ff] p-5 shadow-[0_25px_70px_-35px_rgba(15,23,42,0.5)] sm:p-6">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+          <div className="flex items-start gap-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#2B3A67] text-xl font-semibold text-white shadow-lg shadow-[#2B3A67]/20">
+              {customer.name.charAt(0).toUpperCase()}
             </div>
-            {customer.phone && (
-              <div className="flex items-center gap-2">
-                <Phone className="h-3.5 w-3.5" />
-                {customer.phone}
+            <div>
+              <h1 className="text-2xl font-semibold text-slate-900">{customer.name}</h1>
+              <div className="mt-2 space-y-1.5 text-sm text-slate-600">
+                <div className="flex items-center gap-2">
+                  <Mail className="h-3.5 w-3.5 text-slate-500" />
+                  {customer.email}
+                </div>
+                {customer.phone && (
+                  <div className="flex items-center gap-2">
+                    <Phone className="h-3.5 w-3.5 text-slate-500" />
+                    {customer.phone}
+                  </div>
+                )}
+                {customer.address?.city && (
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-3.5 w-3.5 text-slate-500" />
+                    {[customer.address.street, customer.address.city, customer.address.zipCode, customer.address.country]
+                      .filter(Boolean)
+                      .join(", ")}
+                  </div>
+                )}
               </div>
-            )}
-            {customer.address?.city && (
-              <div className="flex items-center gap-2">
-                <MapPin className="h-3.5 w-3.5" />
-                {[customer.address.street, customer.address.city, customer.address.zipCode, customer.address.country]
-                  .filter(Boolean)
-                  .join(", ")}
-              </div>
-            )}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Link href={`/invoices/new?customerId=${customer._id}`}>
+              <Button className="bg-[#2B3A67] hover:bg-[#1f2b4d]">
+                <FilePlus className="mr-2 h-4 w-4" />
+                Nouvelle facture
+              </Button>
+            </Link>
+            <Button variant="outline" onClick={openEdit} className="border-slate-200 bg-white hover:bg-slate-50">
+              <Pencil className="mr-2 h-4 w-4" />
+              Modifier
+            </Button>
           </div>
         </div>
+      </div>
 
-        <div className="flex gap-2">
-  <Link href={`/invoices/new?customerId=${customer._id}`}>
-    <Button>
-      <FilePlus className="mr-2 h-4 w-4" />
-      Nouvelle facture
-    </Button>
-  </Link>
-  <Button variant="outline" onClick={openEdit}>
-    <Pencil className="mr-2 h-4 w-4" />
-    Modifier
-  </Button>
-</div>
+      <div className="grid gap-4 md:grid-cols-3">
+        <Card className="border-0 bg-white shadow-[0_20px_50px_-35px_rgba(15,23,42,0.6)]">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-500">Total payé</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-semibold text-slate-900">
+              {formatCurrency(invoices?.reduce((sum, invoice) => sum + (invoice.status === "PAID" ? invoice.total : 0), 0) ?? 0)}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 bg-white shadow-[0_20px_50px_-35px_rgba(15,23,42,0.6)]">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-500">Factures</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-semibold text-slate-900">{invoices?.length ?? 0}</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 bg-white shadow-[0_20px_50px_-35px_rgba(15,23,42,0.6)]">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-slate-500">En attente</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-semibold text-slate-900">
+              {invoices?.filter((invoice) => invoice.status === "SENT" || invoice.status === "OVERDUE").length ?? 0}
+            </p>
+          </CardContent>
+        </Card>
       </div>
 
       <div>
-        <h2 className="mb-3 text-lg font-medium">Factures</h2>
+        <h2 className="mb-3 text-lg font-semibold text-slate-900">Factures</h2>
 
         {invoicesLoading && <p className="text-muted-foreground">Chargement…</p>}
 
@@ -154,7 +194,7 @@ export default function CustomerDetailPage() {
           <p className="text-muted-foreground">Aucune facture pour ce client.</p>
         )}
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           {invoices?.map((invoice, i) => (
             <motion.div
               key={invoice._id}
@@ -163,14 +203,19 @@ export default function CustomerDetailPage() {
               transition={{ duration: 0.2, delay: i * 0.03 }}
             >
               <Link href={`/invoices/${invoice._id}`}>
-                <Card className="transition-colors hover:bg-muted/50">
-                  <CardContent className="flex items-center justify-between p-4">
+                <Card className="border-slate-200 bg-white transition-all duration-200 hover:border-slate-300 hover:bg-slate-50">
+                  <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-3">
-                      <FileText className="h-4 w-4 text-muted-foreground" />
-                      <span className="font-medium">{invoice.invoiceNumber}</span>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#edf3ff] text-[#2B3A67]">
+                        <FileText className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-slate-900">{invoice.invoiceNumber}</p>
+                        <p className="text-sm text-slate-500">{invoice.issueDate ? new Date(invoice.issueDate).toLocaleDateString("fr-FR") : "Date inconnue"}</p>
+                      </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-sm font-medium text-slate-700">
                         {formatCurrency(invoice.total)}
                       </span>
                       <Badge variant={statusVariants[invoice.status]}>
