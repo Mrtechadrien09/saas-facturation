@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
 
 // Étape 1 : Notre propre algorithme de calcul de force (0 à 4)
 const calculatePasswordStrength = (password: string): number => {
@@ -45,6 +46,11 @@ export default function Register() {
   const router = useRouter();
   const { register: registerUser } = useAuth();
 
+  const handleSocialAuth = (provider: "google" | "github") => {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://saas-facturation-backend-hb6b.onrender.com/api";
+    window.location.href = `${apiBaseUrl}/auth/${provider}`;
+  };
+
   const { register, handleSubmit, watch, formState: { errors } } = useForm({
     defaultValues: {
       name: "",
@@ -78,6 +84,14 @@ export default function Register() {
           <div className="space-y-2 text-center">
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">Créer un compte</h1>
             <p className="text-sm text-slate-500">Commencez à gérer vos factures dès aujourd'hui</p>
+          </div>
+
+          <SocialAuthButtons onSelect={handleSocialAuth} />
+
+          <div className="relative my-4 flex items-center justify-center">
+            <div className="h-px flex-1 bg-slate-200" />
+            <span className="mx-3 text-xs uppercase tracking-[0.2em] text-slate-400">ou</span>
+            <div className="h-px flex-1 bg-slate-200" />
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
