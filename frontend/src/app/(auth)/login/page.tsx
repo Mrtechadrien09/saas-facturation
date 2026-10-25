@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
 import { GradientBlobs } from "@/components/decorative/gradient-blobs";
+import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
 import Link from "next/link";
 
 
@@ -31,6 +32,11 @@ export default function LoginPage() {
   const [rateLimited, setRateLimited] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  const handleSocialAuth = (provider: "google" | "github") => {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://saas-facturation-backend-hb6b.onrender.com/api";
+    window.location.href = `${apiBaseUrl}/auth/${provider}`;
+  };
 
   const {
     register,
@@ -103,6 +109,14 @@ export default function LoginPage() {
               <p className="mt-3 text-sm leading-7 text-slate-600">
                 Entre dans ton espace Simplifact et reprends le contrôle de tes clients, devis et paiements.
               </p>
+            </div>
+
+            <SocialAuthButtons onSelect={handleSocialAuth} />
+
+            <div className="relative my-4 flex items-center justify-center">
+              <div className="h-px flex-1 bg-slate-200" />
+              <span className="mx-3 text-xs uppercase tracking-[0.2em] text-slate-400">ou</span>
+              <div className="h-px flex-1 bg-slate-200" />
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
