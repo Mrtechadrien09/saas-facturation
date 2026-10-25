@@ -171,6 +171,30 @@ const FaqItem = memo(function FaqItem({
   );
 });
 
+function TypewriterHeadline({ text }: { text: string }) {
+  const [displayedText, setDisplayedText] = useState("");
+
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      i += 1;
+      setDisplayedText(text.slice(0, i));
+      if (i >= text.length) {
+        clearInterval(interval);
+      }
+    }, 35);
+
+    return () => clearInterval(interval);
+  }, [text]);
+
+  return (
+    <span className="inline-flex items-center gap-2">
+      {displayedText}
+      <span className="inline-block h-10 w-[2px] animate-pulse rounded-full bg-[#C9A227] align-middle" />
+    </span>
+  );
+}
+
 export default function HomePage() {
   const router = useRouter();
   const { isAuthenticated, init } = useAuth();
@@ -235,6 +259,8 @@ export default function HomePage() {
       {/* ========== HERO ========== */}
       <section className="relative overflow-hidden bg-slate-950 text-white">
         <div className="absolute inset-0">
+          <div className="grid-pattern absolute inset-0 opacity-30" aria-hidden="true" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(201,162,39,0.18),_transparent_35%)]" />
           <Image
             src="/images/hero.jpg"
             alt="Interface Simplifact pour freelances et indépendants"
@@ -242,11 +268,12 @@ export default function HomePage() {
             priority
             quality={75}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
-            className="object-cover object-[center_35%] brightness-[0.6] contrast-110"
+            className="object-cover object-[center_35%] brightness-[0.52] contrast-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-950/85 via-slate-950/50 to-slate-900/30" />
-          <div className="absolute left-[-10%] top-10 h-80 w-80 rounded-full bg-[#C9A227]/15 blur-3xl" />
-          <div className="absolute right-0 top-1/4 h-72 w-72 rounded-full bg-sky-400/15 blur-3xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-950/90 via-slate-950/70 to-slate-900/50" />
+          <div className="animate-drift absolute -left-20 top-16 h-72 w-72 rounded-full bg-[#C9A227]/20 blur-3xl" />
+          <div className="animate-float-slow absolute right-0 top-1/4 h-80 w-80 rounded-full bg-sky-400/20 blur-3xl" />
+          <div className="animate-float absolute bottom-0 left-1/3 h-56 w-56 rounded-full bg-indigo-500/10 blur-3xl" />
         </div>
 
         <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-24 sm:px-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:py-28">
@@ -269,7 +296,7 @@ export default function HomePage() {
               transition={{ duration: 0.55, delay: 0.08 }}
               className="mt-8 max-w-xl text-5xl font-semibold tracking-tight text-white sm:text-6xl"
             >
-              Simplifact, sans perte de temps
+              <TypewriterHeadline text="Simplifact, sans perte de temps" />
             </motion.h1>
 
             <motion.p
@@ -334,8 +361,40 @@ export default function HomePage() {
             transition={{ duration: 0.65, delay: 0.2 }}
             className="relative"
           >
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/90 shadow-[0_40px_120px_-40px_rgba(15,23,42,0.7)]">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(56,189,248,0.16),_transparent_45%),_radial-gradient(circle_at_bottom_left,_rgba(245,158,11,0.14),_transparent_40%)]" />
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -left-8 top-10 z-10 rounded-2xl border border-white/15 bg-white/10 p-3 shadow-[0_20px_40px_-25px_rgba(148,163,184,0.9)] backdrop-blur-md"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
+                  <CheckCircle2 className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-slate-300">Paiements</p>
+                  <p className="text-sm font-semibold text-white">98.4% suivis</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -right-6 bottom-14 z-10 rounded-2xl border border-[#C9A227]/30 bg-[#C9A227]/10 p-3 shadow-[0_20px_40px_-25px_rgba(201,162,39,0.8)] backdrop-blur-md"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#C9A227]/20 text-[#F7D77A]">
+                  <Zap className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-slate-300">Productivité</p>
+                  <p className="text-sm font-semibold text-white">+38% gain</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <div className="glass-panel relative overflow-hidden rounded-[2rem] shadow-[0_40px_120px_-40px_rgba(15,23,42,0.7)]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(56,189,248,0.18),_transparent_45%),_radial-gradient(circle_at_bottom_left,_rgba(245,158,11,0.14),_transparent_40%)]" />
               <div className="relative p-6 sm:p-8">
                 <div className="flex items-center justify-between gap-4 rounded-3xl bg-slate-900/80 px-4 py-3 text-sm text-slate-200 shadow-sm">
                   <div>
@@ -470,17 +529,20 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: i * 0.08 }}
-                className="rounded-[2rem] border border-slate-200/80 bg-white p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.18)] transition hover:-translate-y-1 hover:shadow-[0_24px_60px_-30px_rgba(15,23,42,0.22)]"
+                className="group relative overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.18)] transition hover:-translate-y-1 hover:shadow-[0_28px_70px_-30px_rgba(43,58,103,0.3)]"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-[#E9F4FF] text-[#2B3A67] shadow-sm">
-                  <Icon className="h-6 w-6" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.12),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(201,162,39,0.12),_transparent_35%)] opacity-0 transition duration-500 group-hover:opacity-100" />
+                <div className="relative">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-[#E9F4FF] text-[#2B3A67] shadow-sm ring-1 ring-[#dfe7ff]">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="mt-6 text-xl font-semibold text-slate-900">
+                    {feature.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                    {feature.description}
+                  </p>
                 </div>
-                <h3 className="mt-6 text-xl font-semibold text-slate-900">
-                  {feature.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">
-                  {feature.description}
-                </p>
               </motion.div>
             );
           })}
