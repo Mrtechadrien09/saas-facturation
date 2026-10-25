@@ -7,7 +7,30 @@ import { User } from '../models/User.js';
 import crypto from 'crypto';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resendClient: Resend | null = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+
+const sendVerificationEmail = async (to: string, name: string, verifyUrl: string) => {
+  if (!resendClient || !process.env.RESEND_API_KEY) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('RESEND_API_KEY absent — email de vérification désactivé en mode local/dev.');
+      return;
+    }
+
+    throw new Error('SERVICE_EMAIL_NON_CONFIGURE');
+  }
+
+  await resendClient.emails.send({
+    from: 'onboarding@resend.dev',
+    to,
+    subject: 'Vérifie ton adresse email',
+    html: `
+      <p>Bonjour ${name},</p>
+      <p>Merci de t'être inscrit. Clique sur le lien ci-dessous pour vérifier ton email (valide 24h) :</p>
+      <p><a href="${verifyUrl}">${verifyUrl}</a></p>
+    `,
+  });
+};
+
 // Fonction utilitaire pour générer le JWT
 export const generateToken = (userId: string): string => {
   const secret = process.env.JWT_SECRET;
@@ -51,20 +74,22 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
 
-    await resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: user.email,
-      subject: 'Vérifie ton adresse email',
-      html: `
-        <p>Bonjour ${user.name},</p>
-        <p>Merci de t'être inscrit. Clique sur le lien ci-dessous pour vérifier ton email (valide 24h) :</p>
-        <p><a href="${verifyUrl}">${verifyUrl}</a></p>
-      `,
-    });
+    try {
+      await sendVerificationEmail(user.email, user.name, verifyUrl);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'production') {
+        throw error;
+      }
+      user.emailVerified = true;
+      user.emailVerificationToken = undefined;
+      user.emailVerificationExpires = undefined;
+      await user.save();
+    }
 
-    // Pas de token de connexion ici : l'utilisateur doit d'abord vérifier son email
     res.status(201).json({
-      message: "Compte créé. Vérifie ton email pour activer ton compte.",
+      message: process.env.NODE_ENV === 'production'
+        ? "Compte créé. Vérifie ton email pour activer ton compte."
+        : "Compte créé avec succès. L'email de vérification a été désactivé en mode local/dev.",
       email: user.email,
     });
   } catch (error) {
@@ -133,17 +158,25 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
 
-    await resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: user.email,
-      subject: 'Réinitialisation de votre mot de passe',
-      html: `
-        <p>Bonjour ${user.name},</p>
-        <p>Vous avez demandé la réinitialisation de votre mot de passe. Cliquez sur le lien ci-dessous (valide 1 heure) :</p>
-        <p><a href="${resetUrl}">${resetUrl}</a></p>
-        <p>Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.</p>
-      `,
-    });
+    if (!resendClient) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('RESEND_API_KEY absent — email de réinitialisation désactivé en mode local/dev.');
+      } else {
+        throw new Error('SERVICE_EMAIL_NON_CONFIGURE');
+      }
+    } else {
+      await resendClient.emails.send({
+        from: 'onboarding@resend.dev',
+        to: user.email,
+        subject: 'Réinitialisation de votre mot de passe',
+        html: `
+          <p>Bonjour ${user.name},</p>
+          <p>Vous avez demandé la réinitialisation de votre mot de passe. Cliquez sur le lien ci-dessous (valide 1 heure) :</p>
+          <p><a href="${resetUrl}">${resetUrl}</a></p>
+          <p>Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.</p>
+        `,
+      });
+    }
 
     res.status(200).json({ message: "Si cet email existe, un lien de réinitialisation a été envoyé." });
   } catch (error) {
@@ -235,12 +268,20 @@ export const resendVerification = async (req: Request, res: Response): Promise<v
 
     const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
 
-    await resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: user.email,
-      subject: 'Vérifie ton adresse email',
-      html: `<p>Voici ton nouveau lien de vérification (valide 24h) :</p><p><a href="${verifyUrl}">${verifyUrl}</a></p>`,
-    });
+    if (!resendClient) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('RESEND_API_KEY absent — email de vérification désactivé en mode local/dev.');
+      } else {
+        throw new Error('SERVICE_EMAIL_NON_CONFIGURE');
+      }
+    } else {
+      await resendClient.emails.send({
+        from: 'onboarding@resend.dev',
+        to: user.email,
+        subject: 'Vérifie ton adresse email',
+        html: `<p>Voici ton nouveau lien de vérification (valide 24h) :</p><p><a href="${verifyUrl}">${verifyUrl}</a></p>`,
+      });
+    }
 
     res.status(200).json({ message: "Si ce compte existe et n'est pas encore vérifié, un email a été envoyé." });
   } catch (error) {
