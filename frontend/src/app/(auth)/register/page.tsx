@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { User, Building2, Mail, Lock, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/use-auth';
 
 // Ajustez ces 3 lignes si vos fichiers Shadcn sont rangés ailleurs
 import { Input } from "@/components/ui/input";
@@ -42,6 +43,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { register: registerUser } = useAuth();
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm({
     defaultValues: {
@@ -60,10 +62,10 @@ export default function Register() {
     setLoading(true);
     setError(null);
     try {
-      console.log("Données envoyées :", data);
-      router.push("/login"); // Rediriger vers la page de connexion après l'inscription
+      await registerUser(data.name, data.email, data.password, data.companyName);
+      router.push(`/check-email?email=${encodeURIComponent(data.email)}`);
     } catch (err: any) {
-      setError(err.message || "Une erreur est survenue.");
+      setError(err?.response?.data?.message || err?.message || "Une erreur est survenue.");
     } finally {
       setLoading(false);
     }
