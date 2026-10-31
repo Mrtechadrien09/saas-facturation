@@ -267,7 +267,7 @@ export default function SettingsPage() {
                 <div className="mb-4 rounded-full bg-white p-3 shadow-sm ring-1 ring-slate-200">
                   <UploadCloud className="h-6 w-6 text-slate-600" />
                 </div>
-                <p className="text-base font-medium text-slate-800">Téléverse ton logo</p>
+                <p className="text-base font-medium text-slate-800">Téléversez votre logo</p>
                 <p className="mt-1 text-sm text-slate-500">PNG, JPG ou SVG • jusqu’à 2 Mo</p>
                 <Button type="button" variant="outline" className="mt-5">
                   Choisir un fichier
@@ -301,7 +301,7 @@ export default function SettingsPage() {
               <div className="flex flex-col gap-3 rounded-[22px] border border-slate-200 bg-gradient-to-r from-slate-50 to-white p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="font-medium text-slate-900">Stripe</p>
-                  <p className="text-sm text-slate-500">Connecte ton compte pour accepter des paiements en ligne.</p>
+                  <p className="text-sm text-slate-500">Connectez votre compte pour accepter des paiements en ligne.</p>
                 </div>
                 <Button type="button" variant="outline" className="min-w-36 border-slate-300 bg-white hover:bg-slate-50">
                   Connecter
