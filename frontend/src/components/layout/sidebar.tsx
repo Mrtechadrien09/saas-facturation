@@ -33,7 +33,7 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="hidden w-64 flex-col border-r bg-gradient-to-b from-blue-100/80 to-slate-100/50 md:flex">
+    <aside className="sticky top-0 hidden h-screen w-64 flex-col border-r bg-gradient-to-b from-blue-100/80 to-slate-100/50 md:flex">
       <div className="flex h-16 items-center gap-2 border-b px-6">
         <Receipt className="h-5 w-5 text-primary" />
         <span className="font-semibold">Simplifact</span>
