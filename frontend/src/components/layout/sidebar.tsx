@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { LayoutDashboard, Users, FileText, Settings, Receipt } from "lucide-react";
+import { LayoutDashboard, Users, FileText, Settings, Receipt, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth";
 
 export const navItems = [
   { href: "/dashboard", label: "Vue d'ensemble", icon: LayoutDashboard },
@@ -23,6 +24,13 @@ const iconColors: Record<string, string> = {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
 
   return (
     <aside className="hidden w-64 flex-col border-r bg-gradient-to-b from-blue-100/80 to-slate-100/50 md:flex">
@@ -58,6 +66,17 @@ export function Sidebar() {
           );
         })}
       </nav>
+
+      <div className="border-t p-3">
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-3 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-slate-800"
+        >
+          <LogOut className="h-4 w-4" />
+          Déconnexion
+        </button>
+      </div>
     </aside>
   );
 }
