@@ -69,11 +69,11 @@ function ResetPasswordcontent() {
           </span>
           <h1 className="mt-6 text-4xl font-semibold tracking-tight">Nouveau mot de passe</h1>
           <p className="mt-4 text-sm leading-7 text-slate-300">
-            Choisis un mot de passe fort pour reprendre l’accès à ton espace sécurisé.
+            Choisissez un mot de passe robuste pour reprendre l’accès à votre espace sécurisé.
           </p>
           <div className="mt-8 space-y-4 rounded-[1.75rem] bg-slate-900/55 p-6 text-sm text-slate-300 ring-1 ring-white/5">
             <p className="font-medium text-white">Protection renforcée</p>
-            <p>Un mot de passe plus sûr aide à protéger tes clients et tes factures.</p>
+            <p>Un mot de passe plus sûr aide à protéger vos clients et vos factures.</p>
             <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Simple, clair, sans superflu</p>
           </div>
         </div>
@@ -103,7 +103,7 @@ function ResetPasswordcontent() {
               ) : done ? (
                 <div className="rounded-[1.75rem] border border-emerald-200 bg-emerald-50 p-6 text-center text-sm text-emerald-700">
                   <CheckCircle2 className="mx-auto mb-3 h-10 w-10" />
-                  Mot de passe réinitialisé. Tu vas être redirigé vers la connexion.
+                  Mot de passe réinitialisé. Vous allez être redirigé vers la connexion.
                 </div>
               ) : (
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
