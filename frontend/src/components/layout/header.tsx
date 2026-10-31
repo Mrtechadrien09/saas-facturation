@@ -29,7 +29,7 @@ export function Header() {
   };
 
   return (
-    <header className="relative flex h-16 items-center justify-between border-b px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200/80 bg-white/80 px-6 backdrop-blur-md shadow-[0_1px_0_rgba(15,23,42,0.05)]">
       <div className="flex items-center gap-3 md:hidden">
         <button
           type="button"
