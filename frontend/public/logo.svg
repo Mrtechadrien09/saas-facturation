@@ -1,0 +1,13 @@
+<svg width="220" height="64" viewBox="0 0 220 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="64" height="64" rx="18" fill="url(#paint0_linear_1_2)"/>
+  <path d="M44.5 15.5C38.5 11 30.5 9 22.2 9.6C13.5 10.4 7 14.5 7 22.3C7 28.2 10.3 32.9 17.8 36.3L23.4 38.5C28.5 40.7 31.3 42.6 31.3 46.7C31.3 50.7 28.3 53.4 23.2 53.4C18.4 53.4 14.2 52 11.7 49.7L9 52.7C12.5 56.2 17.9 58.7 25 58.7C34.3 58.7 41.4 54.6 44.9 47.9C47.4 42.8 47.6 38.2 45.4 34.5L41 27.4C39 24.4 37.3 22.6 34.1 21.3L29.4 19.5C25.9 18.1 24 16.6 24 14.5C24 12.5 25.5 11.3 28.6 11.3C33.2 11.3 38 12.6 44.5 15.5Z" fill="white"/>
+  <path d="M42.7 22.7C45.9 25.7 48.3 29.8 49.5 35.1L49.7 36.6H55.3L53.8 26.1C53.2 21.9 51.4 18.4 48.4 15.8L44.7 19.1C46.2 20.3 47.5 21.8 48.5 23.7L42.7 22.7Z" fill="#F3D77A"/>
+  <path d="M50.6 39.4C46.6 47 38.9 52.6 30 54.4L26.7 55.1L31 59.2C38.5 58.2 45.3 54.3 50.6 48.4L56.1 42.3L50.6 39.4Z" fill="#F3D77A"/>
+  <text x="74" y="40" fill="#1F2F5F" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" letter-spacing="0.5">Simplifact</text>
+  <defs>
+    <linearGradient id="paint0_linear_1_2" x1="8" y1="8" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1F2F5F"/>
+      <stop offset="1" stop-color="#2B3A67"/>
+    </linearGradient>
+  </defs>
+</svg>
