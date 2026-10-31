@@ -7,8 +7,8 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Simplifact",
-  description: "Gestion des factures avec Simplifact",
+  title: "Simplifact | SaaS de facturation pour entreprises",
+  description: "Solution de facturation et de gestion commerciale pour PME, ETI et services B2B.",
 };
 
 export default function RootLayout({
