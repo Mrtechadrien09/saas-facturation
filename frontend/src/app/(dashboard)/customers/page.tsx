@@ -66,9 +66,16 @@ export default function CustomersPage() {
 
   const handleCreate = async () => {
     const { dialCode, ...payloadBase } = form;
+    const cleanAddress = Object.fromEntries(
+      Object.entries(form.address).filter(([_, value]) => typeof value === "string" ? value.trim() !== "" : value)
+    );
+
     const payload = {
       ...payloadBase,
+      name: form.name.trim(),
+      email: form.email.trim(),
       phone: form.phone ? normalizePhone(form.phone, form.dialCode) : "",
+      ...(Object.keys(cleanAddress).length > 0 ? { address: cleanAddress } : {}),
     };
 
     await createCustomer.mutateAsync(payload);
