@@ -13,6 +13,7 @@ interface AuthState {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string, companyName?: string) => Promise<void>;
+  completeSocialLogin: (token: string) => void;
   logout: () => void;
   init: () => void;
 }
@@ -34,6 +35,18 @@ export const useAuth = create<AuthState>((set) => ({
     set({ user: null, isAuthenticated: false });
   },
 
+  completeSocialLogin: (token) => {
+    localStorage.setItem("token", token);
+    set({
+      user: {
+        _id: "oauth-user",
+        name: "Compte connecté",
+        email: "",
+      },
+      isAuthenticated: true,
+    });
+  },
+
   logout: () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -44,9 +57,22 @@ export const useAuth = create<AuthState>((set) => ({
     try {
       const token = localStorage.getItem("token");
       const savedUser = localStorage.getItem("user");
-      if (token && savedUser) {
-        const parsedUser = JSON.parse(savedUser);
-        set({ user: parsedUser, isAuthenticated: true });
+
+      if (token) {
+        if (savedUser) {
+          const parsedUser = JSON.parse(savedUser);
+          set({ user: parsedUser, isAuthenticated: true });
+          return;
+        }
+
+        set({
+          user: {
+            _id: "oauth-user",
+            name: "Compte connecté",
+            email: "",
+          },
+          isAuthenticated: true,
+        });
         return;
       }
     } catch {
