@@ -140,7 +140,10 @@ export default function CustomersPage() {
                 <div className="grid gap-3 sm:grid-cols-[110px_1fr]">
                   <div className="space-y-2">
                     <Label htmlFor="dialCode">Indicatif</Label>
-                    <Select value={form.dialCode} onValueChange={(value) => setForm({ ...form, dialCode: value })}>
+                    <Select
+                      value={form.dialCode || "+33"}
+                      onValueChange={(value: string | null) => setForm({ ...form, dialCode: value || "+33" })}
+                    >
                       <SelectTrigger className="w-full">
                         <SelectValue />
                       </SelectTrigger>
@@ -195,8 +198,8 @@ export default function CustomersPage() {
                 <div className="space-y-2">
                   <Label htmlFor="country">Pays</Label>
                   <Select
-                    value={form.address.country}
-                    onValueChange={(value) => setForm({ ...form, address: { ...form.address, country: value } })}
+                    value={form.address.country || "France"}
+                    onValueChange={(value: string | null) => setForm({ ...form, address: { ...form.address, country: value || "France" } })}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Sélectionne un pays" />
