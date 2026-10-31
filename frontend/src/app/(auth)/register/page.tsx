@@ -82,8 +82,8 @@ export default function Register() {
       <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-sm border border-slate-100">
         <div className="space-y-6">
           <div className="space-y-2 text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900">Créer un compte</h1>
-            <p className="text-sm text-slate-500">Commencez à gérer vos factures dès aujourd'hui</p>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900">Créer un compte entreprise</h1>
+            <p className="text-sm text-slate-500">Centralisez factures, clients et suivi des paiements au sein de votre organisation.</p>
           </div>
 
           <SocialAuthButtons onSelect={handleSocialAuth} />
@@ -107,10 +107,10 @@ export default function Register() {
 
             {/* CHAMP : ENTREPRISE */}
             <div className="space-y-3">
-              <Label htmlFor="companyName">Entreprise (optionnel)</Label>
+              <Label htmlFor="companyName">Entreprise</Label>
               <div className="relative">
                 <Building2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                <Input id="companyName" placeholder="Mon Entreprise SARL" className="pl-9" {...register("companyName")} />
+                <Input id="companyName" placeholder="Nom de l’entreprise" className="pl-9" {...register("companyName")} />
               </div>
             </div>
 
