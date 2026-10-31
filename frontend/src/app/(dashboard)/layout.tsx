@@ -39,7 +39,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     
 
 return (
-  <div className="relative flex min-h-screen bg-slate-50/50">
+  <div className="relative flex h-screen overflow-hidden bg-slate-50/50">
     {/* Dégradé discret en fond, option 2 */}
     <div
       className="pointer-events-none absolute -right-32 -top-32 -z-10 h-96 w-96 rounded-full opacity-[0.100] blur-3xl"
@@ -51,7 +51,7 @@ return (
     />
 
     <Sidebar />
-    <div className="flex min-h-screen flex-1 flex-col">
+    <div className="flex h-screen flex-1 flex-col overflow-hidden">
       {/* Bandeau accent, option 3 */}
       <div className="h-1 w-full bg-gradient-to-r from-[#2B3A67] to-[#C9A227]" />
       <Header />
