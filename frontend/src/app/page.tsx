@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
+import { getTokenFromUrl, clearTokenFromUrl } from "@/lib/auth-token.mjs";
 import Image from "next/image";
 export const dynamic = "force-dynamic";
 const features = [
@@ -197,13 +198,23 @@ function TypewriterHeadline({ text }: { text: string }) {
 
 export default function HomePage() {
   const router = useRouter();
-  const { isAuthenticated, init } = useAuth();
+  const { isAuthenticated, init, completeSocialLogin } = useAuth();
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
+    const tokenFromUrl = getTokenFromUrl(window.location.search);
+
+    if (tokenFromUrl) {
+      completeSocialLogin(tokenFromUrl);
+      const nextPath = clearTokenFromUrl(window.location.href);
+      window.history.replaceState({}, "", nextPath);
+      setChecked(true);
+      return;
+    }
+
     init();
     setChecked(true);
-  }, [init]);
+  }, [completeSocialLogin, init]);
 
   useEffect(() => {
     if (checked && isAuthenticated) {
