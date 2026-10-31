@@ -240,7 +240,7 @@ export default function SettingsPage() {
                   <Label htmlFor="country">Pays</Label>
                   <Select
                     value={form.address.country || "France"}
-                    onValueChange={(value) => setForm({ ...form, address: { ...form.address, country: value } })}
+                    onValueChange={(value: string | null) => setForm({ ...form, address: { ...form.address, country: value || "France" } })}
                   >
                     <SelectTrigger className="h-11 w-full">
                       <SelectValue placeholder="Sélectionne un pays" />
