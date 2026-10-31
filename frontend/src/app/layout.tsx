@@ -9,6 +9,11 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Simplifact | SaaS de facturation pour entreprises",
   description: "Solution de facturation et de gestion commerciale pour PME, ETI et services B2B.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
