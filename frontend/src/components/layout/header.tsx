@@ -58,19 +58,21 @@ export function Header() {
         </div>
       )}
 
-      <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-950">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2B3A67] text-sm font-medium text-white">
-            {user?.name?.charAt(0).toUpperCase() || "?"}
-          </div>
-          <span className="max-w-[160px] truncate">{user?.name || user?.email}</span>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-52">
-          <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
-            Déconnexion
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="ml-auto flex items-center gap-3">
+        <DropdownMenu>
+          <DropdownMenuTrigger className="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-950">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2B3A67] text-sm font-medium text-white">
+              {user?.name?.charAt(0).toUpperCase() || "?"}
+            </div>
+            <span className="max-w-[160px] truncate">{user?.name || user?.email}</span>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-52">
+            <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+              Déconnexion
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </header>
   );
 }
