@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
 import {
   Loader2,
   Save,
@@ -41,10 +42,11 @@ const tabs: { id: SettingsTab; label: string; icon: typeof Building2 }[] = [
 export default function SettingsPage() {
   const { data, isLoading } = useSettings();
   const updateSettings = useUpdateSettings();
+  const { theme, setTheme } = useTheme();
   const [form, setForm] = useState<Settings>(defaultSettings);
   const [saved, setSaved] = useState(false);
   const [activeTab, setActiveTab] = useState<SettingsTab>("company");
-  const [darkMode, setDarkMode] = useState(false);
+  const darkMode = theme === "dark";
 
   useEffect(() => {
     if (data) {
@@ -355,7 +357,7 @@ export default function SettingsPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setDarkMode((value) => !value)}
+                  onClick={() => setTheme(darkMode ? "light" : "dark")}
                   className={[
                     "relative inline-flex h-7 w-12 items-center rounded-full transition-colors",
                     darkMode ? "bg-slate-900" : "bg-slate-200",
