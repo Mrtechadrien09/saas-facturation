@@ -42,7 +42,7 @@ function CheckEmailcontent() {
           <div className="rounded-[2rem] border border-slate-200 bg-white/95 p-8 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.3)] backdrop-blur-xl sm:p-10">
             <div className="text-center">
               <Mail className="mx-auto h-10 w-10 text-[#2B3A67]" />
-              <h2 className="mt-5 text-3xl font-semibold tracking-tight text-slate-950">Vérifie ton email</h2>
+              <h2 className="mt-5 text-3xl font-semibold tracking-tight text-slate-950">Vérifiez votre email</h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
                 Un lien de vérification a été envoyé à <span className="font-medium text-slate-900">{email}</span>.
               </p>
@@ -50,7 +50,7 @@ function CheckEmailcontent() {
 
             <div className="mt-8 space-y-4">
               <p className="text-center text-sm text-slate-600">
-                Clique sur le lien reçu pour activer ton compte et démarrer ta facturation.
+                Cliquez sur le lien reçu pour activer votre compte et commencer votre gestion commerciale.
               </p>
 
               {resent ? (
