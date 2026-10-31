@@ -83,14 +83,14 @@ export default function LoginPage() {
           <span className="inline-flex rounded-full bg-[#C9A227]/20 px-3 py-1 text-xs uppercase tracking-[0.32em] text-[#C9A227]">
             Simplifact
           </span>
-          <h1 className="mt-6 text-4xl font-semibold tracking-tight">Connexion à ton espace</h1>
+          <h1 className="mt-6 text-4xl font-semibold tracking-tight">Accédez à votre espace entreprise</h1>
           <p className="mt-4 text-sm leading-7 text-slate-300">
-            Accède à ton tableau de bord, suis tes factures et garde un oeil sur tes paiements en toute simplicité.
+            Suivez vos clients, vos factures et votre trésorerie depuis un tableau de bord conçu pour les équipes B2B.
           </p>
           <div className="mt-8 space-y-4 rounded-[1.75rem] bg-slate-900/55 p-6 text-sm text-slate-300 ring-1 ring-white/5">
-            <p className="font-medium text-white">Un espace clair pour ton activité</p>
-            <p>Clients, factures, relances et paiements regroupés dans une interface fluide.</p>
-            <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Simple, rapide et professionnel</p>
+            <p className="font-medium text-white">Pilotage financier centralisé</p>
+            <p>Factures, relances, paiements et suivi clients au même endroit pour des équipes plus réactives.</p>
+            <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Sérénité opérationnelle</p>
           </div>
         </div>
       </div>
@@ -105,9 +105,9 @@ export default function LoginPage() {
           <div className="rounded-[2rem] border border-slate-200 bg-white/95 p-8 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.3)] backdrop-blur-xl sm:p-10">
             <div className="mb-8">
               <p className="text-sm uppercase tracking-[0.3em] text-slate-500">Se connecter</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">Bienvenue de retour</h2>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">Connexion à votre espace</h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                Entre dans ton espace Simplifact et reprends le contrôle de tes clients, devis et paiements.
+                Accédez à vos données commerciales, vos factures et votre suivi de trésorerie en quelques secondes.
               </p>
             </div>
 
