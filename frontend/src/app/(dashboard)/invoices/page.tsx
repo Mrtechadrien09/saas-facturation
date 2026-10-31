@@ -81,9 +81,9 @@ export default function InvoicesPage() {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Factures</p>
-            <h1 className="mt-3 text-3xl font-semibold text-slate-900">Gère tes factures</h1>
+            <h1 className="mt-3 text-3xl font-semibold text-slate-900">Gérez vos factures</h1>
             <p className="mt-2 text-sm leading-7 text-slate-600">
-              Recherche, filtre et crée des factures avec un affichage clair et professionnel.
+              Recherchez, filtrez et créez des factures avec un affichage clair et professionnel.
             </p>
           </div>
 
@@ -169,8 +169,8 @@ export default function InvoicesPage() {
           <FileText className="h-10 w-10 text-muted-foreground/50" />
           <h3 className="mt-4 font-medium">Aucune facture pour le moment</h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            Crée ta première facture pour commencer.
-        </p>
+            Créez votre première facture pour commencer.
+          </p>
         </motion.div>
       )}
 
