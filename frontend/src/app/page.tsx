@@ -25,114 +25,114 @@ export const dynamic = "force-dynamic";
 const features = [
   {
     icon: FileText,
-    title: "Simplifact",
+    title: "Facturation professionnelle",
     description:
-      "Crée des factures professionnelles en quelques clics. Mentions légales, numérotation et totaux sont gérés pour toi — tu te concentres sur le contenu.",
+      "Générez des factures conformes, avec mentions légales, numérotation et montants calculés automatiquement pour votre organisation.",
   },
   {
     icon: Users,
-    title: "Gestion clients",
+    title: "Gestion clients & comptes",
     description:
-      "Centralise coordonnées, adresses et historique. Retrouve n’importe quel client en quelques secondes, sans tableur ni dossier éparpillé.",
+      "Centralisez les informations de vos clients, filiales et partenaires avec un historique clair et un accès structuré par équipe.",
   },
   {
     icon: Zap,
-    title: "Suivi en temps réel",
+    title: "Suivi de trésorerie",
     description:
-      "Tableau de bord clair : revenu, factures en attente, retards. Tu sais toujours où en est ta trésorerie, sans tout recalculer à la main.",
+      "Visualisez les encaissements, les relances et les factures en attente pour piloter votre cash-flow avec précision.",
   },
   {
     icon: ShieldCheck,
-    title: "Sécurisé",
+    title: "Sécurité & conformité",
     description:
-      "Compte protégé, vérification email et accès personnel. Tes données restent les tiennes — accessibles uniquement depuis ton espace.",
+      "Accès contrôlé, vérification des comptes et environnement conçu pour les équipes internes et les organisations B2B.",
   },
 ];
 
 const steps = [
   {
     icon: UserPlus,
-    title: "Ajoute tes clients",
+    title: "Importez vos clients",
     description:
-      "Renseigne une fois nom, email et adresse. Ces infos seront réutilisées à chaque facture, sans ressaisie.",
+      "Ajoutez rapidement vos entreprises, contacts et adresses pour centraliser les informations de votre pipeline commercial.",
   },
   {
     icon: FilePlus,
-    title: "Crée une facture",
+    title: "Créez vos factures",
     description:
-      "Ajoute tes lignes, choisis le taux de TVA : HT, TVA et TTC se calculent seuls. Ta facture est prête en moins d’une minute.",
+      "Ajoutez les lignes, les taux de TVA, les conditions de paiement et générez des factures prêtes à envoyer en quelques clics.",
   },
   {
     icon: CreditCard,
-    title: "Envoie et suis les paiements",
+    title: "Suivez les paiements",
     description:
-      "Envoie le PDF par email en un clic, puis suis le statut — brouillon, envoyée, payée ou en retard — jusqu’au règlement.",
+      "Surveillez les statuts, relancez les impayés et gardez une vue fiable sur l’état de votre trésorerie d’entreprise.",
   },
 ];
 
 const audiences = [
   {
-    title: "Indépendants & freelances",
-    text: "Tu factures au fil des missions. Un outil simple te laisse plus de temps pour ton métier, pas pour l’administratif.",
+    title: "PME & ETI",
+    text: "Un outil de facturation robuste pour structurer les processus comptables et commerciaux sans dépendre de fichiers dispersés.",
   },
   {
-    title: "Petites structures",
-    text: "Plusieurs clients, plusieurs échéances. Tout reste centralisé : qui a payé, qui est en retard, combien tu as facturé.",
+    title: "Agences & services",
+    text: "Centralisez les clients, les prestations et les relances pour gagner en réactivité et en visibilité sur les missions en cours.",
   },
   {
-    title: "Ceux qui quittent Excel",
-    text: "Fini les modèles copiés-collés et les erreurs de formules. Une facture propre, numérotée, prête à envoyer.",
+    title: "Équipes finance & opérations",
+    text: "Offrez à vos équipes une base unique pour piloter la facturation, les encaissements et les suivis internes de manière fiable.",
   },
 ];
 
 const testimonials = [
   {
     name: "Camille R.",
-    role: "Graphiste freelance",
-    text: "Avant je passais 20 minutes sur Word pour chaque facture. Maintenant c’est prêt en 2 clics, et mes clients reçoivent un PDF pro. Un vrai gain de temps.",
+    role: "Directrice financière",
+    text: "Nous avons standardisé la facturation de nos clients en quelques semaines. Le suivi des paiements est désormais clair et exploitable par toute l’équipe.",
   },
   {
     name: "Thomas L.",
-    role: "Consultant indépendant",
-    text: "Le suivi des paiements m’a changé la vie. Je vois immédiatement qui a payé et qui est en retard. Plus besoin de relancer à l’aveugle.",
+    role: "Responsable comptabilité",
+    text: "L’outil nous aide à éviter les erreurs de suivi et à relancer rapidement les impayés. L’expérience est simple, propre et adaptée à une organisation.",
   },
   {
     name: "Léa M.",
-    role: "Photographe",
-    text: "Simple, clair, et la TVA se calcule toute seule. J’ai quitté Excel sans regret. Exactement ce qu’il me fallait pour démarrer.",
+    role: "Chef d’agence",
+    text: "La facturation est devenue fluide et beaucoup plus lisible pour nos équipes. Nous gagnons du temps sur les tâches administratives sans perdre la qualité.",
   },
 ];
 
 const faqs = [
   {
-    question: "Mes données sont-elles en sécurité ?",
+    question: "Nos données sont-elles sécurisées ?",
     answer:
-      "Oui. Chaque compte est isolé, protégé par mot de passe et vérification par email. Seul toi (et les personnes à qui tu donnes accès) pouvez consulter tes clients et tes factures.",
+      "Oui. Chaque compte est isolé et protégé par mot de passe, vérification d’email et accès structuré pour les équipes internes.",
   },
   {
-    question: "Puis-je utiliser l'app avec plusieurs clients ?",
+    question: "L’outil convient-il à plusieurs utilisateurs ?",
     answer:
-      "Oui, sans limite artificielle. Ajoute autant de clients que nécessaire, filtre tes factures, et retrouve l’historique de chacun depuis sa fiche.",
+      "Oui. Il est conçu pour les entreprises qui souhaitent centraliser les clients, les factures et les suivis entre plusieurs profils et départements.",
   },
   {
-    question: "Est-ce que je peux envoyer mes factures directement par email ?",
+    question: "Peut-on envoyer des factures directement par email ?",
     answer:
-      "Oui. Depuis le détail d’une facture, un envoi par email joint le PDF. Ton client reçoit un document clair, et le statut passe à « envoyée ».",
+      "Oui. Les factures peuvent être générées puis envoyées directement depuis l’interface, avec un historique clair et un statut suivi par l’équipe.",
   },
   {
     question: "Le calcul de la TVA est-il automatique ?",
     answer:
-      "Oui. Tu indiques le taux par ligne (par ex. 20 %). Les montants HT, TVA et TTC sont recalculés à chaque modification — plus d’erreur de saisie.",
+      "Oui. Vous définissez le taux applicable et le système calcule automatiquement les montants HT, TVA et TTC pour chaque facture.",
   },
   {
-    question: "Puis-je télécharger mes factures en PDF ?",
+    question: "Le SaaS est-il adapté à une structure PME / ETI ?",
     answer:
-      "Oui. Chaque facture se télécharge en PDF, prête à archiver ou à transmettre. Le même fichier part en pièce jointe lors de l’envoi par email.",
+      "Oui. La solution a été pensée pour les organisations qui veulent une gestion plus claire, plus rapide et plus fiable de leurs transactions commerciales.",
   },
   {
-    question: "Est-ce vraiment gratuit pour commencer ?",
+    question: "Peut-on commencer sans procédure complexe ?",
     answer:
-      "Oui. Tu crées ton compte sans carte bancaire. L’objectif est que tu puisses facturer correctement dès le premier jour, sans friction.",
+      "Oui. Vous pouvez créer votre compte et démarrer rapidement, sans friction ni configuration lourde, puis évoluer selon vos besoins.",
   },
 ];
 
@@ -274,7 +274,7 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(201,162,39,0.18),_transparent_35%)]" />
           <Image
             src="/images/hero.jpg"
-            alt="Interface Simplifact pour freelances et indépendants"
+            alt="Interface Simplifact pour entreprises et équipes de gestion"
             fill
             priority
             quality={75}
@@ -298,7 +298,7 @@ export default function HomePage() {
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#C9A227]/20 text-[#C9A227]">
                 <Zap className="h-4 w-4" />
               </span>
-              Pour freelances, TPE et indépendants • Gratuit sans CB
+              Solution de facturation pour PME, ETI et équipes commerciales
             </motion.div>
 
             <motion.h1
@@ -307,7 +307,7 @@ export default function HomePage() {
               transition={{ duration: 0.55, delay: 0.08 }}
               className="mt-8 max-w-xl text-5xl font-semibold tracking-tight text-white sm:text-6xl"
             >
-              <TypewriterHeadline text="Simplifact, sans perte de temps" />
+              <TypewriterHeadline text="Simplifiez la facturation de votre entreprise" />
             </motion.h1>
 
             <motion.p
@@ -316,7 +316,7 @@ export default function HomePage() {
               transition={{ duration: 0.55, delay: 0.16 }}
               className="mt-6 max-w-xl text-lg leading-8 text-slate-200"
             >
-              Centralise tes clients, génère tes factures, et retrouve l’état de tes paiements en un coup d’œil — tout depuis un seul tableau de bord.
+              Centralisez vos clients, vos factures, vos paiements et vos relances dans une plateforme pensée pour les équipes B2B et la gestion d’entreprise.
             </motion.p>
 
             <motion.div
@@ -330,7 +330,7 @@ export default function HomePage() {
                   size="lg"
                   className="bg-[#C9A227] text-slate-950 shadow-lg shadow-[#C9A227]/20 hover:bg-[#d6af2b]"
                 >
-                  Créer un compte gratuit
+                  Créer un compte entreprise
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -340,7 +340,7 @@ export default function HomePage() {
                   variant="outline"
                   className="border-white/20 bg-white/10 text-white hover:bg-white/15"
                 >
-                  Se connecter
+                  Accéder à mon espace
                 </Button>
               </Link>
             </motion.div>
@@ -352,16 +352,16 @@ export default function HomePage() {
               className="mt-10 grid gap-4 sm:grid-cols-3"
             >
               <div className="rounded-3xl border border-white/10 bg-white/10 p-5">
-                <p className="text-3xl font-semibold text-white">120+</p>
-                <p className="mt-2 text-sm text-slate-300">Freelances organisés</p>
+                <p className="text-3xl font-semibold text-white">150+</p>
+                <p className="mt-2 text-sm text-slate-300">Entreprises gérées</p>
               </div>
               <div className="rounded-3xl border border-white/10 bg-white/10 p-5">
-                <p className="text-3xl font-semibold text-white">3 000+</p>
-                <p className="mt-2 text-sm text-slate-300">factures créées</p>
+                <p className="text-3xl font-semibold text-white">8K+</p>
+                <p className="mt-2 text-sm text-slate-300">Factures générées</p>
               </div>
               <div className="rounded-3xl border border-white/10 bg-white/10 p-5">
-                <p className="text-3xl font-semibold text-white">96%</p>
-                <p className="mt-2 text-sm text-slate-300">clients satisfaits</p>
+                <p className="text-3xl font-semibold text-white">97%</p>
+                <p className="mt-2 text-sm text-slate-300">Taux de suivi paiements</p>
               </div>
             </motion.div>
           </div>
@@ -508,7 +508,7 @@ export default function HomePage() {
             transition={{ duration: 0.45 }}
             className="text-sm uppercase tracking-[0.3em] text-slate-500"
           >
-            Ce dont tu as vraiment besoin
+            Ce dont votre entreprise a vraiment besoin
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
@@ -517,7 +517,7 @@ export default function HomePage() {
             transition={{ duration: 0.5, delay: 0.05 }}
             className="mt-5 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl"
           >
-            Gère ta facturation comme un pro, sans complexité.
+            Gérez votre facturation comme un pro, sans complexité.
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 15 }}
@@ -573,7 +573,7 @@ export default function HomePage() {
           <div className="mt-10 grid gap-4 sm:grid-cols-3">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-sm">
               <p className="text-2xl font-semibold text-slate-900">120+</p>
-              <p className="mt-2 text-sm text-slate-500">freelances organisés</p>
+              <p className="mt-2 text-sm text-slate-500">entreprises accompagnées</p>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-sm">
               <p className="text-2xl font-semibold text-slate-900">3 000+</p>
@@ -601,7 +601,7 @@ export default function HomePage() {
               Pour qui
             </p>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-              Conçu pour les artisans du digital, les micros et petites structures.
+              Conçu pour les PME, les agences et les équipes de gestion d’entreprise.
             </h2>
           </motion.div>
 
@@ -639,7 +639,7 @@ export default function HomePage() {
               Comment ça marche
             </p>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-              Trois étapes simples pour démarrer rapidement.
+              Trois étapes simples pour mettre votre facturation sous contrôle.
             </h2>
           </motion.div>
 
@@ -688,7 +688,7 @@ export default function HomePage() {
               Avant / Après
             </p>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-              Passe d’un processus artisanal à un système fluide.
+              Passez d’un suivi manuel à une gestion structurée et professionnelle.
             </h2>
           </motion.div>
 
@@ -835,17 +835,17 @@ export default function HomePage() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-            Prêt à simplifier ta facturation ?
+            Prêt à moderniser la gestion de votre facturation ?
           </h2>
           <p className="mt-3 text-slate-600">
-            Crée ton compte gratuitement, aucune carte bancaire requise.
+            Créez votre compte entreprise et centralisez vos opérations commerciales en quelques minutes.
           </p>
           <Link href="/register">
             <Button
               size="lg"
               className="mt-6 bg-[#2B3A67] text-white shadow-lg shadow-[#2B3A67]/20 hover:bg-[#1f2a4d]"
             >
-              Créer un compte gratuit
+              Créer un compte entreprise
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
@@ -858,7 +858,7 @@ export default function HomePage() {
           <div>
             <p className="text-lg font-semibold text-white">Simplifact</p>
             <p className="mt-3 max-w-md text-sm leading-6 text-slate-400">
-              Une application claire et professionnelle pour facturer, gérer tes clients et suivre tes paiements.
+              Une plateforme de gestion commerciale pensée pour les entreprises qui veulent contrôler leur facturation, leurs clients et leur trésorerie.
             </p>
           </div>
 
