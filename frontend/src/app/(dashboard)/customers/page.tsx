@@ -100,9 +100,9 @@ export default function CustomersPage() {
         <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Clients</p>
-            <h1 className="mt-3 text-3xl font-semibold text-slate-900">Gère ta liste de clients</h1>
+            <h1 className="mt-3 text-3xl font-semibold text-slate-900">Gérez votre portefeuille clients</h1>
             <p className="mt-2 text-sm leading-7 text-slate-600">
-              Retrouve rapidement un client, ajoute ses détails et crée une facture en quelques clics.
+              Retrouvez rapidement un client, ajoutez ses détails et créez une facture en quelques clics.
             </p>
           </div>
 
@@ -287,7 +287,7 @@ export default function CustomersPage() {
           <Users className="h-10 w-10 text-muted-foreground/50" />
           <h3 className="mt-4 font-medium">Aucun client pour le moment</h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            Ajoute ton premier client pour commencer à facturer.
+            Ajoutez votre premier client pour commencer la facturation.
           </p>
         </motion.div>
       )}
