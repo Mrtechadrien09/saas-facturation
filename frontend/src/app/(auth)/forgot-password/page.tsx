@@ -53,11 +53,11 @@ export default function ForgotPasswordPage() {
           </span>
           <h1 className="mt-6 text-4xl font-semibold tracking-tight">Récupère l’accès</h1>
           <p className="mt-4 text-sm leading-7 text-slate-300">
-            Nous t’enverrons un lien sécurisé pour retrouver l’accès à ton espace facturation.
+            Nous vous enverrons un lien sécurisé pour retrouver l’accès à votre espace de facturation.
           </p>
           <div className="mt-8 space-y-4 rounded-[1.75rem] bg-slate-900/55 p-6 text-sm text-slate-300 ring-1 ring-white/5">
             <p className="font-medium text-white">Sécurité et simplicité</p>
-            <p>Un processus clair et sécurisé pour réinitialiser ton mot de passe.</p>
+            <p>Un processus clair et sécurisé pour réinitialiser votre mot de passe.</p>
             <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Facile et rapide</p>
           </div>
         </div>
@@ -75,7 +75,7 @@ export default function ForgotPasswordPage() {
               <Mail className="mx-auto h-10 w-10 text-[#2B3A67]" />
               <h2 className="mt-5 text-3xl font-semibold tracking-tight text-slate-950">Mot de passe oublié</h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                Entre ton email et nous t’enverrons un lien pour définir un nouveau mot de passe.
+                Saisissez votre email pour recevoir un lien de réinitialisation sécurisé.
               </p>
             </div>
 
@@ -84,7 +84,7 @@ export default function ForgotPasswordPage() {
                 <div className="flex flex-col items-center gap-3 rounded-[1.5rem] border border-emerald-200 bg-emerald-50 p-6 text-center text-sm text-emerald-700">
                   <CheckCircle2 className="h-10 w-10" />
                   <p>
-                    Si cet email existe, un lien de réinitialisation a été envoyé. Vérifie ta boîte de réception.
+                    Si cet email existe, un lien de réinitialisation a été envoyé. Vérifiez votre boîte mail.
                   </p>
                 </div>
               ) : (
