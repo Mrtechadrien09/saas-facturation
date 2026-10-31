@@ -166,7 +166,7 @@ export default function DashboardPage() {
               {greeting}{user?.name ? `, ${user.name.split(" ")[0]}` : ""} 👋
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-7 text-slate-200/90">
-              Ton espace facturation clair et rapide : clients, factures et trésorerie au même endroit.
+              Votre espace de gestion commerciale clair et rapide : clients, factures et trésorerie au même endroit.
             </p>
           </div>
 
@@ -188,7 +188,7 @@ export default function DashboardPage() {
           className="rounded-lg border border-red-200 bg-red-50 p-4"
         >
           <p className="text-sm text-red-700">
-            ⚠️ Impossible de charger les statistiques. Vérifie que ton backend tourne bien.
+            ⚠️ Impossible de charger les statistiques. Vérifiez que votre backend fonctionne correctement.
           </p>
         </motion.div>
       )}
