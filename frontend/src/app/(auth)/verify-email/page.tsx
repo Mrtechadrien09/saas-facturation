@@ -46,11 +46,11 @@ export default function VerifyEmailPage() {
           </span>
           <h1 className="mt-6 text-4xl font-semibold tracking-tight">Activation du compte</h1>
           <p className="mt-4 text-sm leading-7 text-slate-300">
-            Nous vérifions ton email et préparons ton tableau de bord pour un accès immédiat.
+            Nous vérifions votre email et préparons votre espace pour un accès immédiat.
           </p>
           <div className="mt-8 space-y-4 rounded-[1.75rem] bg-slate-900/55 p-6 text-sm text-slate-300 ring-1 ring-white/5">
             <p className="font-medium text-white">Un accès protégé</p>
-            <p>Ton compte sera activé rapidement pour que tu puisses reprendre la facturation.</p>
+            <p>Votre compte sera activé rapidement pour que vous puissiez reprendre la gestion commerciale.</p>
             <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Clair, sécurisé, sans surcharge</p>
           </div>
         </div>
@@ -75,9 +75,9 @@ export default function VerifyEmailPage() {
                 {status === "error" && "Lien invalide"}
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                {status === "success" && "Ton compte est activé et tu vas bientôt être redirigé vers le dashboard."}
-                {status === "loading" && "Nous vérifions ton lien et activons ton espace."}
-                {status === "error" && "Ce lien est invalide ou a expiré. Demande un nouveau lien pour continuer."}
+                {status === "success" && "Votre compte est activé et vous allez bientôt être redirigé vers le tableau de bord."}
+                {status === "loading" && "Nous vérifions votre lien et activons votre espace."}
+                {status === "error" && "Ce lien est invalide ou a expiré. Demandez un nouveau lien pour continuer."}
               </p>
             </div>
 
