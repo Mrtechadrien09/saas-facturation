@@ -33,10 +33,10 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-64 flex-col border-r bg-gradient-to-b from-blue-100/80 to-slate-100/50 md:flex">
-      <div className="flex h-16 items-center gap-2 border-b px-6">
-        <Receipt className="h-5 w-5 text-primary" />
-        <span className="font-semibold">Simplifact</span>
+    <aside className="sticky top-0 hidden h-screen w-64 flex-col border-r border-sky-800/60 bg-[#0b1224] text-slate-100 shadow-[inset_-1px_0_0_rgba(96,165,250,0.2)] md:flex">
+      <div className="flex h-16 items-center gap-2 border-b border-sky-800/60 px-6">
+        <Receipt className="h-5 w-5 text-blue-400" />
+        <span className="font-semibold text-white">Simplifact</span>
       </div>
 
       <nav className="flex-1 space-y-1 p-3">
@@ -49,17 +49,17 @@ export function Sidebar() {
               {isActive && (
                 <motion.div
                   layoutId="sidebar-active"
-                  className="absolute inset-0 rounded-md bg-white shadow-sm"
+                  className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg shadow-blue-500/30"
                   transition={{ type: "spring", stiffness: 350, damping: 30 }}
                 />
               )}
               <div
                 className={cn(
-                  "relative flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                  isActive ? "text-primary" : "text-slate-1000 hover:text-foreground"
+                  "relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                  isActive ? "text-white" : "text-slate-300 hover:bg-sky-950/60 hover:text-white"
                 )}
               >
-                <Icon className={cn("h-4 w-4", isActive ? "text-primary" : iconColors[item.href])} />
+                <Icon className={cn("h-4 w-4", isActive ? "text-white" : iconColors[item.href])} />
                 {item.label}
               </div>
             </Link>
@@ -67,11 +67,11 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="border-t p-3">
+      <div className="border-t border-sky-800/60 p-3">
         <button
           type="button"
           onClick={handleLogout}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-3 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-slate-800"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-3 py-2.5 text-sm font-medium text-white shadow-md shadow-blue-500/20 transition hover:bg-blue-500"
         >
           <LogOut className="h-4 w-4" />
           Déconnexion
