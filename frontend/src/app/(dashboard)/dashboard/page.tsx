@@ -221,10 +221,6 @@ export default function DashboardPage() {
                     <div className="text-2xl font-bold tracking-tight text-slate-900 tabular-nums">
                       {isLoading ? <Skeleton className="h-8 w-24 rounded" /> : stat.format(value)}
                     </div>
-                    <div className="flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[10px] font-medium text-emerald-700">
-                      <ArrowUpRight className="h-3 w-3" />
-                      +12%
-                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -244,10 +240,6 @@ export default function DashboardPage() {
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Performance</p>
                 <CardTitle className="mt-2 text-lg font-bold text-slate-900">Revenu des 6 derniers mois</CardTitle>
-              </div>
-              <div className="flex items-center gap-2 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-                <TrendingUp className="h-3.5 w-3.5" />
-                8.4% hausse
               </div>
             </CardHeader>
             <CardContent>
