@@ -81,6 +81,8 @@ export default function CustomersPage() {
     }));
   };
 
+  const selectedDialCountry = countries.find((country) => country.dialCode === form.dialCode) || countries.find((country) => country.dialCode === "+33");
+
   const handleCreate = async () => {
     const { dialCode, ...payloadBase } = form;
     const cleanAddress = Object.fromEntries(
@@ -162,7 +164,12 @@ export default function CustomersPage() {
                       onValueChange={handleDialCodeChange}
                     >
                       <SelectTrigger className="w-full">
-                        <SelectValue />
+                        <div className="flex items-center gap-2">
+                          {selectedDialCountry && (
+                            <ReactCountryFlag countryCode={selectedDialCountry.code} svg className="text-lg leading-none" />
+                          )}
+                          <span>{form.dialCode || "+33"}</span>
+                        </div>
                       </SelectTrigger>
                       <SelectContent>
                         {countries.map((country) => (
