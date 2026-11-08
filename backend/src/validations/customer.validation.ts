@@ -24,7 +24,7 @@ export const customerBodySchema = z.object({
   ),
   phone: z.preprocess(
     emptyStringToUndefined,
-    z.string().refine((value) => !value || /^\+?[0-9][0-9\s.-]{5,20}$/.test(value), {
+    z.string().refine((value) => !value || /^\+?[0-9][0-9\s().-]{5,25}$/.test(value), {
       message: 'Le numéro de téléphone doit être valide.',
     }).optional()
   ),
@@ -42,7 +42,7 @@ export const customerBodySchema = z.object({
     city: optionalTrimmedString(),
     zipCode: optionalTrimmedString(),
     country: optionalTrimmedString('Le pays est invalide.'),
-  }).optional()),
+  }).passthrough().optional()),
 });
 
 export const createCustomerSchema = z.object({
