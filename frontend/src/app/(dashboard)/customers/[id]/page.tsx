@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useCustomer, useUpdateCustomer } from "@/hooks/use-customers";
 import { useCustomerInvoices } from "@/hooks/use-invoices";
 import { formatCurrency } from "@/lib/utils";
+import ReactCountryFlag from "react-country-flag";
 import {
   countries,
   normalizePhone,
@@ -27,7 +28,6 @@ import {
   getDialCodeFromPhone,
   stripDialCode,
   formatPhoneForDialCode,
-  getCountryFlag,
 } from "@/lib/countries";
 import Link from "next/link";
 
@@ -55,11 +55,12 @@ export default function CustomerDetailPage() {
   const [editOpen, setEditOpen] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", dialCode: "+33", phone: "", address:{street: "", city: "", zipCode: "", country: "France"}, });
 
-  const handleDialCodeChange = (value: string) => {
+  const handleDialCodeChange = (value: string | null, _eventDetails?: unknown) => {
+    const nextDialCode = value || "+33";
     setForm((prev) => ({
       ...prev,
-      dialCode: value || "+33",
-      phone: formatPhoneForDialCode(prev.phone, value || "+33"),
+      dialCode: nextDialCode,
+      phone: formatPhoneForDialCode(prev.phone, nextDialCode),
     }));
   };
 
@@ -286,7 +287,9 @@ export default function CustomerDetailPage() {
                   <SelectContent>
                     {countries.map((country) => (
                       <SelectItem key={country.code} value={country.dialCode}>
-                        <span className="mr-2">{getCountryFlag(country.code)}</span>
+                        <span className="mr-2 inline-flex items-center">
+                          <ReactCountryFlag countryCode={country.code} svg className="text-lg leading-none" />
+                        </span>
                         <span>{country.dialCode}</span>
                         <span className="ml-2 text-slate-500">{country.code}</span>
                       </SelectItem>
