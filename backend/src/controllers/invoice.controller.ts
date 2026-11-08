@@ -238,6 +238,7 @@ export const downloadInvoicePDF = async (req: Request, res: Response, next: Next
       ...invoice.toObject(),
       customerName: customer?.name || 'Client inconnu',
       companyName: settings?.companyInfo?.name || 'Mon entreprise',
+      companyLogoUrl: settings?.companyInfo?.logoUrl || '',
     };
 
     const pdfFilename = buildInvoicePdfFilename(settings?.companyInfo?.name || '', invoice.invoiceNumber);
@@ -276,6 +277,7 @@ export const sendInvoiceByEmail = async (req: Request, res: Response, next: Next
       ...invoice.toObject(),
       customerName: customer.name,
       companyName,
+      companyLogoUrl: settings?.companyInfo?.logoUrl || '',
     });
 
     await resend.emails.send({
