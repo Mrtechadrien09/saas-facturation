@@ -204,16 +204,20 @@ export default function HomePage() {
   useEffect(() => {
     const tokenFromUrl = getTokenFromUrl(window.location.search);
 
-    if (tokenFromUrl) {
-      completeSocialLogin(tokenFromUrl);
-      const nextPath = clearTokenFromUrl(window.location.href);
-      window.history.replaceState({}, "", nextPath);
-      setChecked(true);
-      return;
-    }
+    const handleAuth = async () => {
+      if (tokenFromUrl) {
+        await completeSocialLogin(tokenFromUrl);
+        const nextPath = clearTokenFromUrl(window.location.href);
+        window.history.replaceState({}, "", nextPath);
+        setChecked(true);
+        return;
+      }
 
-    init();
-    setChecked(true);
+      init();
+      setChecked(true);
+    };
+
+    void handleAuth();
   }, [completeSocialLogin, init]);
 
   useEffect(() => {
