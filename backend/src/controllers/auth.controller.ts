@@ -136,6 +136,34 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+export const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const authReq = req as any;
+    const userId = authReq.user?.userId;
+
+    if (!userId) {
+      res.status(401).json({ message: 'Utilisateur non authentifié.' });
+      return;
+    }
+
+    const user = await User.findById(userId).select('_id name email companyName avatar googleId githubId');
+    if (!user) {
+      res.status(404).json({ message: 'Utilisateur introuvable.' });
+      return;
+    }
+
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      companyName: user.companyName,
+      avatar: user.avatar,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur lors de la récupération du profil utilisateur.', error });
+  }
+};
+
 // 3. Demande de réinitialisation (envoie un email avec un lien)
 export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
   try {
