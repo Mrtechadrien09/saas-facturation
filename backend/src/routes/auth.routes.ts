@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import  passport  from 'passport';
-import { generateToken } from '../controllers/auth.controller.js';
+import { generateToken, getCurrentUser } from '../controllers/auth.controller.js';
 import { register, login, forgotPassword, resetPassword, verifyEmail, resendVerification } from '../controllers/auth.controller.js';
-import { loginLimiter, registerLimiter, emailActionLimiter } from '../middleware/rateLimiter.js'
+import { loginLimiter, registerLimiter, emailActionLimiter } from '../middleware/rateLimiter.js';
+import { requireAuth } from '../middleware/auth.js';
 const router = Router();
 
 // Ces routes seront préfixées par /api/auth grâce à ton index.ts
@@ -12,6 +13,7 @@ router.post('/forgot-password', emailActionLimiter, forgotPassword);
 router.post('/resend-verification', emailActionLimiter, resendVerification);
 router.post('/verify-email', verifyEmail);
 router.post('/reset-password', resetPassword);
+router.get('/me', requireAuth, getCurrentUser);
 
 // ==========================================
 // 🌐 ROUTES GOOGLE
