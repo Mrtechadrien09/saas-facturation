@@ -53,6 +53,7 @@ export default function CustomerDetailPage() {
   const updateCustomer = useUpdateCustomer();
 
   const [editOpen, setEditOpen] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{ field: string; message: string }[]>([]);
   const [form, setForm] = useState({ name: "", email: "", dialCode: "+33", phone: "", address:{street: "", city: "", zipCode: "", country: "France"}, });
 
   const handleDialCodeChange = (value: string | null, _eventDetails?: unknown) => {
@@ -94,14 +95,24 @@ export default function CustomerDetailPage() {
   };
 
   const handleUpdate = async () => {
-    await updateCustomer.mutateAsync({
-      id,
-      payload: {
-        ...form,
-        phone: form.phone ? normalizePhone(form.phone, form.dialCode) : "",
-      },
-    });
-    setEditOpen(false);
+    setValidationErrors([]);
+
+    try {
+      await updateCustomer.mutateAsync({
+        id,
+        payload: {
+          ...form,
+          phone: form.phone ? normalizePhone(form.phone, form.dialCode) : "",
+        },
+      });
+      setValidationErrors([]);
+      setEditOpen(false);
+    } catch (error: any) {
+      const backendErrors = Array.isArray(error?.response?.data?.errors)
+        ? error.response.data.errors
+        : [{ field: "general", message: error?.response?.data?.message || "Erreur lors de la modification du client." }];
+      setValidationErrors(backendErrors);
+    }
   };
 
   if (isLoading) {
@@ -263,6 +274,19 @@ export default function CustomerDetailPage() {
             <DialogTitle>Modifier le client</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 pt-2">
+            {validationErrors.length > 0 && (
+              <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                <p className="font-medium">Vérifiez les informations :</p>
+                <ul className="mt-2 list-disc space-y-1 pl-5">
+                  {validationErrors.map((error, index) => (
+                    <li key={`${error.field}-${index}`}>
+                      {error.field !== "general" ? `${error.field}: ` : ""}
+                      {error.message}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="edit-name">Nom</Label>
               <Input
