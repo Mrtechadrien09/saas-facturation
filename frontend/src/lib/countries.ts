@@ -4,6 +4,143 @@ export type CountryData = {
   dialCode: string;
 };
 
+export function getDialCodeNumber(dialCode: string) {
+  return Number(dialCode.replace(/\D/g, "")) || 0;
+}
+
+export function getCountryFlag(code: string) {
+  if (!code || code.length !== 2) return "🌍";
+
+  return Array.from(code)
+    .map((char) => String.fromCodePoint(127397 + char.charCodeAt(0)))
+    .join("");
+}
+
+function groupDigits(digits: string, groups: number[]) {
+  const result: string[] = [];
+  let cursor = 0;
+
+  for (const groupSize of groups) {
+    if (cursor >= digits.length) break;
+    result.push(digits.slice(cursor, cursor + groupSize));
+    cursor += groupSize;
+  }
+
+  if (cursor < digits.length) {
+    result.push(digits.slice(cursor));
+  }
+
+  return result.filter(Boolean).join(" ");
+}
+
+export function formatPhoneForDialCode(input: string, dialCode: string) {
+  const digits = input.replace(/\D/g, "");
+
+  if (!digits) return "";
+
+  const maxLengthByCountry: Record<string, number> = {
+    "+1": 10,
+    "+7": 10,
+    "+20": 10,
+    "+27": 9,
+    "+30": 10,
+    "+31": 9,
+    "+32": 9,
+    "+33": 9,
+    "+34": 9,
+    "+39": 10,
+    "+41": 9,
+    "+44": 10,
+    "+45": 8,
+    "+46": 9,
+    "+47": 8,
+    "+48": 9,
+    "+49": 11,
+    "+51": 9,
+    "+52": 10,
+    "+55": 11,
+    "+61": 9,
+    "+62": 9,
+    "+65": 8,
+    "+81": 10,
+    "+82": 10,
+    "+84": 9,
+    "+90": 10,
+    "+91": 10,
+    "+92": 10,
+    "+98": 10,
+    "+212": 9,
+    "+216": 8,
+    "+221": 9,
+    "+234": 10,
+    "+244": 9,
+    "+351": 9,
+    "+352": 9,
+    "+353": 9,
+    "+355": 9,
+    "+356": 8,
+    "+358": 9,
+    "+359": 9,
+    "+972": 9,
+  };
+
+  const maxLength = maxLengthByCountry[dialCode] ?? 12;
+  const trimmedDigits = digits.slice(0, maxLength);
+
+  switch (dialCode) {
+    case "+1":
+      return groupDigits(trimmedDigits, [3, 3, 4]);
+    case "+33":
+    case "+31":
+    case "+32":
+    case "+41":
+    case "+44":
+    case "+49":
+    case "+61":
+    case "+81":
+    case "+91":
+    case "+212":
+    case "+221":
+      return groupDigits(trimmedDigits, [2, 2, 2, 2, 1]);
+    case "+7":
+    case "+20":
+    case "+27":
+    case "+30":
+    case "+34":
+    case "+39":
+    case "+45":
+    case "+46":
+    case "+47":
+    case "+48":
+    case "+51":
+    case "+52":
+    case "+54":
+    case "+55":
+    case "+62":
+    case "+65":
+    case "+82":
+    case "+84":
+    case "+90":
+    case "+92":
+    case "+98":
+    case "+216":
+    case "+221":
+    case "+234":
+    case "+244":
+    case "+351":
+    case "+352":
+    case "+353":
+    case "+355":
+    case "+356":
+    case "+358":
+    case "+359":
+    case "+972":
+      return groupDigits(trimmedDigits, [2, 2, 2, 2, 2]);
+    default:
+      return groupDigits(trimmedDigits, [3, 3, 3, 3]);
+  }
+}
+
 export const countries: CountryData[] = [
   { name: "Afghanistan", code: "AF", dialCode: "+93" },
   { name: "Albanie", code: "AL", dialCode: "+355" },
@@ -191,7 +328,7 @@ export const countries: CountryData[] = [
   { name: "Yémen", code: "YE", dialCode: "+967" },
   { name: "Zambie", code: "ZM", dialCode: "+260" },
   { name: "Zimbabwe", code: "ZW", dialCode: "+263" },
-];
+].sort((a, b) => getDialCodeNumber(a.dialCode) - getDialCodeNumber(b.dialCode));
 
 export function getCountryByName(name: string) {
   return countries.find((country) => country.name === name);
