@@ -9,11 +9,8 @@ import {
   CheckCircle2,
   Building2,
   CreditCard,
-  Shield,
-  SunMedium,
   UploadCloud,
   Sparkles,
-  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +23,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import ReactCountryFlag from "react-country-flag";
 import { countries } from "@/lib/countries";
 
-type SettingsTab = "company" | "payments" | "security";
+type SettingsTab = "company" | "payments";
 
 const defaultSettings: Settings = {
   companyInfo: { name: "", siret: "", phone: "", email: "", website: "" },
@@ -37,7 +34,6 @@ const defaultSettings: Settings = {
 const tabs: { id: SettingsTab; label: string; icon: typeof Building2 }[] = [
   { id: "company", label: "Entreprise & Logo", icon: Building2 },
   { id: "payments", label: "Méthodes de Paiement", icon: CreditCard },
-  { id: "security", label: "Thème & Sécurité", icon: Shield },
 ];
 
 export default function SettingsPage() {
@@ -141,7 +137,7 @@ export default function SettingsPage() {
           </Button>
         </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <div className="rounded-2xl border border-slate-200 bg-white p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Profil</p>
             <p className="mt-2 text-xl font-semibold text-slate-900">{form.companyInfo.name || "À compléter"}</p>
@@ -149,10 +145,6 @@ export default function SettingsPage() {
           <div className="rounded-2xl border border-slate-200 bg-white p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Paiements</p>
             <p className="mt-2 text-xl font-semibold text-slate-900">Stripe</p>
-          </div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-4">
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Sécurité</p>
-            <p className="mt-2 text-xl font-semibold text-slate-900">Niveau élevé</p>
           </div>
         </div>
       </div>
@@ -393,77 +385,6 @@ export default function SettingsPage() {
                   </div>
                 </div>
                 <p className="text-sm text-slate-500">Utilise les clés de test lors du développement puis bascule en production à la fin.</p>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
-
-      {activeTab === "security" && (
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-          <Card className="border-slate-200 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-base text-slate-900">Thème</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between rounded-[22px] border border-slate-200 bg-gradient-to-r from-slate-50 to-white p-4">
-                <div className="flex items-center gap-3">
-                  <div className="rounded-full bg-white p-2 ring-1 ring-slate-200">
-                    <SunMedium className="h-4 w-4 text-amber-500" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-slate-900">Mode sombre</p>
-                    <p className="text-sm text-slate-500">Active le thème sombre pour le dashboard.</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setTheme(darkMode ? "light" : "dark")}
-                  className={[
-                    "relative inline-flex h-7 w-12 items-center rounded-full transition-colors",
-                    darkMode ? "bg-slate-900" : "bg-slate-200",
-                  ].join(" ")}
-                  aria-label="Activer le mode sombre"
-                >
-                  <span
-                    className={[
-                      "inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform",
-                      darkMode ? "translate-x-6" : "translate-x-1",
-                    ].join(" ")}
-                  />
-                </button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-slate-200 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-base text-slate-900">Sécurité</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="currentPassword">Mot de passe actuel</Label>
-                  <Input id="currentPassword" type="password" placeholder="••••••••" className="h-11" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="newPassword">Nouveau mot de passe</Label>
-                  <Input id="newPassword" type="password" placeholder="••••••••" className="h-11" />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between rounded-[22px] border border-slate-200 bg-slate-50 p-4">
-                <div>
-                  <p className="font-medium text-slate-900">Authentification à deux facteurs</p>
-                  <p className="text-sm text-slate-500">Renforce la sécurité du compte.</p>
-                </div>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                >
-                  <Check className="h-4 w-4 text-emerald-500" />
-                  Activer
-                </button>
               </div>
             </CardContent>
           </Card>
