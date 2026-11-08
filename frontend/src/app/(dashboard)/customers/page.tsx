@@ -24,7 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { countries, normalizePhone, formatPhoneForDialCode, getCountryFlag } from "@/lib/countries";
+import ReactCountryFlag from "react-country-flag";
+import { countries, normalizePhone, formatPhoneForDialCode } from "@/lib/countries";
 import {
   Table,
   TableBody,
@@ -64,11 +65,12 @@ export default function CustomersPage() {
   const [sortBy, setSortBy] = useState<"name" | "recent">("name");
   const [view, setView] = useState<"cards" | "list">("cards");
 
-  const handleDialCodeChange = (value: string) => {
+  const handleDialCodeChange = (value: string | null, _eventDetails?: unknown) => {
+    const nextDialCode = value || "+33";
     setForm((prev) => ({
       ...prev,
-      dialCode: value || "+33",
-      phone: formatPhoneForDialCode(prev.phone, value || "+33"),
+      dialCode: nextDialCode,
+      phone: formatPhoneForDialCode(prev.phone, nextDialCode),
     }));
   };
 
@@ -165,7 +167,9 @@ export default function CustomersPage() {
                       <SelectContent>
                         {countries.map((country) => (
                           <SelectItem key={country.code} value={country.dialCode}>
-                            <span className="mr-2">{getCountryFlag(country.code)}</span>
+                            <span className="mr-2 inline-flex items-center">
+                              <ReactCountryFlag countryCode={country.code} svg className="text-lg leading-none" />
+                            </span>
                             <span>{country.dialCode}</span>
                             <span className="ml-2 text-slate-500">{country.code}</span>
                           </SelectItem>
