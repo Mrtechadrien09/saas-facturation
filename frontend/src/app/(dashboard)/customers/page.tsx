@@ -82,6 +82,7 @@ export default function CustomersPage() {
   };
 
   const selectedDialCountry = countries.find((country) => country.dialCode === form.dialCode) || countries.find((country) => country.dialCode === "+33");
+  const selectedCountry = countries.find((country) => country.name === form.address.country) || countries.find((country) => country.name === "France");
 
   const handleCreate = async () => {
     const { dialCode, ...payloadBase } = form;
@@ -229,12 +230,20 @@ export default function CustomersPage() {
                     onValueChange={(value: string | null) => setForm({ ...form, address: { ...form.address, country: value || "France" } })}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Sélectionne un pays" />
+                      <div className="flex items-center gap-2">
+                        {selectedCountry && (
+                          <ReactCountryFlag countryCode={selectedCountry.code} svg className="text-lg leading-none" />
+                        )}
+                        <span>{form.address.country || "France"}</span>
+                      </div>
                     </SelectTrigger>
                     <SelectContent>
                       {countries.map((country) => (
                         <SelectItem key={country.code} value={country.name}>
-                          {country.name}
+                          <span className="mr-2 inline-flex items-center">
+                            <ReactCountryFlag countryCode={country.code} svg className="text-lg leading-none" />
+                          </span>
+                          <span>{country.name}</span>
                         </SelectItem>
                       ))}
                     </SelectContent>
