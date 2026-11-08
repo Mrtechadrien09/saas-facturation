@@ -71,6 +71,8 @@ export default function CustomerDetailPage() {
     }));
   };
 
+  const selectedDialCountry = countries.find((country) => country.dialCode === form.dialCode) || countries.find((country) => country.dialCode === "+33");
+
   const openEdit = () => {
     if (customer) {
       const dialCode = getDialCodeFromPhone(customer.phone || "") || "+33";
@@ -282,7 +284,12 @@ export default function CustomerDetailPage() {
                 <Label htmlFor="edit-dialCode">Indicatif</Label>
                 <Select value={form.dialCode} onValueChange={handleDialCodeChange}>
                   <SelectTrigger className="w-full">
-                    <SelectValue />
+                    <div className="flex items-center gap-2">
+                      {selectedDialCountry && (
+                        <ReactCountryFlag countryCode={selectedDialCountry.code} svg className="text-lg leading-none" />
+                      )}
+                      <span>{form.dialCode}</span>
+                    </div>
                   </SelectTrigger>
                   <SelectContent>
                     {countries.map((country) => (
