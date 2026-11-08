@@ -4,8 +4,13 @@ export type CountryData = {
   dialCode: string;
 };
 
+export function normalizeDialCode(dialCode: string) {
+  const digits = (dialCode || "").replace(/\D/g, "");
+  return digits ? `+${digits}` : "+";
+}
+
 export function getDialCodeNumber(dialCode: string) {
-  return Number(dialCode.replace(/\D/g, "")) || 0;
+  return Number(normalizeDialCode(dialCode).replace(/\D/g, "")) || 0;
 }
 
 export function getCountryFlag(code: string) {
@@ -34,6 +39,7 @@ function groupDigits(digits: string, groups: number[]) {
 }
 
 export function formatPhoneForDialCode(input: string, dialCode: string) {
+  const normalizedDialCode = normalizeDialCode(dialCode);
   const digits = input.replace(/\D/g, "");
 
   if (!digits) return "";
@@ -84,10 +90,10 @@ export function formatPhoneForDialCode(input: string, dialCode: string) {
     "+972": 9,
   };
 
-  const maxLength = maxLengthByCountry[dialCode] ?? 12;
+  const maxLength = maxLengthByCountry[normalizedDialCode] ?? 12;
   const trimmedDigits = digits.slice(0, maxLength);
 
-  switch (dialCode) {
+  switch (normalizedDialCode) {
     case "+1":
       return groupDigits(trimmedDigits, [3, 3, 4]);
     case "+33":
@@ -328,7 +334,10 @@ export const countries: CountryData[] = [
   { name: "Yémen", code: "YE", dialCode: "+967" },
   { name: "Zambie", code: "ZM", dialCode: "+260" },
   { name: "Zimbabwe", code: "ZW", dialCode: "+263" },
-].sort((a, b) => getDialCodeNumber(a.dialCode) - getDialCodeNumber(b.dialCode));
+].map((country) => ({
+  ...country,
+  dialCode: normalizeDialCode(country.dialCode),
+})).sort((a, b) => getDialCodeNumber(a.dialCode) - getDialCodeNumber(b.dialCode));
 
 export function getCountryByName(name: string) {
   return countries.find((country) => country.name === name);
@@ -337,7 +346,7 @@ export function getCountryByName(name: string) {
 export function getDialCodeFromPhone(phone: string) {
   const cleaned = phone.trim();
   const match = cleaned.match(/^\+(\d{1,4})(?:[\s.-]+)?/);
-  return match ? `+${match[1]}` : "";
+  return match ? normalizeDialCode(`+${match[1]}`) : "";
 }
 
 export function stripDialCode(phone: string) {
