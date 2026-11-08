@@ -3,7 +3,7 @@ import { api } from "@/lib/api";
 import { Settings } from "@/types/settings.js";
 
 const defaultSettings: Settings = {
-  companyInfo: { name: "", siret: "", phone: "", email: "", website: "" },
+  companyInfo: { name: "", siret: "", phone: "", email: "", website: "", logoUrl: "" },
   address: { street: "", city: "", zipCode: "", country: "France" },
   financials: { currency: "EUR", defaultVatRate: 20 },
 };
