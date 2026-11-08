@@ -1,4 +1,4 @@
-import { buildInvoicePdfFilename } from '../pdfGenerator';
+import { buildInvoicePdfFilename } from '../pdfGenerator.js';
 
 describe('buildInvoicePdfFilename', () => {
   it('construit un nom de fichier propre à partir du nom de l entreprise et du numéro de facture', () => {
