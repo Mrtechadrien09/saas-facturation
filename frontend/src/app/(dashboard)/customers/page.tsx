@@ -61,6 +61,7 @@ export default function CustomersPage() {
     phone: "",
     address: { street: "", city: "", zipCode: "", country: "France" },
   });
+  const [validationErrors, setValidationErrors] = useState<{ field: string; message: string }[]>([]);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"name" | "recent">("name");
   const [view, setView] = useState<"cards" | "list">("cards");
@@ -98,9 +99,19 @@ export default function CustomersPage() {
       ...(Object.keys(cleanAddress).length > 0 ? { address: cleanAddress } : {}),
     };
 
-    await createCustomer.mutateAsync(payload);
-    setForm({ name: "", email: "", dialCode: "+33", phone: "", address: { street: "", city: "", zipCode: "", country: "France" } });
-    setOpen(false);
+    setValidationErrors([]);
+
+    try {
+      await createCustomer.mutateAsync(payload);
+      setForm({ name: "", email: "", dialCode: "+33", phone: "", address: { street: "", city: "", zipCode: "", country: "France" } });
+      setValidationErrors([]);
+      setOpen(false);
+    } catch (error: any) {
+      const backendErrors = Array.isArray(error?.response?.data?.errors)
+        ? error.response.data.errors
+        : [{ field: "general", message: error?.response?.data?.message || "Erreur lors de la création du client." }];
+      setValidationErrors(backendErrors);
+    }
   };
 
   const filteredCustomers = customers
@@ -140,12 +151,28 @@ export default function CustomersPage() {
                 <DialogTitle>Ajouter un client</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 pt-2">
+                {validationErrors.length > 0 && (
+                  <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                    <p className="font-medium">Vérifiez les informations :</p>
+                    <ul className="mt-2 list-disc space-y-1 pl-5">
+                      {validationErrors.map((error, index) => (
+                        <li key={`${error.field}-${index}`}>
+                          {error.field !== "general" ? `${error.field}: ` : ""}
+                          {error.message}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 <div className="space-y-2">
                   <Label htmlFor="name">Nom</Label>
                   <Input
                     id="name"
                     value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    onChange={(e) => {
+                      setForm({ ...form, name: e.target.value });
+                      if (validationErrors.length > 0) setValidationErrors([]);
+                    }}
                   />
                 </div>
                 <div className="space-y-2">
