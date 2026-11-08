@@ -23,6 +23,17 @@ export const buildInvoicePdfFilename = (companyName: string, invoiceNumber: stri
   return parts.length > 0 ? `${parts.join('-')}.pdf` : 'facture.pdf';
 };
 
+const getImageBufferFromDataUrl = (dataUrl?: string): Buffer | null => {
+  if (!dataUrl || !dataUrl.startsWith('data:image/')) return null;
+
+  try {
+    const base64 = dataUrl.split(',')[1] || '';
+    return Buffer.from(base64, 'base64');
+  } catch {
+    return null;
+  }
+};
+
 export const generateInvoicePDF = (invoice: any, res: Response) => {
   const doc = new PDFDocument({ size: 'A4', margin: 0 });
   doc.pipe(res);
@@ -74,6 +85,15 @@ function buildInvoiceContent(doc: PDFKit.PDFDocument, invoice: any) {
     `Échéance : ${new Date(invoice.dueDate).toLocaleDateString('fr-FR')}`,
     pageWidth - margin - 150, 65, { width: 150, align: 'right' }
   );
+
+  const logoBuffer = getImageBufferFromDataUrl(invoice.companyLogoUrl);
+  if (logoBuffer) {
+    try {
+      doc.image(logoBuffer, pageWidth - margin - 110, 18, { fit: [80, 60] });
+    } catch {
+      // ignore if unsupported image
+    }
+  }
 
   // --- BLOC ÉMETTEUR / CLIENT ---
   let y = 140;
