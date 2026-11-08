@@ -1,4 +1,4 @@
-import { createCustomerSchema } from '../validations/customer.validation';
+import { createCustomerSchema } from '../validations/customer.validation.js';
 
 describe('createCustomerSchema', () => {
   it('accepte un payload client avec champs optionnels vides', () => {
