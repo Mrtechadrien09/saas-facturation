@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import { DollarSign, Users, FileText, Clock, Plus, ArrowUpRight, Wallet, TrendingUp } from "lucide-react";
+import { DollarSign, Users, FileText, Clock, Plus, ArrowUpRight, TrendingUp } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -310,13 +310,6 @@ export default function DashboardPage() {
               <div className="rounded-2xl border border-[#dfe7ff] bg-white p-4 shadow-sm">
                 <p className="text-sm text-slate-500">Aujourd’hui</p>
                 <p className="mt-2 text-xl font-semibold text-slate-900">{today}</p>
-              </div>
-              <div className="rounded-2xl border border-[#dfe7ff] bg-white p-4 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-slate-500">Reste à facturer</p>
-                  <Wallet className="h-4 w-4 text-[#2B3A67]" />
-                </div>
-                <p className="mt-2 text-2xl font-bold text-slate-900">{data?.unpaidInvoices ?? 0}</p>
               </div>
             </CardContent>
           </Card>
