@@ -1,4 +1,4 @@
-import { AppError, NotFoundError, ValidationError, ConflictError } from '../utils/AppError';
+import { AppError, NotFoundError, ValidationError, ConflictError } from '../utils/AppError.js';
 
 describe('AppError Classes', () => {
   describe('AppError', () => {
