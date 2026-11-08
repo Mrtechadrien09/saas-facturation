@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { countries, normalizePhone } from "@/lib/countries";
+import { countries, normalizePhone, formatPhoneForDialCode, getCountryFlag } from "@/lib/countries";
 import {
   Table,
   TableBody,
@@ -63,6 +63,21 @@ export default function CustomersPage() {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"name" | "recent">("name");
   const [view, setView] = useState<"cards" | "list">("cards");
+
+  const handleDialCodeChange = (value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      dialCode: value || "+33",
+      phone: formatPhoneForDialCode(prev.phone, value || "+33"),
+    }));
+  };
+
+  const handlePhoneChange = (value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      phone: formatPhoneForDialCode(value, prev.dialCode),
+    }));
+  };
 
   const handleCreate = async () => {
     const { dialCode, ...payloadBase } = form;
@@ -142,7 +157,7 @@ export default function CustomersPage() {
                     <Label htmlFor="dialCode">Indicatif</Label>
                     <Select
                       value={form.dialCode || "+33"}
-                      onValueChange={(value: string | null) => setForm({ ...form, dialCode: value || "+33" })}
+                      onValueChange={handleDialCodeChange}
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue />
@@ -150,8 +165,9 @@ export default function CustomersPage() {
                       <SelectContent>
                         {countries.map((country) => (
                           <SelectItem key={country.code} value={country.dialCode}>
+                            <span className="mr-2">{getCountryFlag(country.code)}</span>
                             <span>{country.dialCode}</span>
-                            <span className="text-slate-500">{country.code}</span>
+                            <span className="ml-2 text-slate-500">{country.code}</span>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -162,8 +178,8 @@ export default function CustomersPage() {
                     <Input
                       id="phone"
                       value={form.phone}
-                      placeholder="612345678"
-                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      placeholder="6 12 34 56 78"
+                      onChange={(e) => handlePhoneChange(e.target.value)}
                     />
                   </div>
                 </div>
