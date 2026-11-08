@@ -4,9 +4,20 @@ export type CountryData = {
   dialCode: string;
 };
 
+const countryDialCodePrefixes = [
+  "+1", "+7", "+20", "+27", "+30", "+31", "+32", "+33", "+34", "+39", "+41", "+44",
+  "+45", "+46", "+47", "+48", "+49", "+51", "+52", "+55", "+61", "+62", "+65", "+81",
+  "+82", "+84", "+90", "+91", "+92", "+98", "+212", "+216", "+221", "+234", "+244",
+  "+351", "+352", "+353", "+355", "+356", "+358", "+359", "+972",
+];
+
 export function normalizeDialCode(dialCode: string) {
   const digits = (dialCode || "").replace(/\D/g, "");
-  return digits ? `+${digits}` : "+";
+
+  if (!digits) return "+";
+
+  const matchedPrefix = countryDialCodePrefixes.find((prefix) => digits.startsWith(prefix.replace(/\D/g, "")));
+  return matchedPrefix ?? `+${digits}`;
 }
 
 export function getDialCodeNumber(dialCode: string) {
