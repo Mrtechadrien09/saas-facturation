@@ -23,6 +23,7 @@ import { useSettings, useUpdateSettings } from "@/hooks/use-settings";
 import { Settings } from "@/types/settings.js";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import ReactCountryFlag from "react-country-flag";
 import { countries } from "@/lib/countries";
 
 type SettingsTab = "company" | "payments" | "security";
@@ -47,6 +48,8 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
   const [activeTab, setActiveTab] = useState<SettingsTab>("company");
   const darkMode = theme === "dark";
+  const sortedCountriesByName = [...countries].sort((a, b) => a.name.localeCompare(b.name, "fr-FR"));
+  const selectedCountry = sortedCountriesByName.find((country) => country.name === form.address.country) || sortedCountriesByName.find((country) => country.name === "France");
 
   useEffect(() => {
     if (data) {
@@ -243,12 +246,20 @@ export default function SettingsPage() {
                     onValueChange={(value: string | null) => setForm({ ...form, address: { ...form.address, country: value || "France" } })}
                   >
                     <SelectTrigger className="h-11 w-full">
-                      <SelectValue placeholder="Sélectionne un pays" />
+                      <div className="flex items-center gap-2">
+                        {selectedCountry && (
+                          <ReactCountryFlag countryCode={selectedCountry.code} svg className="text-lg leading-none" />
+                        )}
+                        <span>{form.address.country || "France"}</span>
+                      </div>
                     </SelectTrigger>
                     <SelectContent>
-                      {countries.map((country) => (
+                      {sortedCountriesByName.map((country) => (
                         <SelectItem key={country.code} value={country.name}>
-                          {country.name}
+                          <span className="mr-2 inline-flex items-center">
+                            <ReactCountryFlag countryCode={country.code} svg className="text-lg leading-none" />
+                          </span>
+                          <span>{country.name}</span>
                         </SelectItem>
                       ))}
                     </SelectContent>
