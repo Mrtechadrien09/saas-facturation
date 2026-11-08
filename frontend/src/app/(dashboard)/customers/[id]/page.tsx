@@ -20,7 +20,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useCustomer, useUpdateCustomer } from "@/hooks/use-customers";
 import { useCustomerInvoices } from "@/hooks/use-invoices";
 import { formatCurrency } from "@/lib/utils";
-import { countries, normalizePhone, getCountryByName, getDialCodeFromPhone, stripDialCode } from "@/lib/countries";
+import {
+  countries,
+  normalizePhone,
+  getCountryByName,
+  getDialCodeFromPhone,
+  stripDialCode,
+  formatPhoneForDialCode,
+  getCountryFlag,
+} from "@/lib/countries";
 import Link from "next/link";
 
 const statusLabels: Record<string, string> = {
@@ -46,6 +54,21 @@ export default function CustomerDetailPage() {
 
   const [editOpen, setEditOpen] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", dialCode: "+33", phone: "", address:{street: "", city: "", zipCode: "", country: "France"}, });
+
+  const handleDialCodeChange = (value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      dialCode: value || "+33",
+      phone: formatPhoneForDialCode(prev.phone, value || "+33"),
+    }));
+  };
+
+  const handlePhoneChange = (value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      phone: formatPhoneForDialCode(value, prev.dialCode),
+    }));
+  };
 
   const openEdit = () => {
     if (customer) {
@@ -256,15 +279,16 @@ export default function CustomerDetailPage() {
             <div className="grid gap-3 sm:grid-cols-[110px_1fr]">
               <div className="space-y-2">
                 <Label htmlFor="edit-dialCode">Indicatif</Label>
-                <Select value={form.dialCode} onValueChange={(value) => setForm({ ...form, dialCode: value })}>
+                <Select value={form.dialCode} onValueChange={handleDialCodeChange}>
                   <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {countries.map((country) => (
                       <SelectItem key={country.code} value={country.dialCode}>
+                        <span className="mr-2">{getCountryFlag(country.code)}</span>
                         <span>{country.dialCode}</span>
-                        <span className="text-slate-500">{country.code}</span>
+                        <span className="ml-2 text-slate-500">{country.code}</span>
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -275,7 +299,7 @@ export default function CustomerDetailPage() {
                 <Input
                   id="edit-phone"
                   value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  onChange={(e) => handlePhoneChange(e.target.value)}
                 />
               </div>
             </div>
