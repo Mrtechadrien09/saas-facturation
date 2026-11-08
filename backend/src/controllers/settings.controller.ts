@@ -11,7 +11,7 @@ export const getSettings = async (req: Request, res: Response): Promise<void> =>
       // Si aucun paramètre n'existe, on renvoie un objet vide propre ou des valeurs par défaut
       res.status(200).json({ 
         settings: {
-          companyInfo: { name: '' },
+          companyInfo: { name: '', logoUrl: '' },
           address: { country: 'France' },
           financials: { currency: 'EUR', defaultVatRate: 20 }
         } 
