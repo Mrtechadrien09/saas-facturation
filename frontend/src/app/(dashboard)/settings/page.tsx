@@ -54,6 +54,20 @@ export default function SettingsPage() {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      event.target.value = "";
+      window.alert("Format non pris en charge. Veuillez choisir un logo PNG, JPG ou WEBP.");
+      return;
+    }
+
+    const maxSizeInBytes = 2 * 1024 * 1024;
+    if (file.size > maxSizeInBytes) {
+      event.target.value = "";
+      window.alert("Le logo ne doit pas dépasser 2 Mo.");
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = () => {
       const result = typeof reader.result === "string" ? reader.result : "";
@@ -297,7 +311,7 @@ export default function SettingsPage() {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*"
+                  accept="image/png,image/jpeg,image/webp"
                   className="hidden"
                   onChange={handleLogoUpload}
                 />
@@ -311,7 +325,7 @@ export default function SettingsPage() {
                   </div>
                 )}
                 <p className="text-base font-medium text-slate-800">Téléversez votre logo</p>
-                <p className="mt-1 text-sm text-slate-500">PNG, JPG ou SVG • jusqu’à 2 Mo</p>
+                <p className="mt-1 text-sm text-slate-500">Formats pris en charge : PNG, JPG, WEBP • jusqu’à 2 Mo</p>
                 <Button type="button" variant="outline" className="mt-5" onClick={() => fileInputRef.current?.click()}>
                   Choisir un fichier
                 </Button>
