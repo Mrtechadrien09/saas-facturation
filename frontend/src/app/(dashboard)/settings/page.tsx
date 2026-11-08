@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import {
@@ -47,7 +47,26 @@ export default function SettingsPage() {
   const [form, setForm] = useState<Settings>(defaultSettings);
   const [saved, setSaved] = useState(false);
   const [activeTab, setActiveTab] = useState<SettingsTab>("company");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const darkMode = theme === "dark";
+
+  const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = typeof reader.result === "string" ? reader.result : "";
+      setForm((prev) => ({
+        ...prev,
+        companyInfo: {
+          ...prev.companyInfo,
+          logoUrl: result,
+        },
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
   const sortedCountriesByName = [...countries].sort((a, b) => a.name.localeCompare(b.name, "fr-FR"));
   const selectedCountry = sortedCountriesByName.find((country) => country.name === form.address.country) || sortedCountriesByName.find((country) => country.name === "France");
 
@@ -275,12 +294,25 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex flex-col items-center justify-center rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
-                <div className="mb-4 rounded-full bg-white p-3 shadow-sm ring-1 ring-slate-200">
-                  <UploadCloud className="h-6 w-6 text-slate-600" />
-                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleLogoUpload}
+                />
+                {form.companyInfo.logoUrl ? (
+                  <div className="mb-4 flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+                    <img src={form.companyInfo.logoUrl} alt="Logo de l'entreprise" className="h-full w-full object-contain" />
+                  </div>
+                ) : (
+                  <div className="mb-4 rounded-full bg-white p-3 shadow-sm ring-1 ring-slate-200">
+                    <UploadCloud className="h-6 w-6 text-slate-600" />
+                  </div>
+                )}
                 <p className="text-base font-medium text-slate-800">Téléversez votre logo</p>
                 <p className="mt-1 text-sm text-slate-500">PNG, JPG ou SVG • jusqu’à 2 Mo</p>
-                <Button type="button" variant="outline" className="mt-5">
+                <Button type="button" variant="outline" className="mt-5" onClick={() => fileInputRef.current?.click()}>
                   Choisir un fichier
                 </Button>
               </div>
@@ -288,9 +320,13 @@ export default function SettingsPage() {
               <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4">
                 <p className="text-sm font-medium text-slate-700">Aperçu</p>
                 <div className="mt-3 flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm ring-1 ring-slate-200">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#2B3A67] text-lg font-semibold text-white">
-                    {form.companyInfo.name ? form.companyInfo.name.slice(0, 1).toUpperCase() : "S"}
-                  </div>
+                  {form.companyInfo.logoUrl ? (
+                    <img src={form.companyInfo.logoUrl} alt="Logo preview" className="h-12 w-12 rounded-xl object-contain" />
+                  ) : (
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#2B3A67] text-lg font-semibold text-white">
+                      {form.companyInfo.name ? form.companyInfo.name.slice(0, 1).toUpperCase() : "S"}
+                    </div>
+                  )}
                   <div>
                     <p className="font-medium text-slate-900">{form.companyInfo.name || "Nom de votre entreprise"}</p>
                     <p className="text-xs text-slate-500">Identité visuelle</p>
