@@ -8,6 +8,7 @@ export interface ISettings extends Document {
     phone?: string;
     email?: string;
     website?: string;
+    logoUrl?: string;
   };
   address: {
     street?: string;
@@ -28,7 +29,8 @@ const SettingsSchema = new Schema<ISettings>({
     siret: { type: String, trim: true },
     phone: { type: String, trim: true },
     email: { type: String, trim: true, lowercase: true },
-    website: { type: String, trim: true }
+    website: { type: String, trim: true },
+    logoUrl: { type: String, trim: true }
   },
   address: {
     street: { type: String, trim: true },
