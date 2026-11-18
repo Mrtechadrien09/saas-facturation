@@ -140,8 +140,13 @@
     animation: drift 14s ease-in-out infinite;
   }
 
+  .landing-marquee {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 2.5%, black 97.5%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 2.5%, black 97.5%, transparent);
+  }
+
   .landing-marquee-track {
-    animation: landing-marquee 24s linear infinite;
+    animation: landing-marquee 28s linear infinite;
     width: max-content;
   }
 
