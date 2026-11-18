@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
+import Image from "next/image";
 
 // Étape 1 : Notre propre algorithme de calcul de force (0 à 4)
 const calculatePasswordStrength = (password: string): number => {
@@ -78,8 +79,19 @@ export default function Register() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
-      <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10 sm:px-6">
+      <Image
+        src="/images/auth.jpg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
+      />
+      <div className="absolute inset-0 bg-slate-950/55" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_10%,_rgba(15,23,42,0.46)_100%)]" />
+
+      <div className="relative z-10 w-full max-w-md rounded-[28px] border border-white/25 bg-white/88 p-7 shadow-[0_30px_90px_-30px_rgba(15,23,42,0.65)] backdrop-blur-[18px] sm:p-9">
         <div className="space-y-6">
           <div className="space-y-2 text-center">
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">Créer un compte entreprise</h1>
@@ -183,6 +195,6 @@ export default function Register() {
           </p>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
