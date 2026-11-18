@@ -6,9 +6,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Mail, Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { GradientBlobs } from "@/components/decorative/gradient-blobs";
 import { api } from "@/lib/api";
+import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 function CheckEmailcontent() {
@@ -29,17 +28,25 @@ function CheckEmailcontent() {
   };
 
   return (
-    <div className="relative flex min-h-screen overflow-hidden bg-[#F8FAFC]">
-      <GradientBlobs />
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10 sm:px-6">
+      <Image
+        src="/images/auth.jpg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
+      />
+      <div className="absolute inset-0 bg-slate-950/55" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_10%,_rgba(15,23,42,0.46)_100%)]" />
 
-      <div className="flex w-full min-h-screen items-center justify-center px-4 py-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35 }}
-          className="w-full max-w-md"
-        >
-          <div className="rounded-[2rem] border border-slate-200 bg-white/95 p-8 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.3)] backdrop-blur-xl sm:p-10">
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.985 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+        className="relative z-10 w-full max-w-md"
+      >
+          <div className="rounded-[28px] border border-white/25 bg-white/88 p-7 shadow-[0_30px_90px_-30px_rgba(15,23,42,0.65)] backdrop-blur-[18px] sm:p-9">
             <div className="text-center">
               <Mail className="mx-auto h-10 w-10 text-[#2B3A67]" />
               <h2 className="mt-5 text-3xl font-semibold tracking-tight text-slate-950">Vérifiez votre email</h2>
@@ -69,9 +76,8 @@ function CheckEmailcontent() {
               </Link>
             </div>
           </div>
-        </motion.div>
-      </div>
-    </div>
+      </motion.div>
+    </main>
   );
 }
 export default function CheckEmailPage() {
