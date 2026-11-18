@@ -227,10 +227,10 @@ export default function HomePage() {
   }, [checked, isAuthenticated, router]);
 
   return (
-    <div className="relative min-h-screen bg-[#F8FAFC] text-slate-800 pt-10">
+    <div className="relative min-h-screen bg-[#F8FAFC] text-slate-800 pt-11">
       {/* ========== BANDEAU PROMOTIONNEL ========== */}
       <div
-        className="landing-marquee fixed inset-x-0 top-0 z-40 h-10 overflow-hidden border-b border-[#C9A227]/40 bg-[#C9A227] text-slate-950"
+        className="landing-marquee fixed inset-x-0 top-0 z-40 h-11 overflow-hidden border-b border-[#C9A227]/30 bg-[#171F38] text-white shadow-[0_8px_30px_-18px_rgba(15,23,42,0.85)]"
         aria-label="Avantages Simplifact"
       >
         <div className="landing-marquee-track flex h-full items-center">
@@ -243,9 +243,9 @@ export default function HomePage() {
                 "Votre première facture en deux minutes",
                 "Relances automatiques des impayés",
               ].map((message) => (
-                <span key={message} className="flex shrink-0 items-center whitespace-nowrap px-5 text-xs font-semibold sm:px-8 sm:text-sm">
+                <span key={message} className="flex shrink-0 items-center whitespace-nowrap px-5 text-xs font-semibold tracking-[0.01em] text-slate-100 sm:px-8 sm:text-sm">
                   {message}
-                  <span className="ml-5 text-slate-800/70 sm:ml-8">•</span>
+                  <span className="ml-5 h-1 w-1 rounded-full bg-[#C9A227] shadow-[0_0_8px_rgba(201,162,39,0.8)] sm:ml-8" aria-hidden="true" />
                 </span>
               ))}
             </div>
@@ -254,7 +254,7 @@ export default function HomePage() {
       </div>
 
       {/* ========== NAV ========== */}
-      <header className="sticky top-10 z-20 flex items-center justify-between border-b border-slate-200/80 bg-white/80 px-6 py-4 backdrop-blur-md sm:px-10">
+      <header className="sticky top-11 z-20 flex items-center justify-between border-b border-slate-200/80 bg-white/80 px-6 py-4 backdrop-blur-md sm:px-10">
         <div className="flex items-center gap-2">
             <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#2B3A67] text-sm font-bold text-white">
               S
