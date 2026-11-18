@@ -227,9 +227,34 @@ export default function HomePage() {
   }, [checked, isAuthenticated, router]);
 
   return (
-    <div className="relative min-h-screen bg-[#F8FAFC] text-slate-800">
+    <div className="relative min-h-screen bg-[#F8FAFC] text-slate-800 pt-10">
+      {/* ========== BANDEAU PROMOTIONNEL ========== */}
+      <div
+        className="landing-marquee fixed inset-x-0 top-0 z-40 h-10 overflow-hidden border-b border-[#C9A227]/40 bg-[#C9A227] text-slate-950"
+        aria-label="Avantages Simplifact"
+      >
+        <div className="landing-marquee-track flex h-full items-center">
+          {[0, 1].map((copy) => (
+            <div key={copy} className="flex shrink-0 items-center" aria-hidden={copy === 1}>
+              {[
+                "Essayez gratuitement pendant 1 mois",
+                "Sans carte bancaire",
+                "Sans engagement",
+                "Votre première facture en deux minutes",
+                "Relances automatiques des impayés",
+              ].map((message) => (
+                <span key={message} className="flex shrink-0 items-center whitespace-nowrap px-5 text-xs font-semibold sm:px-8 sm:text-sm">
+                  {message}
+                  <span className="ml-5 text-slate-800/70 sm:ml-8">•</span>
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ========== NAV ========== */}
-      <header className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-200/80 bg-white/80 px-6 py-4 backdrop-blur-md sm:px-10">
+      <header className="sticky top-10 z-20 flex items-center justify-between border-b border-slate-200/80 bg-white/80 px-6 py-4 backdrop-blur-md sm:px-10">
         <div className="flex items-center gap-2">
             <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#2B3A67] text-sm font-bold text-white">
               S
