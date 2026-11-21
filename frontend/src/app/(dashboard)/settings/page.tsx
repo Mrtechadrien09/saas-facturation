@@ -46,7 +46,7 @@ export default function SettingsPage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const darkMode = theme === "dark";
 
-  const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLogoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -64,9 +64,37 @@ export default function SettingsPage() {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = typeof reader.result === "string" ? reader.result : "";
+    try {
+      const sourceDataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error("Impossible de lire ce fichier."));
+        reader.onload = () => {
+          if (typeof reader.result === "string") resolve(reader.result);
+          else reject(new Error("Format d'image invalide."));
+        };
+        reader.readAsDataURL(file);
+      });
+
+      const result = file.type === "image/webp"
+        ? await new Promise<string>((resolve, reject) => {
+            const image = new window.Image();
+            image.onerror = () => reject(new Error("Impossible de convertir ce logo."));
+            image.onload = () => {
+              const canvas = document.createElement("canvas");
+              canvas.width = image.naturalWidth;
+              canvas.height = image.naturalHeight;
+              const context = canvas.getContext("2d");
+              if (!context) {
+                reject(new Error("Conversion d'image non disponible."));
+                return;
+              }
+              context.drawImage(image, 0, 0);
+              resolve(canvas.toDataURL("image/png"));
+            };
+            image.src = sourceDataUrl;
+          })
+        : sourceDataUrl;
+
       setForm((prev) => ({
         ...prev,
         companyInfo: {
@@ -74,8 +102,10 @@ export default function SettingsPage() {
           logoUrl: result,
         },
       }));
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      event.target.value = "";
+      window.alert("Impossible de lire ce logo. Choisissez un autre fichier PNG, JPG ou WEBP.");
+    }
   };
   const sortedCountriesByName = [...countries].sort((a, b) => a.name.localeCompare(b.name, "fr-FR"));
   const selectedCountry = sortedCountriesByName.find((country) => country.name === form.address.country) || sortedCountriesByName.find((country) => country.name === "France");
