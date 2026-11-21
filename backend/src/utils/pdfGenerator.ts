@@ -114,7 +114,7 @@ function buildInvoiceContent(doc: PDFKit.PDFDocument, invoice: any) {
     doc.image(INVOICE_TEMPLATE_PATH, 0, 0, { width: pageWidth, height: pageHeight });
 
     // Keep the template's printed layout, replacing only the Figma placeholders.
-    doc.rect(103 * scaleX, 65 * scaleY, 260 * scaleX, 28 * scaleY).fill('#FFFFFF');
+    doc.rect(106 * scaleX, 65 * scaleY, 257 * scaleX, 28 * scaleY).fill('#FFFFFF');
     doc.rect(446 * scaleX, 66 * scaleY, 110 * scaleX, 18 * scaleY).fill('#FFFFFF');
     doc.rect(423 * scaleX, 85 * scaleY, 133 * scaleX, 18 * scaleY).fill('#FFFFFF');
     doc.rect(39 * scaleX, 166 * scaleY, 324 * scaleX, 67 * scaleY).fill('#FFFFFF');
@@ -135,8 +135,8 @@ function buildInvoiceContent(doc: PDFKit.PDFDocument, invoice: any) {
     }
 
     doc.font('Helvetica-Bold').fontSize(15).fillColor(TEXT)
-      .text(invoice.companyName || 'Votre entreprise', 106 * scaleX, 68 * scaleY, {
-        width: 255 * scaleX,
+      .text(invoice.companyName || 'Votre entreprise', 116 * scaleX, 68 * scaleY, {
+        width: 245 * scaleX,
         ellipsis: true,
       });
 
