@@ -237,8 +237,16 @@ export const downloadInvoicePDF = async (req: Request, res: Response, next: Next
     const invoiceData = {
       ...invoice.toObject(),
       customerName: customer?.name || 'Client inconnu',
+      customerAddress: customer?.address || {},
+      customerPhone: customer?.phone || '',
+      customerEmail: customer?.email || '',
       companyName: settings?.companyInfo?.name || 'Mon entreprise',
+      companyAddress: settings?.address || {},
+      companyPhone: settings?.companyInfo?.phone || '',
+      companyEmail: settings?.companyInfo?.email || '',
+      companySiret: settings?.companyInfo?.siret || '',
       companyLogoUrl: settings?.companyInfo?.logoUrl || '',
+      currency: settings?.financials?.currency || 'EUR',
     };
 
     const pdfFilename = buildInvoicePdfFilename(settings?.companyInfo?.name || '', invoice.invoiceNumber);
@@ -276,8 +284,16 @@ export const sendInvoiceByEmail = async (req: Request, res: Response, next: Next
     const pdfBuffer = await generateInvoicePDFBuffer({
       ...invoice.toObject(),
       customerName: customer.name,
+      customerAddress: customer.address || {},
+      customerPhone: customer.phone || '',
+      customerEmail: customer.email || '',
       companyName,
+      companyAddress: settings?.address || {},
+      companyPhone: settings?.companyInfo?.phone || '',
+      companyEmail: settings?.companyInfo?.email || '',
+      companySiret: settings?.companyInfo?.siret || '',
       companyLogoUrl: settings?.companyInfo?.logoUrl || '',
+      currency: settings?.financials?.currency || 'EUR',
     });
 
     await resend.emails.send({
