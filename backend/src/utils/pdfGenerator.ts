@@ -1,11 +1,12 @@
 import PDFDocument from 'pdfkit';
 import { Response } from 'express';
+import { fileURLToPath } from 'node:url';
 
 const INK = '#101114';
 const TEXT = '#172033';
 const GRAY = '#596273';
-const LIGHT_GRAY = '#F5F7FA';
 const RED = '#F02A2A';
+const INVOICE_TEMPLATE_PATH = fileURLToPath(new URL('../../assets/invoice-template.png', import.meta.url));
 
 const slugify = (value: string): string => {
   return value
@@ -59,6 +60,8 @@ function buildInvoiceContent(doc: PDFKit.PDFDocument, invoice: any) {
   const pageHeight = doc.page.height;
   const margin = 40;
   const contentWidth = pageWidth - margin * 2;
+  const scaleX = pageWidth / 597;
+  const scaleY = pageHeight / 842;
   const currency = invoice.currency || 'EUR';
   const formatMoney = (cents: number) => new Intl.NumberFormat('fr-FR', {
     style: 'currency',
@@ -77,13 +80,13 @@ function buildInvoiceContent(doc: PDFKit.PDFDocument, invoice: any) {
     [invoice.customerAddress?.zipCode, invoice.customerAddress?.city].filter(Boolean).join(' '),
     invoice.customerAddress?.country,
   ].filter(Boolean);
-  const footerY = pageHeight - 62;
+  const footerY = 779 * scaleY;
   const columns = {
-    description: { x: margin + 11, width: 225 },
-    quantity: { x: margin + 236, width: 48 },
-    price: { x: margin + 284, width: 68 },
-    vat: { x: margin + 352, width: 42 },
-    total: { x: margin + 394, width: contentWidth - 405 },
+    description: { x: 50 * scaleX, width: 205 * scaleX },
+    quantity: { x: 260 * scaleX, width: 45 * scaleX },
+    price: { x: 330 * scaleX, width: 55 * scaleX },
+    vat: { x: 405 * scaleX, width: 35 * scaleX },
+    total: { x: 470 * scaleX, width: 75 * scaleX },
   };
 
   const drawFooter = () => {
@@ -94,133 +97,136 @@ function buildInvoiceContent(doc: PDFKit.PDFDocument, invoice: any) {
       'Merci de votre confiance',
     ].filter(Boolean).join(' - ');
     doc.font('Helvetica').fontSize(8).fillColor('#7A8494')
-      .text(footerText, margin, footerY + 10, { width: contentWidth, align: 'center' });
+      .text(footerText, margin, footerY + 10 * scaleY, { width: contentWidth, align: 'center' });
   };
 
   const drawTableHeader = (y: number) => {
-    doc.roundedRect(margin, y, contentWidth, 40, 8).fill(INK);
+    doc.roundedRect(margin, y, contentWidth, 51 * scaleY, 8).fill(INK);
     doc.font('Helvetica-Bold').fontSize(8.5).fillColor('#FFFFFF');
-    doc.text('DESCRIPTION', columns.description.x, y + 15, { width: columns.description.width });
-    doc.text('QTÉ', columns.quantity.x, y + 15, { width: columns.quantity.width, align: 'right' });
-    doc.text('PRIX U.', columns.price.x, y + 15, { width: columns.price.width, align: 'right' });
-    doc.text('TVA', columns.vat.x, y + 15, { width: columns.vat.width, align: 'right' });
-    doc.text('TOTAL TTC', columns.total.x, y + 15, { width: columns.total.width, align: 'right' });
+    doc.text('DESCRIPTION', columns.description.x, y + 22 * scaleY, { width: columns.description.width });
+    doc.text('QTÉ', columns.quantity.x, y + 22 * scaleY, { width: columns.quantity.width, align: 'right' });
+    doc.text('PRIX U', columns.price.x, y + 22 * scaleY, { width: columns.price.width, align: 'right' });
+    doc.text('TVA', columns.vat.x, y + 22 * scaleY, { width: columns.vat.width, align: 'right' });
+    doc.text('TOTAL TTC', columns.total.x, y + 22 * scaleY, { width: columns.total.width, align: 'right' });
   };
 
-  const drawPageHeader = () => {
+  const drawTemplatePage = () => {
+    doc.image(INVOICE_TEMPLATE_PATH, 0, 0, { width: pageWidth, height: pageHeight });
+
+    // Keep the template's printed layout, replacing only the Figma placeholders.
+    doc.rect(103 * scaleX, 65 * scaleY, 260 * scaleX, 28 * scaleY).fill('#FFFFFF');
+    doc.rect(446 * scaleX, 66 * scaleY, 110 * scaleX, 18 * scaleY).fill('#FFFFFF');
+    doc.rect(423 * scaleX, 85 * scaleY, 133 * scaleX, 18 * scaleY).fill('#FFFFFF');
+    doc.rect(39 * scaleX, 166 * scaleY, 324 * scaleX, 67 * scaleY).fill('#FFFFFF');
+    doc.roundedRect(377 * scaleX, 166 * scaleY, 172 * scaleX, 69 * scaleY, 5).fill('#F7F9FB');
+    doc.rect(39 * scaleX, 333 * scaleY, 517 * scaleX, pageHeight - 333 * scaleY).fill('#FFFFFF');
+
     const logoBuffer = getImageBufferFromDataUrl(invoice.companyLogoUrl);
     if (logoBuffer) {
       try {
-        doc.image(logoBuffer, margin, 34, { fit: [66, 66] });
+        doc.image(logoBuffer, 40 * scaleX, 36 * scaleY, {
+          fit: [66 * scaleX, 66 * scaleY],
+          align: 'center',
+          valign: 'center',
+        });
       } catch {
-        doc.rect(margin, 36, 66, 66).fill('#D9D9D9');
+        // Keep the gray logo placeholder from the template for unsupported image formats.
       }
-    } else {
-      doc.rect(margin, 36, 66, 66).fill('#D9D9D9');
     }
 
     doc.font('Helvetica-Bold').fontSize(15).fillColor(TEXT)
-      .text(invoice.companyName || 'Votre entreprise', margin + 66, 62, {
-        width: 245,
+      .text(invoice.companyName || 'Votre entreprise', 106 * scaleX, 68 * scaleY, {
+        width: 255 * scaleX,
         ellipsis: true,
       });
 
-    doc.font('Helvetica-Bold').fontSize(28).fillColor(TEXT)
-      .text('FACTURE', pageWidth - margin - 185, 34, { width: 185, align: 'right' });
-    doc.font('Helvetica-Bold').fontSize(10).fillColor(GRAY)
-      .text(`N : ${invoice.invoiceNumber || '—'}`, pageWidth - margin - 185, 70, { width: 185, align: 'right' });
-    doc.font('Helvetica-Bold').fontSize(10).fillColor(GRAY)
-      .text(`Date : ${formatDate(invoice.issueDate)}`, pageWidth - margin - 185, 88, { width: 185, align: 'right' });
+    doc.font('Helvetica-Bold').fontSize(9).fillColor(GRAY)
+      .text(`N : ${invoice.invoiceNumber || '—'}`, 445 * scaleX, 70 * scaleY, { width: 110 * scaleX, align: 'right' });
+    doc.font('Helvetica-Bold').fontSize(9).fillColor(GRAY)
+      .text(`Date : ${formatDate(invoice.issueDate)}`, 423 * scaleX, 89 * scaleY, { width: 132 * scaleX, align: 'right' });
 
-    doc.moveTo(margin, 116).lineTo(pageWidth - margin, 116).strokeColor('#D9DEE6').lineWidth(0.8).stroke();
-  };
+    doc.font('Helvetica').fontSize(9.5).fillColor(TEXT)
+      .text(companyAddress.join(', '), 40 * scaleX, 169 * scaleY, { width: 320 * scaleX, height: 14 * scaleY, ellipsis: true });
+    doc.text(invoice.companyPhone ? `Tél. : ${invoice.companyPhone}` : '', 40 * scaleX, 186 * scaleY, { width: 320 * scaleX });
+    doc.text(invoice.companyEmail ? `Email : ${invoice.companyEmail}` : '', 40 * scaleX, 202 * scaleY, { width: 320 * scaleX });
+    doc.text(invoice.companySiret ? `Siret : ${invoice.companySiret}` : '', 40 * scaleX, 218 * scaleY, { width: 320 * scaleX });
 
-  const drawPartyDetails = () => {
-    const sectionY = 146;
-    const rightX = pageWidth - margin - 180;
-    const rightWidth = 180;
-    const companyLines = [
-      ...companyAddress,
-      invoice.companyPhone ? `Tél. : ${invoice.companyPhone}` : '',
-      invoice.companyEmail ? `Email : ${invoice.companyEmail}` : '',
-      invoice.companySiret ? `Siret : ${invoice.companySiret}` : '',
-    ].filter(Boolean);
     const clientLines = [
+      invoice.customerName || 'Client',
       ...customerAddress,
-      invoice.customerPhone ? `Tél. : ${invoice.customerPhone}` : '',
-      invoice.customerEmail || '',
+      invoice.customerPhone || '',
     ].filter(Boolean);
-
-    doc.font('Helvetica-Bold').fontSize(10).fillColor(INK).text('Emetteur :', margin, sectionY);
     doc.font('Helvetica').fontSize(9.5).fillColor(TEXT)
-      .text(companyLines.join('\n'), margin, sectionY + 17, { width: 245, lineGap: 2 });
-
-    doc.roundedRect(rightX, sectionY - 5, rightWidth, 100, 8).fill(LIGHT_GRAY);
-    doc.font('Helvetica-Bold').fontSize(10).fillColor(INK).text('Facturé à :', rightX + 12, sectionY + 7);
-    doc.font('Helvetica').fontSize(9.5).fillColor(TEXT)
-      .text([invoice.customerName || 'Client', ...clientLines].join('\n'), rightX + 12, sectionY + 24, {
-        width: rightWidth - 24,
+      .text(clientLines.join('\n'), 379 * scaleX, 169 * scaleY, {
+        width: 165 * scaleX,
+        height: 62 * scaleY,
         lineGap: 2,
+        ellipsis: true,
       });
   };
 
-  drawPageHeader();
-  drawPartyDetails();
+  const drawContinuationHeader = () => {
+    doc.font('Helvetica-Bold').fontSize(15).fillColor(TEXT)
+      .text(`FACTURE - suite ${invoice.invoiceNumber || ''}`, margin, 38, { width: contentWidth });
+    doc.moveTo(margin, 65).lineTo(pageWidth - margin, 65).strokeColor('#D9DEE6').lineWidth(0.8).stroke();
+    drawTableHeader(82);
+    return 82 + 51 * scaleY;
+  };
 
-  let y = 282;
-  drawTableHeader(y);
-  y += 40;
+  drawTemplatePage();
+  let y = 333 * scaleY;
+  const items = invoice.items || [];
+  const totalsAreaHeight = 111 * scaleY;
 
-  (invoice.items || []).forEach((item: any) => {
+  items.forEach((item: any) => {
     const descriptionHeight = doc.font('Helvetica').fontSize(9.5)
       .heightOfString(item.description || '', { width: columns.description.width });
-    const rowHeight = Math.max(38, descriptionHeight + 20);
+    const rowHeight = Math.max(48 * scaleY, descriptionHeight + 20 * scaleY);
 
-    if (y + rowHeight > footerY - 25) {
+    if (y + rowHeight + totalsAreaHeight > footerY - 12 * scaleY) {
       drawFooter();
       doc.addPage({ size: 'A4', margin: 0 });
-      y = 48;
-      drawTableHeader(y);
-      y += 40;
+      y = drawContinuationHeader();
     }
 
     doc.font('Helvetica').fontSize(9.5).fillColor(TEXT);
-    doc.text(item.description || '', columns.description.x, y + 12, { width: columns.description.width });
-    doc.text(String(item.quantity ?? ''), columns.quantity.x, y + 12, { width: columns.quantity.width, align: 'right' });
-    doc.text(formatMoney(item.unitPrice || 0), columns.price.x, y + 12, { width: columns.price.width, align: 'right' });
-    doc.text(`${item.vatRate ?? 0}%`, columns.vat.x, y + 12, { width: columns.vat.width, align: 'right' });
+    doc.text(item.description || '', columns.description.x, y + 15 * scaleY, { width: columns.description.width });
+    doc.text(String(item.quantity ?? ''), columns.quantity.x, y + 15 * scaleY, { width: columns.quantity.width, align: 'right' });
+    doc.text(formatMoney(item.unitPrice || 0), columns.price.x, y + 15 * scaleY, { width: columns.price.width, align: 'right' });
+    doc.text(`${item.vatRate ?? 0}%`, columns.vat.x, y + 15 * scaleY, { width: columns.vat.width, align: 'right' });
     const lineTotal = Math.round((item.unitPrice || 0) * (item.quantity || 0) * (1 + (item.vatRate || 0) / 100));
-    doc.font('Helvetica-Bold').text(formatMoney(lineTotal), columns.total.x, y + 12, { width: columns.total.width, align: 'right' });
+    doc.font('Helvetica-Bold').text(formatMoney(lineTotal), columns.total.x, y + 15 * scaleY, { width: columns.total.width, align: 'right' });
     y += rowHeight;
     doc.moveTo(margin, y).lineTo(pageWidth - margin, y).strokeColor('#111111').lineWidth(0.65).stroke();
   });
 
-  y += 34;
-  const totalsBoxWidth = 220;
-  const totalsX = pageWidth - margin - totalsBoxWidth;
-  const totalsHeight = 111;
-  if (y + totalsHeight > footerY - 10) {
+  y = Math.max(y + 40 * scaleY, 423 * scaleY);
+  if (y + totalsAreaHeight > footerY - 12 * scaleY) {
     drawFooter();
     doc.addPage({ size: 'A4', margin: 0 });
-    y = 60;
+    y = drawContinuationHeader() + 16 * scaleY;
   }
 
+  const totalsX = 333 * scaleX;
+  const totalsWidth = 221 * scaleX;
+  const valueX = 440 * scaleX;
+  const valueWidth = 93 * scaleX;
   doc.font('Helvetica-Bold').fontSize(10).fillColor(INK)
-    .text('Sous-total HT', totalsX, y, { width: 110 });
+    .text('Sous-total HT', totalsX, y, { width: 108 * scaleX });
   doc.font('Helvetica').fontSize(10).fillColor(TEXT)
-    .text(formatMoney(invoice.subTotal), totalsX + 110, y, { width: 110, align: 'right' });
-  y += 32;
+    .text(formatMoney(invoice.subTotal), valueX, y, { width: valueWidth, align: 'right' });
+  y += 36 * scaleY;
   doc.font('Helvetica-Bold').fontSize(10).fillColor(INK)
-    .text('Total TVA', totalsX, y, { width: 110 });
+    .text('Total TVA', totalsX, y, { width: 108 * scaleX });
   doc.font('Helvetica').fontSize(10).fillColor(TEXT)
-    .text(formatMoney(invoice.vatTotal), totalsX + 110, y, { width: 110, align: 'right' });
-  y += 18;
+    .text(formatMoney(invoice.vatTotal), valueX, y, { width: valueWidth, align: 'right' });
+  y += 18 * scaleY;
 
-  doc.roundedRect(totalsX, y, totalsBoxWidth, 40, 8).fill('#000000');
+  doc.roundedRect(totalsX, y, totalsWidth, 41 * scaleY, 8).fill('#000000');
   doc.font('Helvetica-Bold').fontSize(12).fillColor(RED)
-    .text('TOTAL TTC', totalsX + 12, y + 12, { width: 90 });
+    .text('TOTAL TTC', totalsX + 4 * scaleX, y + 12 * scaleY, { width: 105 * scaleX });
   doc.font('Helvetica-Bold').fontSize(12).fillColor('#FFFFFF')
-    .text(formatMoney(invoice.total), totalsX + 102, y + 12, { width: 106, align: 'right' });
+    .text(formatMoney(invoice.total), valueX, y + 12 * scaleY, { width: valueWidth, align: 'right' });
 
   drawFooter();
 }
