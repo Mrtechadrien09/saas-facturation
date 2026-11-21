@@ -401,98 +401,18 @@ export default function HomePage() {
             transition={{ duration: 0.65, delay: 0.2 }}
             className="relative"
           >
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -left-8 top-10 z-10 rounded-2xl border border-white/15 bg-white/10 p-3 shadow-[0_20px_40px_-25px_rgba(148,163,184,0.9)] backdrop-blur-md"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
-                  <CheckCircle2 className="h-4 w-4" />
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.25em] text-slate-300">Paiements</p>
-                  <p className="text-sm font-semibold text-white">98.4% suivis</p>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -right-6 bottom-14 z-10 rounded-2xl border border-[#C9A227]/30 bg-[#C9A227]/10 p-3 shadow-[0_20px_40px_-25px_rgba(201,162,39,0.8)] backdrop-blur-md"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#C9A227]/20 text-[#F7D77A]">
-                  <Zap className="h-4 w-4" />
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.25em] text-slate-300">Productivité</p>
-                  <p className="text-sm font-semibold text-white">+38% gain</p>
-                </div>
-              </div>
-            </motion.div>
-
-            <div className="glass-panel relative overflow-hidden rounded-[2rem] shadow-[0_40px_120px_-40px_rgba(15,23,42,0.7)]">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(56,189,248,0.18),_transparent_45%),_radial-gradient(circle_at_bottom_left,_rgba(245,158,11,0.14),_transparent_40%)]" />
-              <div className="relative p-6 sm:p-8">
-                <div className="flex items-center justify-between gap-4 rounded-3xl bg-slate-900/80 px-4 py-3 text-sm text-slate-200 shadow-sm">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Dashboard</p>
-                    <p className="mt-1 text-sm font-semibold text-white">Suivi de facturation</p>
-                  </div>
-                  <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
-                    En ligne
-                  </span>
-                </div>
-
-                <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-[1.75rem] border border-white/10 bg-slate-900/80 p-5">
-                    <p className="text-sm text-slate-400">Factures</p>
-                    <p className="mt-3 text-3xl font-semibold text-white">18</p>
-                    <p className="mt-2 text-xs uppercase tracking-[0.25em] text-slate-500">Ce mois-ci</p>
-                  </div>
-                  <div className="rounded-[1.75rem] border border-white/10 bg-slate-900/80 p-5">
-                    <p className="text-sm text-slate-400">Paiements reçus</p>
-                    <p className="mt-3 text-3xl font-semibold text-white">12</p>
-                    <p className="mt-2 text-xs uppercase tracking-[0.25em] text-slate-500">En attente</p>
-                  </div>
-                </div>
-
-                <div className="mt-6 overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-900/80 p-4 text-sm text-slate-300 shadow-sm">
-                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-slate-500">
-                    <span>Factures récentes</span>
-                    <span>Dernières 24h</span>
-                  </div>
-                  <div className="mt-4 space-y-3">
-                    <div className="rounded-3xl bg-slate-950/60 p-4">
-                      <div className="flex items-center justify-between gap-3 text-xs text-slate-400">
-                        <span>#0012</span>
-                        <span className="rounded-full bg-emerald-500/15 px-2 py-1 text-emerald-300">Payée</span>
-                      </div>
-                      <p className="mt-2 text-sm text-slate-200">Graphisme • 1 250€</p>
-                    </div>
-                    <div className="rounded-3xl bg-slate-950/60 p-4">
-                      <div className="flex items-center justify-between gap-3 text-xs text-slate-400">
-                        <span>#0013</span>
-                        <span className="rounded-full bg-amber-500/15 px-2 py-1 text-amber-300">En retard</span>
-                      </div>
-                      <p className="mt-2 text-sm text-slate-200">Maintenance • 420€</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-[1.75rem] border border-white/10 bg-slate-900/80 p-4">
-                    <p className="text-xs uppercase tracking-[0.25em] text-slate-500">Clients actifs</p>
-                    <p className="mt-3 text-2xl font-semibold text-white">14</p>
-                  </div>
-                  <div className="rounded-[1.75rem] border border-white/10 bg-slate-900/80 p-4">
-                    <p className="text-xs uppercase tracking-[0.25em] text-slate-500">Prochaine relance</p>
-                    <p className="mt-3 text-2xl font-semibold text-white">2</p>
-                  </div>
-                </div>
-              </div>
+            <div className="overflow-hidden rounded-[1.5rem] border border-white/20 bg-slate-950 shadow-[0_40px_120px_-40px_rgba(15,23,42,0.8)] ring-1 ring-black/20">
+              <video
+                className="aspect-video w-full bg-slate-950 object-contain"
+                controls
+                playsInline
+                preload="metadata"
+                poster="/images/preuve.jpg"
+                aria-label="Démonstration de Simplifact"
+              >
+                <source src="/videos/demo-simplifact.mp4" type="video/mp4" />
+                Votre navigateur ne prend pas en charge la lecture vidéo.
+              </video>
             </div>
           </motion.div>
         </div>
