@@ -441,7 +441,7 @@ export default function HomePage() {
               </div>
 
               <img
-                src="/images/preuve.jpg"
+                src="/images/cap.png"
                 alt="Capture d'écran du tableau de bord Simplifact"
                 className="w-full h-auto object-contain"
               />
