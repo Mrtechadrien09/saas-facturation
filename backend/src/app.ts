@@ -36,7 +36,7 @@ app.use(cors({
   credentials: true
 }))
 ;
-app.use(express.json());
+app.use(express.json({ limit: '3mb' }));
 
 // Middleware de logging des requêtes
 app.use((req: Request, res: Response, next: NextFunction) => {
