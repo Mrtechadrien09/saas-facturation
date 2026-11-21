@@ -316,7 +316,7 @@ export default function HomePage() {
           <div className="animate-float absolute bottom-0 left-1/3 h-56 w-56 rounded-full bg-indigo-500/10 blur-3xl" />
         </div>
 
-        <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-24 sm:px-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:py-28">
+        <div className="relative mx-auto grid max-w-7xl gap-12 px-6 py-24 sm:px-10 lg:grid-cols-[minmax(0,1fr)_440px] lg:py-28 xl:grid-cols-[minmax(0,1fr)_560px]">
           <div className="max-w-2xl">
             <motion.div
               initial={{ opacity: 0, y: 18 }}
@@ -404,7 +404,10 @@ export default function HomePage() {
             <div className="overflow-hidden rounded-[1.5rem] border border-white/20 bg-slate-950 shadow-[0_40px_120px_-40px_rgba(15,23,42,0.8)] ring-1 ring-black/20">
               <video
                 className="aspect-video w-full bg-slate-950 object-contain"
+                autoPlay
                 controls
+                loop
+                muted
                 playsInline
                 preload="metadata"
                 poster="/images/preuve.jpg"
