@@ -401,9 +401,9 @@ export default function HomePage() {
             transition={{ duration: 0.65, delay: 0.2 }}
             className="relative"
           >
-            <div className="overflow-hidden rounded-[1.5rem] border border-white/20 bg-slate-950 shadow-[0_40px_120px_-40px_rgba(15,23,42,0.8)] ring-1 ring-black/20">
+            <div className="overflow-hidden rounded-[1.65rem] border border-white/35 bg-gradient-to-br from-white/15 via-white/5 to-white/10 p-1.5 shadow-[0_40px_120px_-40px_rgba(15,23,42,0.8)] ring-1 ring-white/10 backdrop-blur-xl">
               <video
-                className="aspect-video w-full bg-slate-950 object-contain"
+                className="aspect-video w-full rounded-[1.2rem] bg-slate-950 object-contain"
                 autoPlay
                 controls
                 loop
