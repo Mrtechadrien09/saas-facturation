@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, memo } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -199,6 +199,34 @@ export default function HomePage() {
   const router = useRouter();
   const { isAuthenticated, init, completeSocialLogin } = useAuth();
   const [checked, setChecked] = useState(false);
+  const [shouldLoadDemoVideo, setShouldLoadDemoVideo] = useState(false);
+  const demoVideoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    const video = demoVideoRef.current;
+    if (!video) return;
+
+    if (!('IntersectionObserver' in window)) {
+      setShouldLoadDemoVideo(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setShouldLoadDemoVideo(true);
+        observer.disconnect();
+      }
+    }, { rootMargin: '250px' });
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (shouldLoadDemoVideo) {
+      demoVideoRef.current?.load();
+    }
+  }, [shouldLoadDemoVideo]);
 
   useEffect(() => {
     const tokenFromUrl = getTokenFromUrl(window.location.search);
@@ -402,17 +430,18 @@ export default function HomePage() {
           >
             <div className="overflow-hidden rounded-[1.65rem] border border-white/35 bg-gradient-to-br from-white/15 via-white/5 to-white/10 p-1.5 shadow-[0_40px_120px_-40px_rgba(15,23,42,0.8)] ring-1 ring-white/10 backdrop-blur-xl">
               <video
+                ref={demoVideoRef}
                 className="aspect-video w-full rounded-[1.2rem] bg-slate-950 object-contain"
                 autoPlay
                 controls
                 loop
                 muted
                 playsInline
-                preload="metadata"
-                poster="/images/preuve.jpg"
+                preload={shouldLoadDemoVideo ? "metadata" : "none"}
+                poster={shouldLoadDemoVideo ? "/images/preuve.jpg" : undefined}
                 aria-label="Démonstration de Simplifact"
               >
-                <source src="/videos/demo-simplifact.mp4" type="video/mp4" />
+                {shouldLoadDemoVideo && <source src="/videos/demo-simplifact.mp4" type="video/mp4" />}
                 Votre navigateur ne prend pas en charge la lecture vidéo.
               </video>
             </div>
