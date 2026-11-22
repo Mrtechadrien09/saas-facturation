@@ -47,20 +47,24 @@ export function SocialAuthButtons({ className = "", onSelect }: SocialAuthButton
 
     try {
       let backendReady = false;
+      const prewarmDeadline = Date.now() + 60_000;
 
-      for (let attempt = 0; attempt < 8 && !backendReady; attempt += 1) {
+      while (!backendReady && Date.now() < prewarmDeadline) {
         try {
           const response = await fetch(backendUrl.origin, {
             cache: "no-store",
-            signal: AbortSignal.timeout(15000),
+            signal: AbortSignal.timeout(Math.min(8000, prewarmDeadline - Date.now())),
           });
           backendReady = response.ok;
         } catch {
           backendReady = false;
         }
 
-        if (!backendReady && attempt < 7) {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+        if (!backendReady) {
+          const delay = Math.min(1500, prewarmDeadline - Date.now());
+          if (delay > 0) {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+          }
         }
       }
 
