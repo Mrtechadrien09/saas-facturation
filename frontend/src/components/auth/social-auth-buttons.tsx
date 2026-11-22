@@ -1,6 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { Loader2 } from "lucide-react";
 
 export type SocialProvider = "google" | "github";
 
@@ -34,29 +35,77 @@ const providers: { id: SocialProvider; label: string; icon: ReactNode }[] = [
 ];
 
 export function SocialAuthButtons({ className = "", onSelect }: SocialAuthButtonsProps) {
-  const handleSelect = (provider: SocialProvider) => {
-    if (onSelect) {
-      onSelect(provider);
-      return;
-    }
+  const [pendingProvider, setPendingProvider] = useState<SocialProvider | null>(null);
+  const [connectionError, setConnectionError] = useState(false);
 
+  const handleSelect = async (provider: SocialProvider) => {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://saas-facturation-backend-hb6b.onrender.com/api";
-    window.location.href = `${apiBaseUrl}/auth/${provider}`;
+    const backendUrl = new URL(apiBaseUrl);
+
+    setPendingProvider(provider);
+    setConnectionError(false);
+
+    try {
+      let backendReady = false;
+
+      for (let attempt = 0; attempt < 8 && !backendReady; attempt += 1) {
+        try {
+          const response = await fetch(backendUrl.origin, {
+            cache: "no-store",
+            signal: AbortSignal.timeout(15000),
+          });
+          backendReady = response.ok;
+        } catch {
+          backendReady = false;
+        }
+
+        if (!backendReady && attempt < 7) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+      }
+
+      if (!backendReady) {
+        throw new Error("Le serveur de connexion est momentanément indisponible.");
+      }
+
+      if (onSelect) {
+        await onSelect(provider);
+      } else {
+        window.location.href = `${apiBaseUrl}/auth/${provider}`;
+      }
+    } catch {
+      setPendingProvider(null);
+      setConnectionError(true);
+    }
   };
 
   return (
-    <div className={`grid grid-cols-2 gap-3 ${className}`.trim()}>
-      {providers.map((provider) => (
-        <button
-          key={provider.id}
-          type="button"
-          onClick={() => handleSelect(provider.id)}
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
-        >
-          {provider.icon}
-          {provider.label}
-        </button>
-      ))}
+    <div className={className}>
+      <div className="grid grid-cols-2 gap-3">
+        {providers.map((provider) => (
+          <button
+            key={provider.id}
+            type="button"
+            onClick={() => void handleSelect(provider.id)}
+            disabled={pendingProvider !== null}
+            aria-busy={pendingProvider === provider.id}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-wait disabled:opacity-70"
+          >
+            {pendingProvider === provider.id ? <Loader2 className="h-4 w-4 animate-spin" /> : provider.icon}
+            {pendingProvider === provider.id ? "Connexion…" : provider.label}
+          </button>
+        ))}
+      </div>
+      {pendingProvider && (
+        <span className="sr-only" role="status" aria-live="polite">
+          Connexion avec {pendingProvider} en cours.
+        </span>
+      )}
+      {connectionError && (
+        <p className="mt-3 text-center text-sm text-red-600" role="alert">
+          Le serveur met trop de temps à répondre. Réessaie dans un instant.
+        </p>
+      )}
     </div>
   );
 }
