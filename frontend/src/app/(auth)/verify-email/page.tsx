@@ -9,8 +9,11 @@ import { api } from "@/lib/api";
 import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
 import Image from "next/image";
+import { useLanguage } from "@/lib/language";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
 
 export default function VerifyEmailPage() {
+  const { t } = useLanguage();
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -36,6 +39,7 @@ export default function VerifyEmailPage() {
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10 sm:px-6">
+      <div className="absolute right-4 top-4 z-20"><LanguageSwitcher /></div>
       <Image
         src="/images/auth.jpg"
         alt=""
@@ -60,21 +64,21 @@ export default function VerifyEmailPage() {
               {status === "error" && <XCircle className="mx-auto h-10 w-10 text-destructive" />}
 
               <h2 className="mt-5 text-3xl font-semibold tracking-tight text-slate-950">
-                {status === "loading" && "Vérification en cours..."}
-                {status === "success" && "Email vérifié !"}
-                {status === "error" && "Lien invalide"}
+                {status === "loading" && t("Vérification en cours...")}
+                {status === "success" && t("Email vérifié !")}
+                {status === "error" && t("Lien invalide")}
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                {status === "success" && "Votre compte est activé et vous allez bientôt être redirigé vers le tableau de bord."}
-                {status === "loading" && "Nous vérifions votre lien et activons votre espace."}
-                {status === "error" && "Ce lien est invalide ou a expiré. Demandez un nouveau lien pour continuer."}
+                {status === "success" && t("Votre compte est activé et vous allez bientôt être redirigé vers le tableau de bord.")}
+                {status === "loading" && t("Nous vérifions votre lien et activons votre espace.")}
+                {status === "error" && t("Ce lien est invalide ou a expiré. Demandez un nouveau lien pour continuer.")}
               </p>
             </div>
 
             {status === "error" && (
               <div className="mt-8 text-center">
                 <Link href="/check-email">
-                  <Button variant="outline">Demander un nouveau lien</Button>
+                  <Button variant="outline">{t("Demander un nouveau lien")}</Button>
                 </Link>
               </div>
             )}
