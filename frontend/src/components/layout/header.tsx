@@ -11,12 +11,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { navItems } from "@/components/layout/sidebar";
 import { Menu } from "lucide-react";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { useLanguage } from "@/lib/language";
 
 export function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
 
   const handleLogout = () => {
     logout();
@@ -35,7 +38,7 @@ export function Header() {
           type="button"
           onClick={() => setMenuOpen(!menuOpen)}
           className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-50"
-          aria-label="Ouvrir le menu"
+          aria-label={t("Ouvrir le menu")}
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -51,7 +54,7 @@ export function Header() {
                 onClick={() => handleNavigation(item.href)}
                 className={`rounded-2xl px-4 py-3 text-left text-sm text-slate-700 transition hover:bg-slate-100 ${pathname === item.href ? "bg-slate-100 font-semibold" : ""}`}
               >
-                {item.label}
+                {t(item.label)}
               </button>
             ))}
           </div>
@@ -59,6 +62,7 @@ export function Header() {
       )}
 
       <div className="ml-auto flex items-center gap-3">
+        <LanguageSwitcher />
         <DropdownMenu>
           <DropdownMenuTrigger className="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-950">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2B3A67] text-sm font-medium text-white">
@@ -68,7 +72,7 @@ export function Header() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-52">
             <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
-              Déconnexion
+              {t("Déconnexion")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
