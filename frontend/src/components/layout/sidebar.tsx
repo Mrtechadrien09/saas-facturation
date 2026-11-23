@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { LayoutDashboard, Users, FileText, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
+import { useLanguage } from "@/lib/language";
 
 export const navItems = [
   { href: "/dashboard", label: "Vue d'ensemble", icon: LayoutDashboard },
@@ -26,6 +27,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { logout } = useAuth();
+  const { t } = useLanguage();
 
   const handleLogout = () => {
     logout();
@@ -59,7 +61,7 @@ export function Sidebar() {
                 )}
               >
                 <Icon className={cn("h-4 w-4", isActive ? "text-white" : iconColors[item.href])} />
-                {item.label}
+                {t(item.label)}
               </div>
             </Link>
           );
@@ -73,7 +75,7 @@ export function Sidebar() {
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-3 py-2.5 text-sm font-medium text-white shadow-md shadow-blue-500/20 transition hover:bg-blue-500"
         >
           <LogOut className="h-4 w-4" />
-          Déconnexion
+          {t("Déconnexion")}
         </button>
       </div>
     </aside>
