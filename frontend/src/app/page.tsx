@@ -844,32 +844,22 @@ export default function HomePage() {
 
       {/* ========== FOOTER ========== */}
       <footer className="border-t border-slate-900 bg-slate-950 px-6 py-12 text-slate-300">
-        <div className="mx-auto flex max-w-6xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-lg font-semibold text-white">Simplifact</p>
-            <p className="mt-3 max-w-md text-sm leading-6 text-slate-400">
-              {t("Une plateforme de gestion commerciale pensée pour les entreprises qui veulent contrôler leur facturation, leurs clients et leur trésorerie.")}
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-400">
-            <Link href="/login" className="transition hover:text-white">
-              {t("Connexion")}
-            </Link>
-            <Link href="/register" className="transition hover:text-white">
-              {t("Inscription")}
-            </Link>
-            <a href="#features" className="transition hover:text-white">
-              {t("Fonctionnalités")}
-            </a>
-            <a href="#faq" className="transition hover:text-white">
-              FAQ
-            </a>
-          </div>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-400">
+        <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[minmax(12rem,0.7fr)_minmax(0,1.3fr)] md:gap-16">
+          <nav aria-label={t("Liens du site")} className="flex flex-col items-start gap-3 text-sm text-slate-400">
+            <Link href="/login" className="transition hover:text-white">{t("Connexion")}</Link>
+            <Link href="/register" className="transition hover:text-white">{t("Inscription")}</Link>
+            <a href="#features" className="transition hover:text-white">{t("Fonctionnalités")}</a>
+            <a href="#faq" className="transition hover:text-white">FAQ</a>
             <Link href="/about" className="transition hover:text-white">{t("À propos de nous")}</Link>
             <Link href="/privacy" className="transition hover:text-white">{t("Confidentialité")}</Link>
             <Link href="/terms" className="transition hover:text-white">{t("Conditions d’utilisation")}</Link>
+          </nav>
+
+          <div className="md:justify-self-end md:text-right">
+            <p className="text-lg font-semibold text-white">Simplifact</p>
+            <p className="mt-3 max-w-md text-sm leading-6 text-slate-400 md:ml-auto">
+              {t("Une plateforme de gestion commerciale pensée pour les entreprises qui veulent contrôler leur facturation, leurs clients et leur trésorerie.")}
+            </p>
           </div>
         </div>
 
