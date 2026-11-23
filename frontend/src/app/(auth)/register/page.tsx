@@ -13,6 +13,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
 import Image from "next/image";
+import { useLanguage } from "@/lib/language";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
 
 // Étape 1 : Notre propre algorithme de calcul de force (0 à 4)
 const calculatePasswordStrength = (password: string): number => {
@@ -46,6 +48,7 @@ export default function Register() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { register: registerUser } = useAuth();
+  const { t } = useLanguage();
 
   const handleSocialAuth = (provider: "google" | "github") => {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://saas-facturation-backend-hb6b.onrender.com/api";
@@ -80,6 +83,7 @@ export default function Register() {
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10 sm:px-6">
+      <div className="absolute right-4 top-4 z-20"><LanguageSwitcher /></div>
       <Image
         src="/images/auth.jpg"
         alt=""
@@ -94,51 +98,51 @@ export default function Register() {
       <div className="relative z-10 w-full max-w-md rounded-[28px] border border-white/25 bg-white/88 p-7 shadow-[0_30px_90px_-30px_rgba(15,23,42,0.65)] backdrop-blur-[18px] sm:p-9">
         <div className="space-y-6">
           <div className="space-y-2 text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900">Créer un compte entreprise</h1>
-            <p className="text-sm text-slate-500">Centralisez factures, clients et suivi des paiements au sein de votre organisation.</p>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900">{t("Créer un compte entreprise")}</h1>
+            <p className="text-sm text-slate-500">{t("Centralisez factures, clients et suivi des paiements au sein de votre organisation.")}</p>
           </div>
 
           <SocialAuthButtons onSelect={handleSocialAuth} />
 
           <div className="relative my-4 flex items-center justify-center">
             <div className="h-px flex-1 bg-slate-200" />
-            <span className="mx-3 text-xs uppercase tracking-[0.2em] text-slate-400">ou</span>
+            <span className="mx-3 text-xs uppercase tracking-[0.2em] text-slate-400">{t("ou")}</span>
             <div className="h-px flex-1 bg-slate-200" />
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* CHAMP : NOM */}
             <div className="space-y-3">
-              <Label htmlFor="name">Nom complet</Label>
+              <Label htmlFor="name">{t("Nom complet")}</Label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                <Input id="name" placeholder="Jean Dupont" className="pl-9" {...register("name", { required: "Le nom est requis" })} />
+                <Input id="name" placeholder="Jean Dupont" className="pl-9" {...register("name", { required: t("Le nom est requis") })} />
               </div>
-              {errors.name && <p className="text-sm text-destructive">{String(errors.name.message)}</p>}
+              {errors.name && <p className="text-sm text-destructive">{t(String(errors.name.message))}</p>}
             </div>
 
             {/* CHAMP : ENTREPRISE */}
             <div className="space-y-3">
-              <Label htmlFor="companyName">Entreprise</Label>
+              <Label htmlFor="companyName">{t("Entreprise")}</Label>
               <div className="relative">
                 <Building2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                <Input id="companyName" placeholder="Nom de l’entreprise" className="pl-9" {...register("companyName")} />
+                <Input id="companyName" placeholder={t("Nom de l’entreprise")} className="pl-9" {...register("companyName")} />
               </div>
             </div>
 
             {/* CHAMP : EMAIL */}
             <div className="space-y-3">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t("Email")}</Label>
               <div className="relative">
                 <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                <Input id="email" type="email" placeholder="toi@exemple.com" className="pl-10" {...register("email", { required: "L'email est requis" })} />
+                <Input id="email" type="email" placeholder={t("toi@exemple.com")} className="pl-10" {...register("email", { required: t("L'email est requis") })} />
               </div>
-              {errors.email && <p className="text-sm text-destructive">{String(errors.email.message)}</p>}
+              {errors.email && <p className="text-sm text-destructive">{t(String(errors.email.message))}</p>}
             </div>
 
             {/* CHAMP : MOT DE PASSE */}
             <div className="space-y-3">
-              <Label htmlFor="password">Mot de passe</Label>
+              <Label htmlFor="password">{t("Mot de passe")}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <Input 
@@ -147,12 +151,12 @@ export default function Register() {
                   placeholder="••••••••" 
                   className="pl-9" 
                   {...register("password", { 
-                    required: "Le mot de passe est requis",
-                    minLength: { value: 6, message: "Le mot de passe doit contenir au moins 6 caractères" }
+                    required: t("Le mot de passe est requis"),
+                    minLength: { value: 6, message: t("Le mot de passe doit contenir au moins 6 caractères") }
                   })} 
                 />
               </div>
-              {errors.password && <p className="text-sm text-destructive">{String(errors.password.message)}</p>}
+              {errors.password && <p className="text-sm text-destructive">{t(String(errors.password.message))}</p>}
 
               {/* JAUGE DE FORCE MAISON */}
               {passwordValue && (
@@ -164,33 +168,33 @@ export default function Register() {
                     />
                   </div>
                   <p className="text-xs text-slate-500 flex justify-between items-center">
-                    <span>Force : 
+                    <span>{t("Force :")} 
                       <span className="font-semibold ml-1 text-slate-700">
-                        {passwordScore === 1 && "Faible ⚠️"}
-                        {passwordScore === 2 && "Moyen 🛠️"}
-                        {passwordScore === 3 && "Bon 👍"}
-                        {passwordScore === 4 && "Très sécurisé 💪"}
+                        {passwordScore === 1 && t("Faible ⚠️")}
+                        {passwordScore === 2 && t("Moyen 🛠️")}
+                        {passwordScore === 3 && t("Bon 👍")}
+                        {passwordScore === 4 && t("Très sécurisé 💪")}
                       </span>
                     </span>
                     {passwordValue.length < 6 && (
-                      <span className="text-red-500 font-medium">Min. 6 caractères</span>
+                      <span className="text-red-500 font-medium">{t("Min. 6 caractères")}</span>
                     )}
                   </p>
                 </div>
               )}
             </div>
 
-            {error && <p className="text-sm text-destructive">{error}</p>}
+            {error && <p className="text-sm text-destructive">{t(error)}</p>}
 
             <Button type="submit" className="w-full bg-[#2B3A67] hover:bg-[#1F2B4D]" disabled={loading}>
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "S'inscrire"}
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : t("S'inscrire")}
             </Button>
           </form>
 
           <p className="mt-5 text-center text-sm text-slate-600">
-            Déjà un compte ?{" "}
+            {t("Déjà un compte ?")} 
             <Link href="/login" className="font-semibold text-[#2B3A67] underline-offset-4 hover:underline">
-              Se connecter
+              {t("Se connecter")}
             </Link>
           </p>
         </div>
