@@ -258,7 +258,7 @@ export default function HomePage() {
   }, [checked, isAuthenticated, router]);
 
   return (
-    <div className="relative min-h-screen bg-[#F8FAFC] text-slate-800 pt-11">
+    <div className="relative min-h-screen bg-white text-slate-800 pt-11">
       {/* ========== BANDEAU PROMOTIONNEL ========== */}
       <div
         className="landing-marquee fixed inset-x-0 top-0 z-40 h-11 overflow-hidden border-b border-[#C9A227]/30 bg-[#171F38] text-white shadow-[0_8px_30px_-18px_rgba(15,23,42,0.85)]"
@@ -467,7 +467,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="bg-slate-50 p-6 sm:p-8">
+          <div className="bg-white p-6 sm:p-8">
             <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm">
               <div className="border-b border-slate-200 bg-slate-950 px-5 py-4 text-sm text-slate-100">
                 {t("Tableau de bord Simplifact")}
@@ -545,7 +545,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-slate-50 px-6 py-20 sm:px-10">
+      <section className="bg-white px-6 py-20 sm:px-10">
         <div className="mx-auto max-w-6xl">
           <div className="grid items-center gap-4 md:grid-cols-[1fr_auto_1fr]">
             <div className="h-px bg-slate-200/80" />
@@ -611,7 +611,7 @@ export default function HomePage() {
       </section>
 
       {/* ========== COMMENT ÇA MARCHE ========== */}
-      <section id="comment-ca-marche" className="bg-slate-50 px-6 py-24 sm:px-10">
+      <section id="comment-ca-marche" className="bg-white px-6 py-24 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
