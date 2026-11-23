@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { Loader2 } from "lucide-react";
+import { useLanguage } from "@/lib/language";
 
 export type SocialProvider = "google" | "github";
 
@@ -35,6 +36,7 @@ const providers: { id: SocialProvider; label: string; icon: ReactNode }[] = [
 ];
 
 export function SocialAuthButtons({ className = "", onSelect }: SocialAuthButtonsProps) {
+  const { t } = useLanguage();
   const [pendingProvider, setPendingProvider] = useState<SocialProvider | null>(null);
   const [connectionError, setConnectionError] = useState(false);
 
@@ -96,18 +98,18 @@ export function SocialAuthButtons({ className = "", onSelect }: SocialAuthButton
             className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-wait disabled:opacity-70"
           >
             {pendingProvider === provider.id ? <Loader2 className="h-4 w-4 animate-spin" /> : provider.icon}
-            {pendingProvider === provider.id ? "Connexion…" : provider.label}
+            {pendingProvider === provider.id ? t("Connexion…") : provider.label}
           </button>
         ))}
       </div>
       {pendingProvider && (
         <span className="sr-only" role="status" aria-live="polite">
-          Connexion avec {pendingProvider} en cours.
+          {t("Connexion avec le fournisseur en cours.")}
         </span>
       )}
       {connectionError && (
         <p className="mt-3 text-center text-sm text-red-600" role="alert">
-          Le serveur met trop de temps à répondre. Réessaie dans un instant.
+          {t("Le serveur met trop de temps à répondre. Réessaie dans un instant.")}
         </p>
       )}
     </div>
