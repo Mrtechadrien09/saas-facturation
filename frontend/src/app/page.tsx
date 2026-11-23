@@ -21,6 +21,8 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { getTokenFromUrl, clearTokenFromUrl } from "@/lib/auth-token.mjs";
 import Image from "next/image";
+import { useLanguage } from "@/lib/language";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
 const features = [
   {
     icon: FileText,
@@ -143,6 +145,7 @@ const FaqItem = memo(function FaqItem({
   answer: string;
 }) {
   const [open, setOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <div className="border-b border-slate-200 py-4">
@@ -151,7 +154,7 @@ const FaqItem = memo(function FaqItem({
         aria-expanded={open}
         className="flex w-full items-center justify-between text-left font-medium text-slate-800"
       >
-        {question}
+        {t(question)}
         <ChevronDown
           className={`h-4 w-4 shrink-0 text-[#C9A227] transition-transform duration-200 ${
             open ? "rotate-180" : ""
@@ -164,7 +167,7 @@ const FaqItem = memo(function FaqItem({
           animate={{ opacity: 1, height: "auto" }}
           className="mt-2 text-sm leading-relaxed text-slate-600"
         >
-          {answer}
+          {t(answer)}
         </motion.p>
       )}
     </div>
@@ -198,6 +201,7 @@ function TypewriterHeadline({ text }: { text: string }) {
 export default function HomePage() {
   const router = useRouter();
   const { isAuthenticated, init, completeSocialLogin } = useAuth();
+  const { t } = useLanguage();
   const [checked, setChecked] = useState(false);
   const [shouldLoadDemoVideo, setShouldLoadDemoVideo] = useState(false);
   const demoVideoRef = useRef<HTMLVideoElement | null>(null);
@@ -264,11 +268,11 @@ export default function HomePage() {
           {[0, 1].map((copy) => (
             <div key={copy} className="flex shrink-0 items-center" aria-hidden={copy === 1}>
               {[
-                "Essayez gratuitement pendant 1 mois",
-                "Sans carte bancaire",
-                "Sans engagement",
-                "Votre première facture en deux minutes",
-                "Relances automatiques des impayés",
+                t("Essayez gratuitement pendant 1 mois"),
+                t("Sans carte bancaire"),
+                t("Sans engagement"),
+                t("Votre première facture en deux minutes"),
+                t("Relances automatiques des impayés"),
               ].map((message) => (
                 <span key={message} className="flex shrink-0 items-center whitespace-nowrap px-5 text-xs font-semibold tracking-[0.01em] text-slate-100 sm:px-8 sm:text-sm">
                   {message}
@@ -293,31 +297,32 @@ export default function HomePage() {
 
         <nav className="hidden items-center gap-6 text-sm text-slate-600 md:flex">
           <a href="#features" className="transition hover:text-[#2B3A67]">
-            Fonctionnalités
+            {t("Fonctionnalités")}
           </a>
           <a href="#comment-ca-marche" className="transition hover:text-[#2B3A67]">
-            Comment ça marche
+            {t("Comment ça marche")}
           </a>
           <a href="#temoignages" className="transition hover:text-[#2B3A67]">
-            Témoignages
+            {t("Témoignages")}
           </a>
           <a href="#faq" className="transition hover:text-[#2B3A67]">
-            FAQ
+            {t("FAQ")}
           </a>
         </nav>
 
         <div className="flex items-center gap-3">
+          <LanguageSwitcher />
           <Link href="/login">
             <Button
               variant="ghost"
               className="text-slate-700 hover:bg-slate-100"
             >
-              Connexion
+              {t("Connexion")}
             </Button>
           </Link>
           <Link href="/register">
             <Button className="bg-[#2B3A67] text-white hover:bg-[#1f2a4d]">
-              Commencer
+              {t("Commencer")}
             </Button>
           </Link>
         </div>
@@ -330,7 +335,7 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(201,162,39,0.18),_transparent_35%)]" />
           <Image
             src="/images/hero.jpg"
-            alt="Interface Simplifact pour entreprises et équipes de gestion"
+            alt={t("Interface Simplifact pour entreprises et équipes de gestion")}
             fill
             priority
             quality={75}
@@ -354,7 +359,7 @@ export default function HomePage() {
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#C9A227]/20 text-[#C9A227]">
                 <Zap className="h-4 w-4" />
               </span>
-              Solution de facturation pour PME, ETI et équipes commerciales
+              {t("Solution de facturation pour PME, ETI et équipes commerciales")}
             </motion.div>
 
             <motion.h1
@@ -363,7 +368,7 @@ export default function HomePage() {
               transition={{ duration: 0.55, delay: 0.08 }}
               className="mt-8 max-w-xl text-5xl font-semibold tracking-tight text-white sm:text-6xl"
             >
-              <TypewriterHeadline text="Simplifiez la facturation de votre entreprise" />
+              <TypewriterHeadline text={t("Simplifiez la facturation de votre entreprise")} />
             </motion.h1>
 
             <motion.p
@@ -372,7 +377,7 @@ export default function HomePage() {
               transition={{ duration: 0.55, delay: 0.16 }}
               className="mt-6 max-w-xl text-lg leading-8 text-slate-200"
             >
-              Centralisez vos clients, vos factures, vos paiements et vos relances dans une plateforme pensée pour les équipes B2B et la gestion d’entreprise.
+              {t("Centralisez vos clients, vos factures, vos paiements et vos relances dans une plateforme pensée pour les équipes B2B et la gestion d’entreprise.")}
             </motion.p>
 
             <motion.div
@@ -386,7 +391,7 @@ export default function HomePage() {
                   size="lg"
                   className="bg-[#C9A227] text-slate-950 shadow-lg shadow-[#C9A227]/20 hover:bg-[#d6af2b]"
                 >
-                  Créer un compte entreprise
+                  {t("Créer un compte entreprise")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -396,7 +401,7 @@ export default function HomePage() {
                   variant="outline"
                   className="border-white/20 bg-white/10 text-white hover:bg-white/15"
                 >
-                  Accéder à mon espace
+                  {t("Accéder à mon espace")}
                 </Button>
               </Link>
             </motion.div>
@@ -409,15 +414,15 @@ export default function HomePage() {
             >
               <div className="rounded-3xl border border-white/10 bg-white/10 p-5">
                 <p className="text-3xl font-semibold text-white">150+</p>
-                <p className="mt-2 text-sm text-slate-300">Entreprises gérées</p>
+                <p className="mt-2 text-sm text-slate-300">{t("Entreprises gérées")}</p>
               </div>
               <div className="rounded-3xl border border-white/10 bg-white/10 p-5">
                 <p className="text-3xl font-semibold text-white">8K+</p>
-                <p className="mt-2 text-sm text-slate-300">Factures générées</p>
+                <p className="mt-2 text-sm text-slate-300">{t("Factures générées")}</p>
               </div>
               <div className="rounded-3xl border border-white/10 bg-white/10 p-5">
                 <p className="text-3xl font-semibold text-white">97%</p>
-                <p className="mt-2 text-sm text-slate-300">Taux de suivi paiements</p>
+                <p className="mt-2 text-sm text-slate-300">{t("Taux de suivi paiements")}</p>
               </div>
             </motion.div>
           </div>
@@ -439,7 +444,7 @@ export default function HomePage() {
                 playsInline
                 preload={shouldLoadDemoVideo ? "metadata" : "none"}
                 poster={shouldLoadDemoVideo ? "/images/preuve.jpg" : undefined}
-                aria-label="Démonstration de Simplifact"
+                aria-label={t("Démonstration de Simplifact")}
               >
                 {shouldLoadDemoVideo && <source src="/videos/demo-simplifact.mp4" type="video/mp4" />}
                 Votre navigateur ne prend pas en charge la lecture vidéo.
@@ -453,24 +458,24 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl px-6 py-24 sm:px-10">
         <div className="rounded-[2rem] border border-slate-200 bg-white shadow-[0_30px_70px_-40px_rgba(15,23,42,0.2)] overflow-hidden">
           <div className="bg-slate-950 px-6 py-6 text-white sm:px-10">
-            <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Capture du dashboard</p>
+            <p className="text-sm uppercase tracking-[0.3em] text-slate-400">{t("Capture du dashboard")}</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Ce que voit vraiment l’utilisateur après connexion
+              {t("Ce que voit vraiment l’utilisateur après connexion")}
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-              Un aperçu visuel du tableau de bord aide à rassurer : suivi des factures, clients actifs et factures en attente.
+              {t("Un aperçu visuel du tableau de bord aide à rassurer : suivi des factures, clients actifs et factures en attente.")}
             </p>
           </div>
 
           <div className="bg-slate-50 p-6 sm:p-8">
             <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm">
               <div className="border-b border-slate-200 bg-slate-950 px-5 py-4 text-sm text-slate-100">
-                Tableau de bord Simplifact
+                {t("Tableau de bord Simplifact")}
               </div>
 
               <img
                 src="/images/cap.png"
-                alt="Capture d'écran du tableau de bord Simplifact"
+                alt={t("Capture d'écran du tableau de bord Simplifact")}
                 className="w-full h-auto object-contain"
               />
             </div>
@@ -488,7 +493,7 @@ export default function HomePage() {
             transition={{ duration: 0.45 }}
             className="text-sm uppercase tracking-[0.3em] text-slate-500"
           >
-            Ce dont votre entreprise a vraiment besoin
+            {t("Ce dont votre entreprise a vraiment besoin")}
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
@@ -497,7 +502,7 @@ export default function HomePage() {
             transition={{ duration: 0.5, delay: 0.05 }}
             className="mt-5 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl"
           >
-            Gérez votre facturation comme un pro, sans complexité.
+            {t("Gérez votre facturation comme un pro, sans complexité.")}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 15 }}
@@ -506,7 +511,7 @@ export default function HomePage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="mt-5 text-sm leading-7 text-slate-600 sm:text-base"
           >
-            Des fonctionnalités claires, un tableau de bord lisible et des factures prêtes à envoyer en quelques clics.
+            {t("Des fonctionnalités claires, un tableau de bord lisible et des factures prêtes à envoyer en quelques clics.")}
           </motion.p>
         </div>
 
@@ -528,10 +533,10 @@ export default function HomePage() {
                     <Icon className="h-6 w-6" />
                   </div>
                   <h3 className="mt-6 text-xl font-semibold text-slate-900">
-                    {feature.title}
+                    {t(feature.title)}
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-slate-600">
-                    {feature.description}
+                    {t(feature.description)}
                   </p>
                 </div>
               </motion.div>
@@ -545,7 +550,7 @@ export default function HomePage() {
           <div className="grid items-center gap-4 md:grid-cols-[1fr_auto_1fr]">
             <div className="h-px bg-slate-200/80" />
             <p className="text-center text-sm uppercase tracking-[0.35em] text-slate-500">
-              Ils nous font confiance
+              {t("Ils nous font confiance")}
             </p>
             <div className="h-px bg-slate-200/80" />
           </div>
@@ -553,15 +558,15 @@ export default function HomePage() {
           <div className="mt-10 grid gap-4 sm:grid-cols-3">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-sm">
               <p className="text-2xl font-semibold text-slate-900">120+</p>
-              <p className="mt-2 text-sm text-slate-500">entreprises accompagnées</p>
+              <p className="mt-2 text-sm text-slate-500">{t("entreprises accompagnées")}</p>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-sm">
               <p className="text-2xl font-semibold text-slate-900">3 000+</p>
-              <p className="mt-2 text-sm text-slate-500">factures créées</p>
+              <p className="mt-2 text-sm text-slate-500">{t("factures créées")}</p>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-sm">
               <p className="text-2xl font-semibold text-slate-900">96%</p>
-              <p className="mt-2 text-sm text-slate-500">clients satisfaits</p>
+              <p className="mt-2 text-sm text-slate-500">{t("clients satisfaits")}</p>
             </div>
           </div>
         </div>
@@ -578,10 +583,10 @@ export default function HomePage() {
             className="text-center"
           >
             <p className="text-sm uppercase tracking-[0.3em] text-slate-500">
-              Pour qui
+              {t("Pour qui")}
             </p>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-              Conçu pour les PME, les agences et les équipes de gestion d’entreprise.
+              {t("Conçu pour les PME, les agences et les équipes de gestion d’entreprise.")}
             </h2>
           </motion.div>
 
@@ -595,9 +600,9 @@ export default function HomePage() {
                 transition={{ duration: 0.45, delay: i * 0.08 }}
                 className="rounded-[2rem] border border-slate-200 bg-slate-50 p-6 shadow-[0_18px_50px_-38px_rgba(15,23,42,0.35)]"
               >
-                <h3 className="text-xl font-semibold text-slate-900">{item.title}</h3>
+                <h3 className="text-xl font-semibold text-slate-900">{t(item.title)}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-slate-600">
-                  {item.text}
+                  {t(item.text)}
                 </p>
               </motion.div>
             ))}
@@ -616,10 +621,10 @@ export default function HomePage() {
             className="text-center"
           >
             <p className="text-sm uppercase tracking-[0.3em] text-slate-500">
-              Comment ça marche
+              {t("Comment ça marche")}
             </p>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-              Trois étapes simples pour mettre votre facturation sous contrôle.
+              {t("Trois étapes simples pour mettre votre facturation sous contrôle.")}
             </h2>
           </motion.div>
 
@@ -642,10 +647,10 @@ export default function HomePage() {
                     <Icon className="h-6 w-6" />
                   </div>
                   <h3 className="mt-6 text-xl font-semibold text-slate-900">
-                    {step.title}
+                    {t(step.title)}
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-slate-600">
-                    {step.description}
+                    {t(step.description)}
                   </p>
                 </motion.div>
               );
@@ -665,10 +670,10 @@ export default function HomePage() {
             className="text-center"
           >
             <p className="text-sm uppercase tracking-[0.3em] text-slate-500">
-              Avant / Après
+              {t("Avant / Après")}
             </p>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-              Passez d’un suivi manuel à une gestion structurée et professionnelle.
+              {t("Passez d’un suivi manuel à une gestion structurée et professionnelle.")}
             </h2>
           </motion.div>
 
@@ -680,19 +685,19 @@ export default function HomePage() {
               transition={{ duration: 0.45 }}
               className="rounded-[2rem] border border-red-200 bg-red-50/70 p-8"
             >
-              <h3 className="font-semibold text-red-700">Sans outil dédié</h3>
+              <h3 className="font-semibold text-red-700">{t("Sans outil dédié")}</h3>
               <ul className="mt-6 space-y-4 text-sm leading-relaxed text-slate-600">
                 <li className="flex gap-3">
                   <span className="mt-1 text-red-500">✕</span>
-                  Factures faites à la main, modèles dispersés et erreurs fréquentes.
+                  {t("Factures faites à la main, modèles dispersés et erreurs fréquentes.")}
                 </li>
                 <li className="flex gap-3">
                   <span className="mt-1 text-red-500">✕</span>
-                  Calculs manuels de TVA et suivi des paiements impossible.
+                  {t("Calculs manuels de TVA et suivi des paiements impossible.")}
                 </li>
                 <li className="flex gap-3">
                   <span className="mt-1 text-red-500">✕</span>
-                  Relances improvisées et historique client incomplet.
+                  {t("Relances improvisées et historique client incomplet.")}
                 </li>
               </ul>
             </motion.div>
@@ -704,19 +709,19 @@ export default function HomePage() {
               transition={{ duration: 0.45 }}
               className="rounded-[2rem] border border-slate-200 bg-slate-50 p-8"
             >
-              <h3 className="font-semibold text-slate-900">Avec Simplifact</h3>
+              <h3 className="font-semibold text-slate-900">{t("Avec Simplifact")}</h3>
               <ul className="mt-6 space-y-4 text-sm leading-relaxed text-slate-600">
                 <li className="flex gap-3">
                   <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-[#C9A227]" />
-                  Factures prêtes en quelques clics, avec toutes les mentions légales.
+                  {t("Factures prêtes en quelques clics, avec toutes les mentions légales.")}
                 </li>
                 <li className="flex gap-3">
                   <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-[#C9A227]" />
-                  TVA automatique et suivi de paiement intégré.
+                  {t("TVA automatique et suivi de paiement intégré.")}
                 </li>
                 <li className="flex gap-3">
                   <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-[#C9A227]" />
-                  Clients centralisés, relances plus simples et reporting clair.
+                  {t("Clients centralisés, relances plus simples et reporting clair.")}
                 </li>
               </ul>
             </motion.div>
@@ -734,13 +739,13 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
             className="text-center text-3xl font-semibold tracking-tight text-slate-900"
           >
-            Ils facturent déjà avec nous
+            {t("Ils facturent déjà avec nous")}
           </motion.h2>
 
           <div className="mt-14 grid gap-6 sm:grid-cols-3">
-            {testimonials.map((t, i) => (
+            {testimonials.map((testimonial, i) => (
               <motion.div
-                key={t.name}
+                key={testimonial.name}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -760,12 +765,12 @@ export default function HomePage() {
                 </div>
 
                 <p className="mt-4 text-sm leading-relaxed text-slate-600">
-                  « {t.text} »
+                  « {t(testimonial.text)} »
                 </p>
 
                 <div className="mt-5">
-                  <p className="font-medium text-slate-800">{t.name}</p>
-                  <p className="text-xs text-slate-500">{t.role}</p>
+                  <p className="font-medium text-slate-800">{testimonial.name}</p>
+                  <p className="text-xs text-slate-500">{t(testimonial.role)}</p>
                 </div>
               </motion.div>
             ))}
@@ -783,7 +788,7 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
             className="text-center text-3xl font-semibold tracking-tight text-slate-900"
           >
-            Questions fréquentes
+            {t("Questions fréquentes")}
           </motion.h2>
 
           <div className="mt-10">
@@ -815,17 +820,17 @@ export default function HomePage() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-            Prêt à moderniser la gestion de votre facturation ?
+            {t("Prêt à moderniser la gestion de votre facturation ?")}
           </h2>
           <p className="mt-3 text-slate-600">
-            Créez votre compte entreprise et centralisez vos opérations commerciales en quelques minutes.
+            {t("Créez votre compte entreprise et centralisez vos opérations commerciales en quelques minutes.")}
           </p>
           <Link href="/register">
             <Button
               size="lg"
               className="mt-6 bg-[#2B3A67] text-white shadow-lg shadow-[#2B3A67]/20 hover:bg-[#1f2a4d]"
             >
-              Créer un compte entreprise
+              {t("Créer un compte entreprise")}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
@@ -838,7 +843,7 @@ export default function HomePage() {
           <div>
             <p className="text-lg font-semibold text-white">Simplifact</p>
             <p className="mt-3 max-w-md text-sm leading-6 text-slate-400">
-              Une plateforme de gestion commerciale pensée pour les entreprises qui veulent contrôler leur facturation, leurs clients et leur trésorerie.
+              {t("Une plateforme de gestion commerciale pensée pour les entreprises qui veulent contrôler leur facturation, leurs clients et leur trésorerie.")}
             </p>
           </div>
 
@@ -847,10 +852,10 @@ export default function HomePage() {
               Connexion
             </Link>
             <Link href="/register" className="transition hover:text-white">
-              Inscription
+              {t("Inscription")}
             </Link>
             <a href="#features" className="transition hover:text-white">
-              Fonctionnalités
+              {t("Fonctionnalités")}
             </a>
             <a href="#faq" className="transition hover:text-white">
               FAQ
@@ -859,7 +864,7 @@ export default function HomePage() {
         </div>
 
         <div className="mt-8 border-t border-slate-800 pt-6 text-center text-sm text-slate-500">
-          © {new Date().getFullYear()} Simplifact. Tous droits réservés.
+          © {new Date().getFullYear()} Simplifact. {t("Tous droits réservés.")}
         </div>
       </footer>
     </div>
