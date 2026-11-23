@@ -19,7 +19,7 @@ router.get('/me', requireAuth, getCurrentUser);
 // 🌐 ROUTES GOOGLE
 // ==========================================
 router.get('/google', 
-  passport.authenticate('google', { scope: ['profile', 'email'], session: false })
+  passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account', session: false })
 );
 
 router.get('/google/callback',
