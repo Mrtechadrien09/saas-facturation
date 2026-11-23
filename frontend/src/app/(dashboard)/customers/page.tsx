@@ -44,6 +44,8 @@ const avatarColors = [
   "bg-cyan-100 text-cyan-700",
 ];
 
+const countriesSortedByName = [...countries].sort((a, b) => a.name.localeCompare(b.name, "fr-FR"));
+
 function getAvatarColor(name: string) {
   const index = name.charCodeAt(0) % avatarColors.length;
   return avatarColors[index];
@@ -200,7 +202,7 @@ export default function CustomersPage() {
                         </div>
                       </SelectTrigger>
                       <SelectContent>
-                        {countries.map((country) => (
+                        {countriesSortedByName.map((country) => (
                           <SelectItem key={country.code} value={country.dialCode}>
                             <span className="mr-2 inline-flex items-center">
                               <ReactCountryFlag countryCode={country.code} svg className="text-lg leading-none" />
@@ -265,7 +267,7 @@ export default function CustomersPage() {
                       </div>
                     </SelectTrigger>
                     <SelectContent>
-                      {countries.map((country) => (
+                      {countriesSortedByName.map((country) => (
                         <SelectItem key={country.code} value={country.name}>
                           <span className="mr-2 inline-flex items-center">
                             <ReactCountryFlag countryCode={country.code} svg className="text-lg leading-none" />
