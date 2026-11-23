@@ -867,7 +867,6 @@ export default function HomePage() {
             </a>
           </div>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-400">
-            <span className="font-medium text-slate-300">{t("Informations")}</span>
             <Link href="/about" className="transition hover:text-white">{t("À propos de nous")}</Link>
             <Link href="/privacy" className="transition hover:text-white">{t("Confidentialité")}</Link>
             <Link href="/terms" className="transition hover:text-white">{t("Conditions d’utilisation")}</Link>
