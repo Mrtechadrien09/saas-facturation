@@ -300,21 +300,6 @@ export default function HomePage() {
             </span>
         </div>
 
-        <nav className="hidden items-center gap-6 text-sm text-slate-600 md:flex">
-          <a href="#features" className="transition hover:text-[#2B3A67]">
-            {t("Fonctionnalités")}
-          </a>
-          <a href="#comment-ca-marche" className="transition hover:text-[#2B3A67]">
-            {t("Comment ça marche")}
-          </a>
-          <a href="#temoignages" className="transition hover:text-[#2B3A67]">
-            {t("Témoignages")}
-          </a>
-          <a href="#faq" className="transition hover:text-[#2B3A67]">
-            {t("FAQ")}
-          </a>
-        </nav>
-
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
           <Link href="/login">
