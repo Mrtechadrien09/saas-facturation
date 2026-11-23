@@ -22,6 +22,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ReactCountryFlag from "react-country-flag";
 import { countries } from "@/lib/countries";
+import { useLanguage } from "@/lib/language";
 
 type SettingsTab = "company" | "payments";
 
@@ -37,6 +38,7 @@ const tabs: { id: SettingsTab; label: string; icon: typeof Building2 }[] = [
 ];
 
 export default function SettingsPage() {
+  const { language, t } = useLanguage();
   const { data, isLoading } = useSettings();
   const updateSettings = useUpdateSettings();
   const { theme, setTheme } = useTheme();
@@ -53,14 +55,14 @@ export default function SettingsPage() {
     const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
     if (!allowedTypes.includes(file.type)) {
       event.target.value = "";
-      window.alert("Format non pris en charge. Veuillez choisir un logo PNG, JPG ou WEBP.");
+      window.alert(t("Format non pris en charge. Veuillez choisir un logo PNG, JPG ou WEBP."));
       return;
     }
 
     const maxSizeInBytes = 2 * 1024 * 1024;
     if (file.size > maxSizeInBytes) {
       event.target.value = "";
-      window.alert("Le logo ne doit pas dépasser 2 Mo.");
+      window.alert(t("Le logo ne doit pas dépasser 2 Mo."));
       return;
     }
 
@@ -104,10 +106,15 @@ export default function SettingsPage() {
       }));
     } catch {
       event.target.value = "";
-      window.alert("Impossible de lire ce logo. Choisissez un autre fichier PNG, JPG ou WEBP.");
+      window.alert(t("Impossible de lire ce logo. Choisissez un autre fichier PNG, JPG ou WEBP."));
     }
   };
-  const sortedCountriesByName = [...countries].sort((a, b) => a.name.localeCompare(b.name, "fr-FR"));
+  const englishCountryNames = new Intl.DisplayNames(["en"], { type: "region" });
+  const getCountryLabel = (country: (typeof countries)[number]) =>
+    language === "en" ? englishCountryNames.of(country.code) || country.name : country.name;
+  const sortedCountriesByName = [...countries].sort((a, b) =>
+    getCountryLabel(a).localeCompare(getCountryLabel(b), language === "en" ? "en" : "fr-FR")
+  );
   const selectedCountry = sortedCountriesByName.find((country) => country.name === form.address.country) || sortedCountriesByName.find((country) => country.name === "France");
 
   useEffect(() => {
@@ -152,9 +159,9 @@ export default function SettingsPage() {
           <div>
             <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-[#dfe7ff] bg-[#edf3ff] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#2B3A67]">
               <Sparkles className="h-3.5 w-3.5" />
-              compte & entreprise
+              {t("compte & entreprise")}
             </div>
-            <h1 className="text-2xl font-semibold text-slate-900">Paramètres</h1>
+            <h1 className="text-2xl font-semibold text-slate-900">{t("Paramètres")}</h1>
           </div>
 
           <Button onClick={handleSave} disabled={updateSettings.isPending || !form.companyInfo.name} className="bg-[#2B3A67] hover:bg-[#1f2b4d]">
@@ -163,17 +170,17 @@ export default function SettingsPage() {
             ) : (
               <Save className="mr-2 h-4 w-4" />
             )}
-            Enregistrer
+            {t("Enregistrer")}
           </Button>
         </div>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <div className="rounded-2xl border border-slate-200 bg-white p-4">
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Profil</p>
-            <p className="mt-2 text-xl font-semibold text-slate-900">{form.companyInfo.name || "À compléter"}</p>
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-500">{t("Profil")}</p>
+            <p className="mt-2 text-xl font-semibold text-slate-900">{form.companyInfo.name || t("À compléter")}</p>
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white p-4">
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Paiements</p>
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-500">{t("Paiements")}</p>
             <p className="mt-2 text-xl font-semibold text-slate-900">Stripe</p>
           </div>
         </div>
@@ -198,7 +205,7 @@ export default function SettingsPage() {
                 ].join(" ")}
               >
                 <Icon className="h-4 w-4" />
-                {tab.label}
+                {t(tab.label)}
               </button>
             );
           })}
@@ -210,11 +217,11 @@ export default function SettingsPage() {
           <div className="space-y-6">
             <Card className="border-slate-200 shadow-sm">
               <CardHeader>
-                <CardTitle className="text-base text-slate-900">Profil de l’entreprise</CardTitle>
+                <CardTitle className="text-base text-slate-900">{t("Profil de l’entreprise")}</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Raison sociale *</Label>
+                  <Label htmlFor="name">{t("Raison sociale *")}</Label>
                   <Input
                     id="name"
                     value={form.companyInfo.name}
@@ -223,7 +230,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="siret">SIRET</Label>
+                  <Label htmlFor="siret">{t("SIRET")}</Label>
                   <Input
                     id="siret"
                     value={form.companyInfo.siret || ""}
@@ -232,7 +239,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="companyEmail">Email</Label>
+                  <Label htmlFor="companyEmail">{t("Email")}</Label>
                   <Input
                     id="companyEmail"
                     type="email"
@@ -242,7 +249,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Téléphone</Label>
+                  <Label htmlFor="phone">{t("Téléphone")}</Label>
                   <Input
                     id="phone"
                     value={form.companyInfo.phone || ""}
@@ -251,7 +258,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="website">Site web</Label>
+                  <Label htmlFor="website">{t("Site web")}</Label>
                   <Input
                     id="website"
                     value={form.companyInfo.website || ""}
@@ -264,11 +271,11 @@ export default function SettingsPage() {
 
             <Card className="border-slate-200 shadow-sm">
               <CardHeader>
-                <CardTitle className="text-base text-slate-900">Adresse</CardTitle>
+                <CardTitle className="text-base text-slate-900">{t("Adresse")}</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="street">Rue</Label>
+                  <Label htmlFor="street">{t("Rue")}</Label>
                   <Input
                     id="street"
                     value={form.address.street || ""}
@@ -277,7 +284,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="city">Ville</Label>
+                  <Label htmlFor="city">{t("Ville")}</Label>
                   <Input
                     id="city"
                     value={form.address.city || ""}
@@ -286,7 +293,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="zipCode">Code postal</Label>
+                  <Label htmlFor="zipCode">{t("Code postal")}</Label>
                   <Input
                     id="zipCode"
                     value={form.address.zipCode || ""}
@@ -295,7 +302,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="country">Pays</Label>
+                  <Label htmlFor="country">{t("Pays")}</Label>
                   <Select
                     value={form.address.country || "France"}
                     onValueChange={(value: string | null) => setForm({ ...form, address: { ...form.address, country: value || "France" } })}
@@ -305,7 +312,7 @@ export default function SettingsPage() {
                         {selectedCountry && (
                           <ReactCountryFlag countryCode={selectedCountry.code} svg className="text-lg leading-none" />
                         )}
-                        <span>{form.address.country || "France"}</span>
+                        <span>{selectedCountry ? getCountryLabel(selectedCountry) : t("Pays")}</span>
                       </div>
                     </SelectTrigger>
                     <SelectContent>
@@ -314,7 +321,7 @@ export default function SettingsPage() {
                           <span className="mr-2 inline-flex items-center">
                             <ReactCountryFlag countryCode={country.code} svg className="text-lg leading-none" />
                           </span>
-                          <span>{country.name}</span>
+                          <span>{getCountryLabel(country)}</span>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -326,7 +333,7 @@ export default function SettingsPage() {
 
           <Card className="border-slate-200 shadow-sm">
             <CardHeader>
-              <CardTitle className="text-base text-slate-900">Logo</CardTitle>
+              <CardTitle className="text-base text-slate-900">{t("Logo")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex flex-col items-center justify-center rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
@@ -339,33 +346,33 @@ export default function SettingsPage() {
                 />
                 {form.companyInfo.logoUrl ? (
                   <div className="mb-4 flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
-                    <img src={form.companyInfo.logoUrl} alt="Logo de l'entreprise" className="h-full w-full object-contain" />
+                    <img src={form.companyInfo.logoUrl} alt={t("Logo de l'entreprise")} className="h-full w-full object-contain" />
                   </div>
                 ) : (
                   <div className="mb-4 rounded-full bg-white p-3 shadow-sm ring-1 ring-slate-200">
                     <UploadCloud className="h-6 w-6 text-slate-600" />
                   </div>
                 )}
-                <p className="text-base font-medium text-slate-800">Téléversez votre logo</p>
-                <p className="mt-1 text-sm text-slate-500">Formats pris en charge : PNG, JPG, WEBP • jusqu’à 2 Mo</p>
+                <p className="text-base font-medium text-slate-800">{t("Téléversez votre logo")}</p>
+                <p className="mt-1 text-sm text-slate-500">{t("Formats pris en charge : PNG, JPG, WEBP • jusqu’à 2 Mo")}</p>
                 <Button type="button" variant="outline" className="mt-5" onClick={() => fileInputRef.current?.click()}>
-                  Choisir un fichier
+                  {t("Choisir un fichier")}
                 </Button>
               </div>
 
               <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4">
-                <p className="text-sm font-medium text-slate-700">Aperçu</p>
+                <p className="text-sm font-medium text-slate-700">{t("Aperçu")}</p>
                 <div className="mt-3 flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm ring-1 ring-slate-200">
                   {form.companyInfo.logoUrl ? (
-                    <img src={form.companyInfo.logoUrl} alt="Logo preview" className="h-12 w-12 rounded-xl object-contain" />
+                    <img src={form.companyInfo.logoUrl} alt={t("Logo preview")} className="h-12 w-12 rounded-xl object-contain" />
                   ) : (
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#2B3A67] text-lg font-semibold text-white">
                       {form.companyInfo.name ? form.companyInfo.name.slice(0, 1).toUpperCase() : "S"}
                     </div>
                   )}
                   <div>
-                    <p className="font-medium text-slate-900">{form.companyInfo.name || "Nom de votre entreprise"}</p>
-                    <p className="text-xs text-slate-500">Identité visuelle</p>
+                    <p className="font-medium text-slate-900">{form.companyInfo.name || t("Nom de votre entreprise")}</p>
+                    <p className="text-xs text-slate-500">{t("Identité visuelle")}</p>
                   </div>
                 </div>
               </div>
@@ -378,43 +385,43 @@ export default function SettingsPage() {
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
           <Card className="border-slate-200 shadow-sm">
             <CardHeader>
-              <CardTitle className="text-base text-slate-900">Paiements</CardTitle>
+              <CardTitle className="text-base text-slate-900">{t("Paiements")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-5">
               <div className="flex flex-col gap-3 rounded-[22px] border border-slate-200 bg-gradient-to-r from-slate-50 to-white p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="font-medium text-slate-900">Stripe</p>
-                  <p className="text-sm text-slate-500">Connectez votre compte pour accepter des paiements en ligne.</p>
+                  <p className="text-sm text-slate-500">{t("Connectez votre compte pour accepter des paiements en ligne.")}</p>
                 </div>
                 <Button type="button" variant="outline" className="min-w-36 border-slate-300 bg-white hover:bg-slate-50">
-                  Connecter
+                  {t("Connecter")}
                 </Button>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="stripePublicKey">Clé publique</Label>
+                  <Label htmlFor="stripePublicKey">{t("Clé publique")}</Label>
                   <Input id="stripePublicKey" placeholder="pk_live_..." className="h-11" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="stripeSecretKey">Clé secrète</Label>
+                  <Label htmlFor="stripeSecretKey">{t("Clé secrète")}</Label>
                   <Input id="stripeSecretKey" type="password" placeholder="sk_live_..." className="h-11" />
                 </div>
               </div>
 
               <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div className="mb-3 flex items-center justify-between gap-3">
-                  <p className="font-medium text-slate-900">Mode de paiement</p>
+                  <p className="font-medium text-slate-900">{t("Mode de paiement")}</p>
                   <div className="inline-flex rounded-full bg-white p-1 ring-1 ring-slate-200">
                     <button type="button" className="rounded-full bg-slate-900 px-3 py-1.5 text-xs font-medium text-white">
-                      Test
+                      {t("Test")}
                     </button>
                     <button type="button" className="rounded-full px-3 py-1.5 text-xs font-medium text-slate-600">
-                      Live
+                      {t("Live")}
                     </button>
                   </div>
                 </div>
-                <p className="text-sm text-slate-500">Utilise les clés de test lors du développement puis bascule en production à la fin.</p>
+                <p className="text-sm text-slate-500">{t("Utilise les clés de test lors du développement puis bascule en production à la fin.")}</p>
               </div>
             </CardContent>
           </Card>
@@ -428,7 +435,7 @@ export default function SettingsPage() {
           className="fixed bottom-5 right-5 z-20 flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700 shadow-lg"
         >
           <CheckCircle2 className="h-4 w-4" />
-          Enregistré
+          {t("Enregistré")}
         </motion.div>
       )}
     </div>
