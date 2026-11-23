@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import ReactCountryFlag from "react-country-flag";
 import { countries, normalizePhone, formatPhoneForDialCode } from "@/lib/countries";
+import { useLanguage } from "@/lib/language";
 import {
   Table,
   TableBody,
@@ -51,7 +52,15 @@ function getAvatarColor(name: string) {
   return avatarColors[index];
 }
 
+const englishCountryNames = new Intl.DisplayNames(["en"], { type: "region" });
+
 export default function CustomersPage() {
+  const { language, t } = useLanguage();
+  const getCountryLabel = (country: (typeof countries)[number]) =>
+    language === "en" ? englishCountryNames.of(country.code) || country.name : country.name;
+  const countriesSortedByName = [...countries].sort((a, b) =>
+    getCountryLabel(a).localeCompare(getCountryLabel(b), language === "en" ? "en" : "fr-FR")
+  );
   const { data: customers, isLoading } = useCustomers();
   const createCustomer = useCreateCustomer();
   const deleteCustomer = useDeleteCustomer();
@@ -132,10 +141,10 @@ export default function CustomersPage() {
       <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.18)]">
         <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Clients</p>
-            <h1 className="mt-3 text-3xl font-semibold text-slate-900">Gérez votre portefeuille clients</h1>
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-500">{t("Clients")}</p>
+            <h1 className="mt-3 text-3xl font-semibold text-slate-900">{t("Gérez votre portefeuille clients")}</h1>
             <p className="mt-2 text-sm leading-7 text-slate-600">
-              Retrouvez rapidement un client, ajoutez ses détails et créez une facture en quelques clics.
+              {t("Retrouvez rapidement un client, ajoutez ses détails et créez une facture en quelques clics.")}
             </p>
           </div>
 
@@ -144,30 +153,30 @@ export default function CustomersPage() {
               render={
                 <Button size="lg" className="gap-2">
                   <Plus className="mr-2 h-4 w-4" />
-                  Nouveau client
+                  {t("Nouveau client")}
                 </Button>
               }
             />
             <DialogContent className="w-full max-w-md">
               <DialogHeader>
-                <DialogTitle>Ajouter un client</DialogTitle>
+                <DialogTitle>{t("Ajouter un client")}</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 pt-2">
                 {validationErrors.length > 0 && (
                   <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-                    <p className="font-medium">Vérifiez les informations :</p>
+                    <p className="font-medium">{t("Vérifiez les informations :")}</p>
                     <ul className="mt-2 list-disc space-y-1 pl-5">
                       {validationErrors.map((error, index) => (
                         <li key={`${error.field}-${index}`}>
-                          {error.field !== "general" ? `${error.field}: ` : ""}
-                          {error.message}
+                          {error.field !== "general" ? `${t(error.field)}: ` : ""}
+                          {t(error.message)}
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
                 <div className="space-y-2">
-                  <Label htmlFor="name">Nom</Label>
+                  <Label htmlFor="name">{t("Nom")}</Label>
                   <Input
                     id="name"
                     value={form.name}
@@ -178,7 +187,7 @@ export default function CustomersPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t("Email")}</Label>
                   <Input
                     id="email"
                     type="email"
@@ -188,7 +197,7 @@ export default function CustomersPage() {
                 </div>
                 <div className="grid gap-3 sm:grid-cols-[110px_1fr]">
                   <div className="space-y-2">
-                    <Label htmlFor="dialCode">Indicatif</Label>
+                    <Label htmlFor="dialCode">{t("Indicatif")}</Label>
                     <Select
                       value={form.dialCode || "+33"}
                       onValueChange={handleDialCodeChange}
@@ -208,14 +217,14 @@ export default function CustomersPage() {
                               <ReactCountryFlag countryCode={country.code} svg className="text-lg leading-none" />
                             </span>
                             <span>{country.dialCode}</span>
-                            <span className="ml-2 text-slate-500">{country.code}</span>
+                            <span className="ml-2 text-slate-500">{getCountryLabel(country)}</span>
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Téléphone</Label>
+                    <Label htmlFor="phone">{t("Téléphone")}</Label>
                     <Input
                       id="phone"
                       value={form.phone}
@@ -225,7 +234,7 @@ export default function CustomersPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="street">Rue</Label>
+                  <Label htmlFor="street">{t("Rue")}</Label>
                   <Input
                     id="street"
                     value={form.address.street}
@@ -235,7 +244,7 @@ export default function CustomersPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-2">
-                    <Label htmlFor="city">Ville</Label>
+                    <Label htmlFor="city">{t("Ville")}</Label>
                     <Input
                       id="city"
                       value={form.address.city}
@@ -243,7 +252,7 @@ export default function CustomersPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="zipCode">Code postal</Label>
+                    <Label htmlFor="zipCode">{t("Code postal")}</Label>
                     <Input
                       id="zipCode"
                       value={form.address.zipCode}
@@ -253,7 +262,7 @@ export default function CustomersPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="country">Pays</Label>
+                  <Label htmlFor="country">{t("Pays")}</Label>
                   <Select
                     value={form.address.country || "France"}
                     onValueChange={(value: string | null) => setForm({ ...form, address: { ...form.address, country: value || "France" } })}
@@ -263,7 +272,7 @@ export default function CustomersPage() {
                         {selectedCountry && (
                           <ReactCountryFlag countryCode={selectedCountry.code} svg className="text-lg leading-none" />
                         )}
-                        <span>{form.address.country || "France"}</span>
+                        <span>{selectedCountry ? getCountryLabel(selectedCountry) : t("Pays")}</span>
                       </div>
                     </SelectTrigger>
                     <SelectContent>
@@ -272,7 +281,7 @@ export default function CustomersPage() {
                           <span className="mr-2 inline-flex items-center">
                             <ReactCountryFlag countryCode={country.code} svg className="text-lg leading-none" />
                           </span>
-                          <span>{country.name}</span>
+                          <span>{getCountryLabel(country)}</span>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -284,7 +293,7 @@ export default function CustomersPage() {
                   disabled={createCustomer.isPending || !form.name || !form.email}
                   className="w-full"
                 >
-                  {createCustomer.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Créer"}
+                  {createCustomer.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : t("Créer")}
                 </Button>
               </div>
             </DialogContent>
@@ -297,7 +306,7 @@ export default function CustomersPage() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <Input
-              placeholder="Rechercher un client..."
+              placeholder={t("Rechercher un client...")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-9"
@@ -310,8 +319,8 @@ export default function CustomersPage() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="name">Nom (A-Z)</SelectItem>
-              <SelectItem value="recent">Plus récents</SelectItem>
+              <SelectItem value="name">{t("Nom (A-Z)")}</SelectItem>
+              <SelectItem value="recent">{t("Plus récents")}</SelectItem>
             </SelectContent>
           </Select>
 
@@ -353,9 +362,9 @@ export default function CustomersPage() {
           className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16 text-center"
         >
           <Users className="h-10 w-10 text-muted-foreground/50" />
-          <h3 className="mt-4 font-medium">Aucun client pour le moment</h3>
+          <h3 className="mt-4 font-medium">{t("Aucun client pour le moment")}</h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            Ajoutez votre premier client pour commencer la facturation.
+            {t("Ajoutez votre premier client pour commencer la facturation.")}
           </p>
         </motion.div>
       )}
@@ -421,9 +430,9 @@ export default function CustomersPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Nom</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Téléphone</TableHead>
+                    <TableHead>{t("Nom")}</TableHead>
+                    <TableHead>{t("Email")}</TableHead>
+                    <TableHead>{t("Téléphone")}</TableHead>
                 <TableHead className="w-10"></TableHead>
               </TableRow>
             </TableHeader>
