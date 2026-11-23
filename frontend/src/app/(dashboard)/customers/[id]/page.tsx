@@ -30,6 +30,7 @@ import {
   formatPhoneForDialCode,
 } from "@/lib/countries";
 import Link from "next/link";
+import { useLanguage } from "@/lib/language";
 
 const statusLabels: Record<string, string> = {
   DRAFT: "Brouillon",
@@ -46,6 +47,7 @@ const statusVariants: Record<string, "default" | "secondary" | "destructive" | "
 };
 
 export default function CustomerDetailPage() {
+  const { language, t } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { data: customer, isLoading } = useCustomer(id);
@@ -73,6 +75,12 @@ export default function CustomerDetailPage() {
   };
 
   const selectedDialCountry = countries.find((country) => country.dialCode === form.dialCode) || countries.find((country) => country.dialCode === "+33");
+  const englishCountryNames = new Intl.DisplayNames(["en"], { type: "region" });
+  const getCountryLabel = (country: (typeof countries)[number]) =>
+    language === "en" ? englishCountryNames.of(country.code) || country.name : country.name;
+  const countriesSortedByName = [...countries].sort((a, b) =>
+    getCountryLabel(a).localeCompare(getCountryLabel(b), language === "en" ? "en" : "fr-FR")
+  );
   const selectedCountry = countries.find((country) => country.name === form.address.country) || countries.find((country) => country.name === "France");
 
   const openEdit = () => {
@@ -111,7 +119,10 @@ export default function CustomerDetailPage() {
       const backendErrors = Array.isArray(error?.response?.data?.errors)
         ? error.response.data.errors
         : [{ field: "general", message: error?.response?.data?.message || "Erreur lors de la modification du client." }];
-      setValidationErrors(backendErrors);
+      setValidationErrors(backendErrors.map((item: { field: string; message: string }) => ({
+        ...item,
+        message: t(item.message),
+      })));
     }
   };
 
@@ -134,14 +145,14 @@ export default function CustomerDetailPage() {
 }
 
   if (!customer) {
-    return <p className="text-muted-foreground">Client introuvable.</p>;
+    return <p className="text-muted-foreground">{t("Client introuvable.")}</p>;
   }
 
   return (
     <div className="space-y-6">
       <Button variant="ghost" size="sm" onClick={() => router.push("/customers")} className="text-slate-600 hover:bg-slate-100 hover:text-slate-900">
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Retour aux clients
+        {t("Retour aux clients")}
       </Button>
 
       <div className="rounded-[28px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-[#edf3ff] p-5 shadow-[0_25px_70px_-35px_rgba(15,23,42,0.5)] sm:p-6">
@@ -179,12 +190,12 @@ export default function CustomerDetailPage() {
             <Link href={`/invoices/new?customerId=${customer._id}`}>
               <Button className="bg-[#2B3A67] hover:bg-[#1f2b4d]">
                 <FilePlus className="mr-2 h-4 w-4" />
-                Nouvelle facture
+                {t("Nouvelle facture")}
               </Button>
             </Link>
             <Button variant="outline" onClick={openEdit} className="border-slate-200 bg-white hover:bg-slate-50">
               <Pencil className="mr-2 h-4 w-4" />
-              Modifier
+              {t("Modifier")}
             </Button>
           </div>
         </div>
@@ -193,18 +204,18 @@ export default function CustomerDetailPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card className="border-0 bg-white shadow-[0_20px_50px_-35px_rgba(15,23,42,0.6)]">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-500">Total payé</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-500">{t("Total payé")}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-semibold text-slate-900">
-              {formatCurrency(invoices?.reduce((sum, invoice) => sum + (invoice.status === "PAID" ? invoice.total : 0), 0) ?? 0)}
+              {formatCurrency(invoices?.reduce((sum, invoice) => sum + (invoice.status === "PAID" ? invoice.total : 0), 0) ?? 0, language)}
             </p>
           </CardContent>
         </Card>
 
         <Card className="border-0 bg-white shadow-[0_20px_50px_-35px_rgba(15,23,42,0.6)]">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-500">Factures</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-500">{t("Factures")}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-semibold text-slate-900">{invoices?.length ?? 0}</p>
@@ -213,7 +224,7 @@ export default function CustomerDetailPage() {
 
         <Card className="border-0 bg-white shadow-[0_20px_50px_-35px_rgba(15,23,42,0.6)]">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-500">En attente</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-500">{t("En attente")}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-semibold text-slate-900">
@@ -224,12 +235,12 @@ export default function CustomerDetailPage() {
       </div>
 
       <div>
-        <h2 className="mb-3 text-lg font-semibold text-slate-900">Factures</h2>
+        <h2 className="mb-3 text-lg font-semibold text-slate-900">{t("Factures")}</h2>
 
-        {invoicesLoading && <p className="text-muted-foreground">Chargement…</p>}
+        {invoicesLoading && <p className="text-muted-foreground">{t("Chargement…")}</p>}
 
         {!invoicesLoading && invoices?.length === 0 && (
-          <p className="text-muted-foreground">Aucune facture pour ce client.</p>
+          <p className="text-muted-foreground">{t("Aucune facture pour ce client.")}</p>
         )}
 
         <div className="space-y-3">
@@ -249,15 +260,15 @@ export default function CustomerDetailPage() {
                       </div>
                       <div>
                         <p className="font-medium text-slate-900">{invoice.invoiceNumber}</p>
-                        <p className="text-sm text-slate-500">{invoice.issueDate ? new Date(invoice.issueDate).toLocaleDateString("fr-FR") : "Date inconnue"}</p>
+                        <p className="text-sm text-slate-500">{invoice.issueDate ? new Date(invoice.issueDate).toLocaleDateString(language === "en" ? "en-GB" : "fr-FR") : t("Date inconnue")}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-sm font-medium text-slate-700">
-                        {formatCurrency(invoice.total)}
+                        {formatCurrency(invoice.total, language)}
                       </span>
                       <Badge variant={statusVariants[invoice.status]}>
-                        {statusLabels[invoice.status]}
+                        {t(statusLabels[invoice.status])}
                       </Badge>
                     </div>
                   </CardContent>
@@ -271,24 +282,24 @@ export default function CustomerDetailPage() {
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Modifier le client</DialogTitle>
+            <DialogTitle>{t("Modifier le client")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 pt-2">
             {validationErrors.length > 0 && (
               <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-                <p className="font-medium">Vérifiez les informations :</p>
+                <p className="font-medium">{t("Vérifiez les informations :")}</p>
                 <ul className="mt-2 list-disc space-y-1 pl-5">
                   {validationErrors.map((error, index) => (
                     <li key={`${error.field}-${index}`}>
-                      {error.field !== "general" ? `${error.field}: ` : ""}
-                      {error.message}
+                      {error.field !== "general" ? `${t(error.field)}: ` : ""}
+                      {t(error.message)}
                     </li>
                   ))}
                 </ul>
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="edit-name">Nom</Label>
+              <Label htmlFor="edit-name">{t("Nom")}</Label>
               <Input
                 id="edit-name"
                 value={form.name}
@@ -296,7 +307,7 @@ export default function CustomerDetailPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-email">Email</Label>
+              <Label htmlFor="edit-email">{t("Email")}</Label>
               <Input
                 id="edit-email"
                 type="email"
@@ -306,7 +317,7 @@ export default function CustomerDetailPage() {
             </div>
             <div className="grid gap-3 sm:grid-cols-[110px_1fr]">
               <div className="space-y-2">
-                <Label htmlFor="edit-dialCode">Indicatif</Label>
+                <Label htmlFor="edit-dialCode">{t("Indicatif")}</Label>
                 <Select value={form.dialCode} onValueChange={handleDialCodeChange}>
                   <SelectTrigger className="w-full">
                     <div className="flex items-center gap-2">
@@ -317,20 +328,20 @@ export default function CustomerDetailPage() {
                     </div>
                   </SelectTrigger>
                   <SelectContent>
-                    {countries.map((country) => (
+                    {countriesSortedByName.map((country) => (
                       <SelectItem key={country.code} value={country.dialCode}>
                         <span className="mr-2 inline-flex items-center">
                           <ReactCountryFlag countryCode={country.code} svg className="text-lg leading-none" />
                         </span>
                         <span>{country.dialCode}</span>
-                        <span className="ml-2 text-slate-500">{country.code}</span>
+                        <span className="ml-2 text-slate-500">{getCountryLabel(country)}</span>
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-phone">Téléphone</Label>
+                <Label htmlFor="edit-phone">{t("Téléphone")}</Label>
                 <Input
                   id="edit-phone"
                   value={form.phone}
@@ -340,7 +351,7 @@ export default function CustomerDetailPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edit-street">Rue</Label>
+              <Label htmlFor="edit-street">{t("Rue")}</Label>
               <Input
                 id="edit-street"
                 value={form.address.street}
@@ -350,7 +361,7 @@ export default function CustomerDetailPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label htmlFor="edit-city">Ville</Label>
+                <Label htmlFor="edit-city">{t("Ville")}</Label>
                 <Input
                   id="edit-city"
                   value={form.address.city}
@@ -358,7 +369,7 @@ export default function CustomerDetailPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-zipCode">Code postal</Label>
+                <Label htmlFor="edit-zipCode">{t("Code postal")}</Label>
                 <Input
                   id="edit-zipCode"
                   value={form.address.zipCode}
@@ -368,33 +379,33 @@ export default function CustomerDetailPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edit-country">Pays</Label>
+              <Label htmlFor="edit-country">{t("Pays")}</Label>
               <Select
                 value={form.address.country}
-                onValueChange={(value) => setForm({ ...form, address: { ...form.address, country: value } })}
+                onValueChange={(value: string | null) => setForm({ ...form, address: { ...form.address, country: value || "France" } })}
               >
                 <SelectTrigger className="w-full">
                   <div className="flex items-center gap-2">
                     {selectedCountry && (
                       <ReactCountryFlag countryCode={selectedCountry.code} svg className="text-lg leading-none" />
                     )}
-                    <span>{form.address.country}</span>
+                    <span>{selectedCountry ? getCountryLabel(selectedCountry) : t("Pays")}</span>
                   </div>
                 </SelectTrigger>
                 <SelectContent>
-                  {countries.map((country) => (
+                  {countriesSortedByName.map((country) => (
                     <SelectItem key={country.code} value={country.name}>
                       <span className="mr-2 inline-flex items-center">
                         <ReactCountryFlag countryCode={country.code} svg className="text-lg leading-none" />
                       </span>
-                      <span>{country.name}</span>
+                      <span>{getCountryLabel(country)}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <Button onClick={handleUpdate} disabled={updateCustomer.isPending} className="w-full">
-              {updateCustomer.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Enregistrer"}
+              {updateCustomer.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : t("Enregistrer")}
             </Button>
           </div>
         </DialogContent>
