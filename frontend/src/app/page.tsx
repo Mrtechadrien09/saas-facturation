@@ -258,7 +258,12 @@ export default function HomePage() {
   }, [checked, isAuthenticated, router]);
 
   return (
-    <div className="relative min-h-screen bg-[#EEF4F0] text-slate-800 pt-11">
+    <div
+      className="relative min-h-screen bg-[#EEF4F0] text-slate-800 pt-11"
+      style={{
+        backgroundImage: "radial-gradient(ellipse 32rem 72rem at 0% 22%, rgba(43,58,103,0.055), transparent 68%), radial-gradient(ellipse 32rem 72rem at 100% 78%, rgba(201,162,39,0.075), transparent 68%)",
+      }}
+    >
       {/* ========== BANDEAU PROMOTIONNEL ========== */}
       <div
         className="landing-marquee fixed inset-x-0 top-0 z-40 h-11 overflow-hidden border-b border-[#C9A227]/30 bg-[#171F38] text-white shadow-[0_8px_30px_-18px_rgba(15,23,42,0.85)]"
@@ -545,7 +550,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-[#EEF4F0] px-6 py-20 sm:px-10">
+      <section className="bg-transparent px-6 py-20 sm:px-10">
         <div className="mx-auto max-w-6xl">
           <div className="grid items-center gap-4 md:grid-cols-[1fr_auto_1fr]">
             <div className="h-px bg-slate-200/80" />
@@ -573,7 +578,7 @@ export default function HomePage() {
       </section>
 
       {/* ========== POUR QUI ========== */}
-      <section className="bg-[#EEF4F0] px-6 py-24 sm:px-10">
+      <section className="bg-transparent px-6 py-24 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -611,7 +616,7 @@ export default function HomePage() {
       </section>
 
       {/* ========== COMMENT ÇA MARCHE ========== */}
-      <section id="comment-ca-marche" className="bg-[#EEF4F0] px-6 py-24 sm:px-10">
+      <section id="comment-ca-marche" className="bg-transparent px-6 py-24 sm:px-10">
         <div className="mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -660,7 +665,7 @@ export default function HomePage() {
       </section>
 
       {/* ========== AVANT / APRÈS ========== */}
-      <section className="bg-[#EEF4F0] px-6 py-24 sm:px-10">
+      <section className="bg-transparent px-6 py-24 sm:px-10">
         <div className="mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -779,7 +784,7 @@ export default function HomePage() {
       </section>
 
       {/* ========== FAQ ========== */}
-      <section id="faq" className="border-t border-slate-200 bg-[#EEF4F0] px-6 py-20">
+      <section id="faq" className="border-t border-slate-200 bg-transparent px-6 py-20">
         <div className="mx-auto max-w-2xl">
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
