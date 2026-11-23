@@ -21,6 +21,7 @@ import {
 import { useCustomers } from "@/hooks/use-customers";
 import { useCreateInvoice } from "@/hooks/use-invoices";
 import { formatCurrency } from "@/lib/utils";
+import { useLanguage } from "@/lib/language";
 
 const itemSchema = z.object({
   description: z.string().min(1, "Description requise"),
@@ -40,6 +41,7 @@ type InvoiceFormInput = z.input<typeof invoiceSchema>;   // avant coercion (ce q
 type InvoiceFormOutput = z.output<typeof invoiceSchema>; // après coercion (ce qu'on envoie à l'API)
 
 export default function NewInvoicePage() {
+  const { language, t } = useLanguage();
   const router = useRouter();
   const searchParams = useSearchParams();
   const preselectedCustomerId = searchParams.get("customerId");
@@ -104,7 +106,7 @@ const vatTotal = items.reduce((sum, item) => {
       const invoice = await createInvoice.mutateAsync(payload);
       router.push(`/invoices/${invoice._id}`);
     } catch (err: any) {
-      setError(err.response?.data?.message || "Erreur lors de la création de la facture");
+      setError(t(err.response?.data?.message || "Erreur lors de la création de la facture"));
     }
   };
 
@@ -118,16 +120,16 @@ const vatTotal = items.reduce((sum, item) => {
       >
         <Button variant="ghost" size="sm" onClick={() => router.push("/invoices")} className="mb-4">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Retour aux factures
+          {t("Retour aux factures")}
         </Button>
 
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Facturation</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-slate-500">{t("Facturation")}</p>
           <h1 className="mt-3 text-4xl font-bold text-slate-900">
-            Nouvelle facture
+            {t("Nouvelle facture")}
           </h1>
           <p className="text-slate-600 mt-2 max-w-2xl">
-            Crée une facture détaillée, choisis le client, définis les articles et envoie tout en un clic.
+            {t("Crée une facture détaillée, choisis le client, définis les articles et envoie tout en un clic.")}
           </p>
         </div>
       </motion.div>
@@ -143,12 +145,12 @@ const vatTotal = items.reduce((sum, item) => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <span className="h-8 w-1 bg-blue-600 rounded-full"></span>
-                Informations générales
+                {t("Informations générales")}
               </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-3">
               <div className="space-y-2">
-                <Label className="font-semibold">Client</Label>
+                <Label className="font-semibold">{t("Client")}</Label>
                 <Select
                   value={preselectedCustomerId ?? undefined}
                   onValueChange={(v) => {
@@ -157,7 +159,7 @@ const vatTotal = items.reduce((sum, item) => {
                   disabled={customersLoading}
                 >
                   <SelectTrigger className="focus-ring">
-                    <SelectValue placeholder="Sélectionne un client" />
+                    <SelectValue placeholder={t("Sélectionne un client")} />
                   </SelectTrigger>
                   <SelectContent>
                     {customers?.map((c) => (
@@ -168,13 +170,13 @@ const vatTotal = items.reduce((sum, item) => {
                   </SelectContent>
                 </Select>
                 {errors.customerId && (
-                  <p className="text-sm text-red-600 font-medium">{errors.customerId.message}</p>
+                  <p className="text-sm text-red-600 font-medium">{t(String(errors.customerId.message))}</p>
                 )}
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="dueDate" className="font-semibold">
-                  Date d'échéance
+                  {t("Date d'échéance")}
                 </Label>
                 <Input
                   id="dueDate"
@@ -183,12 +185,12 @@ const vatTotal = items.reduce((sum, item) => {
                   className="focus-ring"
                 />
                 {errors.dueDate && (
-                  <p className="text-sm text-red-600 font-medium">{errors.dueDate.message}</p>
+                  <p className="text-sm text-red-600 font-medium">{t(String(errors.dueDate.message))}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label className="font-semibold">Statut</Label>
+                <Label className="font-semibold">{t("Statut")}</Label>
                 <Select
                   defaultValue="DRAFT"
                   onValueChange={(v) => v && setValue("status", v as InvoiceFormInput["status"])}
@@ -197,10 +199,10 @@ const vatTotal = items.reduce((sum, item) => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="DRAFT">📝 Brouillon</SelectItem>
-                    <SelectItem value="SENT">📤 Envoyée</SelectItem>
-                    <SelectItem value="PAID">✅ Payée</SelectItem>
-                    <SelectItem value="OVERDUE">⚠️ En retard</SelectItem>
+                    <SelectItem value="DRAFT">📝 {t("Brouillon")}</SelectItem>
+                    <SelectItem value="SENT">📤 {t("Envoyée")}</SelectItem>
+                    <SelectItem value="PAID">✅ {t("Payée")}</SelectItem>
+                    <SelectItem value="OVERDUE">⚠️ {t("En retard")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -218,7 +220,7 @@ const vatTotal = items.reduce((sum, item) => {
             <CardHeader className="flex flex-row items-center justify-between pb-3">
               <CardTitle className="flex items-center gap-2">
                 <span className="h-8 w-1 bg-blue-600 rounded-full"></span>
-                Articles
+                {t("Articles")}
               </CardTitle>
               <Button
                 type="button"
@@ -227,7 +229,7 @@ const vatTotal = items.reduce((sum, item) => {
                 onClick={() => append({ description: "", quantity: 1, unitPrice: 0, vatRate: 20 })}
               >
                 <Plus className="mr-2 h-4 w-4" />
-                Ajouter
+                {t("Ajouter")}
               </Button>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -240,15 +242,15 @@ const vatTotal = items.reduce((sum, item) => {
                   className="grid grid-cols-12 gap-2 items-end p-4 bg-slate-50 dark:bg-slate-900/30 rounded-lg border border-slate-200 dark:border-slate-800"
                 >
                   <div className="col-span-5 space-y-1">
-                    <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">Description</Label>
+                    <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">{t("Description")}</Label>
                     <Input
                       {...register(`items.${index}.description`)}
-                      placeholder="Ex: Conseil..."
+                      placeholder={t("Ex: Conseil...")}
                       className="focus-ring"
                     />
                   </div>
                   <div className="col-span-2 space-y-1">
-                    <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">Qté</Label>
+                    <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">{t("Qté")}</Label>
                     <Input
                       type="number"
                       step="1"
@@ -257,7 +259,7 @@ const vatTotal = items.reduce((sum, item) => {
                     />
                   </div>
                   <div className="col-span-2 space-y-1">
-                    <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">Prix (€)</Label>
+                    <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">{t("Prix (€)")}</Label>
                     <Input
                       type="number"
                       step="0.01"
@@ -266,7 +268,7 @@ const vatTotal = items.reduce((sum, item) => {
                     />
                   </div>
                   <div className="col-span-2 space-y-1">
-                    <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">TVA (%)</Label>
+                    <Label className="text-xs font-bold text-slate-700 dark:text-slate-300">{t("TVA (%)")}</Label>
                     <Input
                       type="number"
                       step="1"
@@ -288,7 +290,7 @@ const vatTotal = items.reduce((sum, item) => {
                 </motion.div>
               ))}
               {errors.items?.root && (
-                <p className="text-sm text-red-600 font-medium">{errors.items.root.message}</p>
+                <p className="text-sm text-red-600 font-medium">{t(String(errors.items.root.message))}</p>
               )}
 
               {/* 📊 Résumé */}
@@ -298,16 +300,16 @@ const vatTotal = items.reduce((sum, item) => {
                 className="ml-auto w-full max-w-xs space-y-2 border-t-2 border-blue-200 dark:border-blue-900 pt-4 text-sm bg-gradient-to-br from-blue-50 to-blue-50/30 dark:from-blue-950/20 dark:to-blue-950/10 p-4 rounded-lg"
               >
                 <div className="flex justify-between text-slate-700 dark:text-slate-300">
-                  <span className="font-medium">Sous-total HT</span>
-                  <span className="font-semibold">{formatCurrency(Math.round(subTotal * 100))}</span>
+                  <span className="font-medium">{t("Sous-total HT")}</span>
+                  <span className="font-semibold">{formatCurrency(Math.round(subTotal * 100), language)}</span>
                 </div>
                 <div className="flex justify-between text-slate-700 dark:text-slate-300">
-                  <span className="font-medium">TVA</span>
-                  <span className="font-semibold text-amber-600">{formatCurrency(Math.round(vatTotal * 100))}</span>
+                  <span className="font-medium">{t("TVA")}</span>
+                  <span className="font-semibold text-amber-600">{formatCurrency(Math.round(vatTotal * 100), language)}</span>
                 </div>
                 <div className="flex justify-between font-bold text-lg text-blue-600 dark:text-blue-400 border-t pt-2">
-                  <span>Total TTC</span>
-                  <span>{formatCurrency(Math.round(total * 100))}</span>
+                  <span>{t("Total TTC")}</span>
+                  <span>{formatCurrency(Math.round(total * 100), language)}</span>
                 </div>
               </motion.div>
             </CardContent>
@@ -321,7 +323,7 @@ const vatTotal = items.reduce((sum, item) => {
             animate={{ opacity: 1, y: 0 }}
             className="p-4 bg-red-50 dark:bg-red-950/20 border-l-4 border-red-600 rounded text-red-700 dark:text-red-400 font-medium"
           >
-            {error}
+            {t(error)}
           </motion.div>
         )}
 
@@ -342,11 +344,11 @@ const vatTotal = items.reduce((sum, item) => {
             {createInvoice.isPending ? (
               <>
                 <Loader2 className="h-5 w-5 animate-spin" />
-                Création en cours...
+                {t("Création en cours...")}
               </>
             ) : (
               <>
-                ✅ Créer la facture
+                ✅ {t("Créer la facture")}
               </>
             )}
           </Button>
@@ -356,7 +358,7 @@ const vatTotal = items.reduce((sum, item) => {
             size="lg"
             onClick={() => router.push("/invoices")}
           >
-            Annuler
+            {t("Annuler")}
           </Button>
         </motion.div>
       </form>
