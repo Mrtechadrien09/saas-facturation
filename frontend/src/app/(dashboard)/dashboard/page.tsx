@@ -15,6 +15,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useInvoices, useRecentInvoices } from "@/hooks/use-invoices";
 import { useCustomers } from "@/hooks/use-customers";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/language";
 
 interface InvoiceStatusStat {
   count: number;
@@ -105,7 +106,7 @@ const statusVariants: Record<string, "default" | "secondary" | "destructive" | "
   OVERDUE: "destructive",
 };
 
-function buildMonthlyRevenue(invoices: Invoice[] | undefined) {
+function buildMonthlyRevenue(invoices: Invoice[] | undefined, language: "fr" | "en") {
   if (!invoices) return [];
 
   const now = new Date();
@@ -115,7 +116,7 @@ function buildMonthlyRevenue(invoices: Invoice[] | undefined) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
     months.push({
       key: `${d.getFullYear()}-${d.getMonth()}`,
-      label: d.toLocaleDateString("fr-FR", { month: "short" }),
+      label: d.toLocaleDateString(language === "en" ? "en-GB" : "fr-FR", { month: "short" }),
       revenue: 0,
     });
   }
@@ -134,6 +135,7 @@ function buildMonthlyRevenue(invoices: Invoice[] | undefined) {
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const { language, t } = useLanguage();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["dashboard-stats"],
     queryFn: fetchStats,
@@ -142,14 +144,14 @@ export default function DashboardPage() {
   const { data: recentInvoices, isLoading: recentLoading } = useRecentInvoices(5);
   const { data: customers } = useCustomers();
 
-  const chartData = buildMonthlyRevenue(allInvoicesData?.data);
+  const chartData = buildMonthlyRevenue(allInvoicesData?.data, language);
 
   const getCustomerName = (customerId: string) =>
     customers?.find((c) => c._id === customerId)?.name || "Client inconnu";
 
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? "Bonjour" : hour < 18 ? "Bon après-midi" : "Bonsoir";
-  const today = new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+  const greeting = t(hour < 12 ? "Bonjour" : hour < 18 ? "Bon après-midi" : "Bonsoir");
+  const today = new Date().toLocaleDateString(language === "en" ? "en-GB" : "fr-FR", { weekday: "long", day: "numeric", month: "long" });
 
   return (
     <div className="space-y-8">
@@ -161,12 +163,12 @@ export default function DashboardPage() {
       >
         <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
           <div className="max-w-2xl">
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-200">Tableau de bord</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-200">{t("Tableau de bord")}</p>
             <h1 className="mt-3 text-3xl font-semibold sm:text-4xl">
               {greeting}{user?.name ? `, ${user.name.split(" ")[0]}` : ""} 👋
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-7 text-slate-200/90">
-              Votre espace de gestion commerciale clair et rapide : clients, factures et trésorerie au même endroit.
+              {t("Votre espace de gestion commerciale clair et rapide : clients, factures et trésorerie au même endroit.")}
             </p>
           </div>
 
@@ -174,7 +176,7 @@ export default function DashboardPage() {
             <Link href="/invoices/new" className="w-full sm:w-auto">
               <Button variant="default" size="lg" className="w-full gap-2 bg-[#C9A227] text-slate-950 hover:bg-[#d8b645] sm:w-auto">
                 <Plus className="h-5 w-5" />
-                Nouvelle facture
+                {t("Nouvelle facture")}
               </Button>
             </Link>
           </div>
@@ -188,7 +190,7 @@ export default function DashboardPage() {
           className="rounded-lg border border-red-200 bg-red-50 p-4"
         >
           <p className="text-sm text-red-700">
-            ⚠️ Impossible de charger les statistiques. Vérifiez que votre backend fonctionne correctement.
+            ⚠️ {t("Impossible de charger les statistiques. Vérifiez que votre backend fonctionne correctement.")}
           </p>
         </motion.div>
       )}
@@ -210,7 +212,7 @@ export default function DashboardPage() {
                 <div className={`h-1.5 bg-gradient-to-r ${stat.accent}`} />
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 pt-4">
                   <CardTitle className="text-sm font-medium text-slate-600">
-                    {stat.label}
+                    {t(stat.label)}
                   </CardTitle>
                   <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${stat.bg} ring-1 ${stat.ring}`}>
                     <Icon className={`h-5 w-5 ${stat.color}`} />
@@ -219,7 +221,7 @@ export default function DashboardPage() {
                 <CardContent className="pb-5 pt-0">
                   <div className="flex items-end justify-between gap-3">
                     <div className="text-2xl font-bold tracking-tight text-slate-900 tabular-nums">
-                      {isLoading ? <Skeleton className="h-8 w-24 rounded" /> : stat.format(value)}
+                      {isLoading ? <Skeleton className="h-8 w-24 rounded" /> : stat.key === "totalRevenue" ? formatCurrency(value, language) : stat.format(value)}
                     </div>
                   </div>
                 </CardContent>
@@ -238,8 +240,8 @@ export default function DashboardPage() {
           <Card className="border-0 bg-white shadow-[0_20px_50px_-35px_rgba(15,23,42,0.6)]">
             <CardHeader className="flex flex-row items-center justify-between gap-3 pb-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Performance</p>
-                <CardTitle className="mt-2 text-lg font-bold text-slate-900">Revenu des 6 derniers mois</CardTitle>
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{t("Performance")}</p>
+                <CardTitle className="mt-2 text-lg font-bold text-slate-900">{t("Revenu des 6 derniers mois")}</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
@@ -254,7 +256,7 @@ export default function DashboardPage() {
                     tickFormatter={(v) => `${v}€`}
                   />
                   <Tooltip
-                    formatter={(value: any) => [`${(value).toFixed(2)} €`, "Revenu"]}
+                    formatter={(value: any) => [`${(value).toFixed(2)} €`, t("Revenu")]}
                     contentStyle={{
                       borderRadius: 10,
                       fontSize: 13,
@@ -284,7 +286,7 @@ export default function DashboardPage() {
         >
           <Card className="h-full border-0 bg-white shadow-[0_20px_50px_-35px_rgba(15,23,42,0.6)]">
             <CardHeader>
-              <CardTitle className="text-lg font-bold text-slate-900">Statut des factures</CardTitle>
+              <CardTitle className="text-lg font-bold text-slate-900">{t("Statut des factures")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {Object.entries(statusLabels).map(([key, label]) => {
@@ -293,7 +295,7 @@ export default function DashboardPage() {
                 return (
                   <div key={key} className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5">
                     <div className="flex items-center gap-2">
-                      <Badge variant={statusVariants[key]}>{label}</Badge>
+                      <Badge variant={statusVariants[key]}>{t(label)}</Badge>
                     </div>
                     <span className="font-bold text-slate-900">{count}</span>
                   </div>
@@ -304,11 +306,11 @@ export default function DashboardPage() {
 
           <Card className="border-0 bg-gradient-to-br from-[#f8faff] to-[#eef3ff] shadow-[0_20px_50px_-35px_rgba(43,58,103,0.8)]">
             <CardHeader>
-              <CardTitle className="text-lg font-bold text-slate-900">Aperçu rapide</CardTitle>
+              <CardTitle className="text-lg font-bold text-slate-900">{t("Aperçu rapide")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="rounded-2xl border border-[#dfe7ff] bg-white p-4 shadow-sm">
-                <p className="text-sm text-slate-500">Aujourd’hui</p>
+                <p className="text-sm text-slate-500">{t("Aujourd’hui")}</p>
                 <p className="mt-2 text-xl font-semibold text-slate-900">{today}</p>
               </div>
             </CardContent>
@@ -326,11 +328,11 @@ export default function DashboardPage() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Dernières activités</p>
-                  <CardTitle className="mt-2 text-lg font-bold text-slate-900">Factures récentes</CardTitle>
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{t("Dernières activités")}</p>
+                  <CardTitle className="mt-2 text-lg font-bold text-slate-900">{t("Factures récentes")}</CardTitle>
                 </div>
                 <Link href="/invoices" className="text-sm font-medium text-[#2B3A67]">
-                  Voir tout
+                  {t("Voir tout")}
                 </Link>
               </div>
             </CardHeader>
@@ -342,7 +344,7 @@ export default function DashboardPage() {
 
               {!recentLoading && recentInvoices?.length === 0 && (
                 <div className="py-8 text-center">
-                  <p className="text-sm text-slate-500">Aucune facture pour le moment.</p>
+                  <p className="text-sm text-slate-500">{t("Aucune facture pour le moment.")}</p>
                 </div>
               )}
 
@@ -365,10 +367,10 @@ export default function DashboardPage() {
                       </div>
                       <div className="ml-2 flex flex-col items-end gap-1">
                         <span className="text-sm font-bold text-slate-900">
-                          {formatCurrency(invoice.total)}
+                          {formatCurrency(invoice.total, language)}
                         </span>
                         <Badge variant={statusVariants[invoice.status]} className="text-[10px] font-semibold">
-                          {statusLabels[invoice.status]}
+                          {t(statusLabels[invoice.status])}
                         </Badge>
                       </div>
                     </div>
