@@ -21,6 +21,7 @@ import { useInvoice, useUpdateInvoiceStatus, downloadInvoicePDF } from "@/hooks/
 import { useCustomers } from "@/hooks/use-customers";
 import { formatCurrency } from "@/lib/utils";
 import { useDeleteInvoice } from "@/hooks/use-invoices";
+import { useLanguage } from "@/lib/language";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -48,6 +49,7 @@ const statusVariants: Record<string, "default" | "secondary" | "destructive" | "
 };
 
 export default function InvoiceDetailPage() {
+  const { language, t } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { data: invoice, isLoading } = useInvoice(id);
@@ -90,7 +92,7 @@ export default function InvoiceDetailPage() {
 }
 
   if (!invoice) {
-    return <p className="text-muted-foreground">Facture introuvable.</p>;
+    return <p className="text-muted-foreground">{t("Facture introuvable.")}</p>;
   }
   
   
@@ -98,14 +100,14 @@ export default function InvoiceDetailPage() {
     <div className="space-y-6">
       <Button variant="ghost" size="sm" onClick={() => router.push("/invoices")}>
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Retour aux factures
+        {t("Retour aux factures")}
       </Button>
 
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-semibold">{invoice.invoiceNumber}</h1>
           <p className="text-muted-foreground">
-            Échéance le {new Date(invoice.dueDate).toLocaleDateString("fr-FR")}
+            {t("Échéance le")} {new Date(invoice.dueDate).toLocaleDateString(language === "en" ? "en-GB" : "fr-FR")}
           </p>
         </div>
 
@@ -120,15 +122,15 @@ export default function InvoiceDetailPage() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="DRAFT">Brouillon</SelectItem>
-              <SelectItem value="SENT">Envoyée</SelectItem>
-              <SelectItem value="PAID">Payée</SelectItem>
-              <SelectItem value="OVERDUE">En retard</SelectItem>
+              <SelectItem value="DRAFT">{t("Brouillon")}</SelectItem>
+              <SelectItem value="SENT">{t("Envoyée")}</SelectItem>
+              <SelectItem value="PAID">{t("Payée")}</SelectItem>
+              <SelectItem value="OVERDUE">{t("En retard")}</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={() => sendEmail.mutate(invoice._id)} disabled={sendEmail.isPending}>  {sendEmail.isPending ? (   <Loader2 className="h-4 w-4 animate-spin" />  ) : (    <MailIcon className="h-4 w-4" /> )}
+          <Button variant="outline" title={t("Envoyer")} aria-label={t("Envoyer")} onClick={() => sendEmail.mutate(invoice._id)} disabled={sendEmail.isPending}>  {sendEmail.isPending ? (   <Loader2 className="h-4 w-4 animate-spin" />  ) : (    <MailIcon className="h-4 w-4" /> )}
           </Button>
-          <Button variant="outline" onClick={handleDownload} disabled={downloading}>
+          <Button variant="outline" title={t("Télécharger")} aria-label={t("Télécharger")} onClick={handleDownload} disabled={downloading}>
             {downloading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
@@ -139,15 +141,15 @@ export default function InvoiceDetailPage() {
             <AlertDialogTrigger render={<Button variant="outline" size="icon"><Trash2 className="h-4 w-4 text-destructive" /></Button>} />
                 <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Supprimer cette facture ?
+                    <AlertDialogTitle>{t("Supprimer cette facture ?")}
                     </AlertDialogTitle>
                         <AlertDialogDescription>
-                            Cette action est irréversible. La facture {invoice.invoiceNumber} sera définitivement supprimée.
+                            {t("Cette action est irréversible. La facture ")}{invoice.invoiceNumber}{t(" sera définitivement supprimée.")}
                         </AlertDialogDescription>
                 </AlertDialogHeader>
             <AlertDialogFooter>
-            <AlertDialogCancel>Annuler</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>Supprimer</AlertDialogAction>
+            <AlertDialogCancel>{t("Annuler")}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>{t("Supprimer")}</AlertDialogAction>
             </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
@@ -157,7 +159,7 @@ export default function InvoiceDetailPage() {
       {customer && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Client</CardTitle>
+            <CardTitle className="text-base">{t("Client")}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="font-medium">{customer.name}</p>
@@ -171,7 +173,7 @@ export default function InvoiceDetailPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Articles</CardTitle>
+          <CardTitle className="text-base">{t("Articles")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {invoice.items.map((item, i) => (
@@ -185,34 +187,34 @@ export default function InvoiceDetailPage() {
               <div>
                 <p className="font-medium">{item.description}</p>
                 <p className="text-sm text-muted-foreground">
-                  {item.quantity} × {formatCurrency(item.unitPrice)} · TVA {item.vatRate}%
+                  {item.quantity} × {formatCurrency(item.unitPrice, language)} · {t("TVA")} {item.vatRate}%
                 </p>
               </div>
               <p className="font-medium">
-                {formatCurrency(item.quantity * item.unitPrice)}
+                {formatCurrency(item.quantity * item.unitPrice, language)}
               </p>
             </motion.div>
           ))}
 
           <div className="ml-auto w-full max-w-xs space-y-1 border-t pt-4 text-sm">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Sous-total HT</span>
-              <span>{formatCurrency(invoice.subTotal)}</span>
+              <span className="text-muted-foreground">{t("Sous-total HT")}</span>
+              <span>{formatCurrency(invoice.subTotal, language)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">TVA</span>
-              <span>{formatCurrency(invoice.vatTotal)}</span>
+              <span className="text-muted-foreground">{t("TVA")}</span>
+              <span>{formatCurrency(invoice.vatTotal, language)}</span>
             </div>
             <div className="flex justify-between text-base font-medium">
-              <span>Total TTC</span>
-              <span>{formatCurrency(invoice.total)}</span>
+              <span>{t("Total TTC")}</span>
+              <span>{formatCurrency(invoice.total, language)}</span>
             </div>
           </div>
         </CardContent>
       </Card>
 
       <div>
-        <Badge variant={statusVariants[invoice.status]}>{statusLabels[invoice.status]}</Badge>
+        <Badge variant={statusVariants[invoice.status]}>{t(statusLabels[invoice.status])}</Badge>
       </div>
     </div>
   );
